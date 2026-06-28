@@ -1,0 +1,41 @@
+{% load i18n %}
+
+
+<footer class="footer" role="contentinfo">
+    <div class="container">
+        <div class="footer__grid">
+            {# ── Hakkımızda ── #}
+            <div class="footer__section">
+                <h3 class="footer__title">Lezzet Haritası</h3>
+                <p class="footer__text">
+                    {% trans "Türkiye'nin 81 ilinin eşsiz yöresel lezzetlerini keşfedin." %}
+                </p>
+            </div>
+
+            {# ── Hızlı Linkler ── #}
+            <div class="footer__section">
+                <h3 class="footer__title">{% trans "Hızlı Linkler" %}</h3>
+                <ul class="footer__links">
+                    <li><a href="/">{% trans "Ana Sayfa" %}</a></li>
+                    {# Sprint 2'de eklenecek #}
+                </ul>
+            </div>
+
+            {# ── İletişim ── #}
+            <div class="footer__section">
+                <h3 class="footer__title">{% trans "İletişim" %}</h3>
+                <ul class="footer__links">
+                    <li>info@lezzetharitasi.com</li>
+                </ul>
+            </div>
+        </div>
+
+        {# ── Telif Hakkı ── #}
+        <div class="footer__bottom">
+            <p>
+                &copy; {% now "Y" %} Lezzet Haritası.
+                {% trans "Tüm hakları saklıdır." %}
+            </p>
+        </div>
+    </div>
+</footer>

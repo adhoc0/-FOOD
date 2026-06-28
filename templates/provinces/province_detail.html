@@ -1,0 +1,346 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ province.name }} Yöresel Yemekleri - Türkiye'nin Lezzet Haritası{% endblock %}
+
+{% block content %}
+<div class="province-header glassmorphism">
+    <div class="province-title-wrapper">
+        <div class="plate-badge">{{ province.plate_code|stringformat:"02d" }}</div>
+        <div>
+            <h1 class="province-title">{{ province.name }} Mutfağı</h1>
+            <p class="province-region"><i class="fas fa-map-marker-alt"></i> {{ province.region }}</p>
+        </div>
+    </div>
+    <a href="{% url 'pages:home' %}" class="btn-back"><i class="fas fa-arrow-left"></i> Haritaya Dön</a>
+</div>
+
+<div class="layout-grid">
+    <!-- Sol/Orta Alan: A-Z Tüm Tarifler -->
+    <main class="main-content">
+        <h2 class="section-heading">Tüm Yöresel Lezzetler (A-Z)</h2>
+        
+        {% if recipes_az %}
+            <div class="recipe-grid">
+                {% for recipe in recipes_az %}
+                <div class="recipe-card glassmorphism">
+                    <!-- Gelecekte gerçek görsel eklenecek -->
+                    <div class="recipe-img-placeholder">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <div class="recipe-content">
+                        <h3><a href="{% url 'recipes:detail' recipe.slug %}">{{ recipe.title }}</a></h3>
+                        <p class="recipe-desc">{{ recipe.description|truncatechars:80 }}</p>
+                        <div class="recipe-meta">
+                            <span><i class="far fa-clock"></i> {{ recipe.prep_time_minutes|add:recipe.cook_time_minutes }} dk</span>
+                            <span class="difficulty {{ recipe.difficulty|lower }}">{{ recipe.difficulty }}</span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state glassmorphism">
+                <i class="fas fa-folder-open"></i>
+                <p>Henüz {{ province.name }} yöresine ait bir tarif eklenmemiş.</p>
+                <button class="btn-primary">İlk Tarifi Sen Ekle</button>
+            </div>
+        {% endif %}
+    </main>
+
+    <!-- Sağ Sidebar: En Çok Beğenilenler -->
+    <aside class="sidebar">
+        <div class="sidebar-widget glassmorphism">
+            <h3 class="widget-title"><i class="fas fa-star"></i> Popüler {{ province.name }} Lezzetleri</h3>
+            
+            {% if top_recipes %}
+                <ul class="top-recipes-list">
+                    {% for recipe in top_recipes %}
+                    <li class="top-recipe-item">
+                        <div class="top-img-placeholder"></div>
+                        <div class="top-recipe-info">
+                            <h4><a href="{% url 'recipes:detail' recipe.slug %}">{{ recipe.title }}</a></h4>
+                            <div class="stars">
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="far fa-star text-warning"></i>
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted">Yeterli veri yok.</p>
+            {% endif %}
+        </div>
+    </aside>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .province-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 2rem;
+        border-radius: 20px;
+        margin-bottom: 2rem;
+        background: linear-gradient(to right, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+    }
+
+    .province-title-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .plate-badge {
+        background: #ff6b6b;
+        color: white;
+        font-size: 2.5rem;
+        font-weight: 800;
+        width: 80px;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 16px;
+        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .province-title {
+        font-size: 2.5rem;
+        margin: 0 0 0.5rem 0;
+        color: #fff;
+    }
+
+    .province-region {
+        color: var(--text-secondary);
+        font-size: 1.1rem;
+        margin: 0;
+    }
+
+    .btn-back {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        text-decoration: none;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-back:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+    }
+
+    /* Layout */
+    .layout-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 2rem;
+    }
+
+    @media (max-width: 992px) {
+        .layout-grid {
+            grid-template-columns: 1fr;
+        }
+        .province-header {
+            flex-direction: column;
+            text-align: center;
+            gap: 1.5rem;
+        }
+        .province-title-wrapper {
+            flex-direction: column;
+        }
+    }
+
+    .section-heading {
+        margin-bottom: 1.5rem;
+        color: #fff;
+        font-size: 1.8rem;
+    }
+
+    /* Recipe Grid */
+    .recipe-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .recipe-card {
+        border-radius: 16px;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+        background: rgba(30, 41, 59, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .recipe-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    }
+
+    .recipe-img-placeholder {
+        height: 180px;
+        background: linear-gradient(45deg, #2c3e50, #3498db);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        color: rgba(255, 255, 255, 0.2);
+    }
+
+    .recipe-content {
+        padding: 1.5rem;
+    }
+
+    .recipe-content h3 {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.3rem;
+    }
+
+    .recipe-content h3 a {
+        color: #fff;
+        text-decoration: none;
+    }
+
+    .recipe-content h3 a:hover {
+        color: #ff6b6b;
+    }
+
+    .recipe-desc {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+        line-height: 1.5;
+    }
+
+    .recipe-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.85rem;
+        color: #cbd5e1;
+    }
+
+    .difficulty {
+        padding: 0.25rem 0.75rem;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.8rem;
+    }
+    .difficulty.kolay { background: rgba(46, 204, 113, 0.2); color: #2ecc71; }
+    .difficulty.orta { background: rgba(241, 196, 15, 0.2); color: #f1c40f; }
+    .difficulty.zor { background: rgba(231, 76, 60, 0.2); color: #e74c3c; }
+
+    /* Sidebar */
+    .sidebar-widget {
+        padding: 1.5rem;
+        border-radius: 16px;
+        background: rgba(30, 41, 59, 0.6);
+    }
+
+    .widget-title {
+        font-size: 1.2rem;
+        margin-bottom: 1.5rem;
+        color: #fff;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        padding-bottom: 0.8rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .top-recipes-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .top-recipe-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .top-recipe-item:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+    }
+
+    .top-img-placeholder {
+        width: 60px;
+        height: 60px;
+        border-radius: 10px;
+        background: #34495e;
+        flex-shrink: 0;
+    }
+
+    .top-recipe-info h4 {
+        margin: 0 0 0.3rem 0;
+        font-size: 1rem;
+    }
+
+    .top-recipe-info h4 a {
+        color: #fff;
+        text-decoration: none;
+    }
+
+    .top-recipe-info h4 a:hover {
+        color: #ff6b6b;
+    }
+
+    .stars {
+        font-size: 0.8rem;
+    }
+    .text-warning { color: #feca57; }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        border-radius: 16px;
+        background: rgba(30, 41, 59, 0.4);
+    }
+
+    .empty-state i {
+        font-size: 4rem;
+        color: rgba(255,255,255,0.1);
+        margin-bottom: 1rem;
+    }
+
+    .empty-state p {
+        color: var(--text-secondary);
+        margin-bottom: 1.5rem;
+    }
+
+    .btn-primary {
+        background: linear-gradient(45deg, #ff6b6b, #ee5253);
+        color: white;
+        border: none;
+        padding: 0.8rem 1.5rem;
+        border-radius: 50px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+    }
+</style>
+{% endblock %}

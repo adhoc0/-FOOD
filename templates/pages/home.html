@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Ana Sayfa - Türkiye Yöresel Yemekleri{% endblock %}
+
+{% block content %}
+<section class="hero glassmorphism">
+    <div class="hero-content">
+        <h1 class="animate-fade-in-up">Türkiye'nin Lezzet Haritası</h1>
+        <p class="animate-fade-in-up delay-100">81 ilin binlerce yöresel tarifini keşfet. Kendi favorilerini oluştur, yeni lezzetler dene.</p>
+        <div class="map-tooltip" id="map-tooltip" style="display: none;"></div>
+    </div>
+</section>
+
+<section class="map-container glassmorphism animate-fade-in-up delay-200">
+    <!-- SVG Harita burada yüklenecek -->
+    {% include "includes/turkey_map.html" %}
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pages/home.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const provinces = document.querySelectorAll('#svg-turkiye-haritasi g');
+        const tooltip = document.getElementById('map-tooltip');
+        const mapContainer = document.querySelector('.map-container');
+
+        provinces.forEach(province => {
+            province.addEventListener('mouseenter', (e) => {
+                const name = province.getAttribute('data-iladi');
+                if (name) {
+                    tooltip.innerHTML = `<span style="color:#ff6b6b;">${name}</span> Mutfağı`;
+                    tooltip.style.display = 'block';
+                    tooltip.style.opacity = '1';
+                }
+            });
+
+            province.addEventListener('mousemove', (e) => {
+                const containerRect = mapContainer.getBoundingClientRect();
+                const x = e.clientX - containerRect.left;
+                const y = e.clientY - containerRect.top;
+                
+                tooltip.style.left = `${x}px`;
+                tooltip.style.top = `${y}px`;
+            });
+
+            province.addEventListener('mouseleave', () => {
+                tooltip.style.opacity = '0';
+                setTimeout(() => {
+                    tooltip.style.display = 'none';
+                }, 200);
+            });
+
+            province.addEventListener('click', () => {
+                const slug = province.getAttribute('id');
+                if (slug && slug !== 'turkiye') {
+                    window.location.href = `/il/${slug}/`;
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

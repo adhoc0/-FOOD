@@ -1,0 +1,84 @@
+/* Premium Hero Section */
+.hero {
+    text-align: center;
+    padding: 4rem 2rem;
+    margin-bottom: 3rem;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    background: -webkit-linear-gradient(45deg, #ff6b6b, #feca57);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Map Container */
+.map-container {
+    padding: 2rem;
+    border-radius: 20px;
+    background: rgba(30, 41, 59, 0.7); /* Koyu mavi/gri glass */
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* SVG Map Styles */
+#svg-turkiye-haritasi {
+    width: 100%;
+    max-width: 1000px;
+    height: auto;
+    filter: drop-shadow(0px 10px 15px rgba(0,0,0,0.5));
+}
+
+#svg-turkiye-haritasi g {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#svg-turkiye-haritasi g path {
+    transition: all 0.3s ease;
+    fill: rgba(255, 255, 255, 0.15);
+    stroke: rgba(255, 255, 255, 0.4);
+    stroke-width: 1.5;
+}
+
+#svg-turkiye-haritasi g:hover path {
+    fill: #ff6b6b;
+    stroke: #fff;
+    stroke-width: 2.5;
+}
+
+/* Tooltip */
+.map-tooltip {
+    position: absolute;
+    background: rgba(15, 23, 42, 0.9);
+    color: #fff;
+    padding: 0.8rem 1.5rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    pointer-events: none;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    border: 1px solid rgba(255, 107, 107, 0.4);
+    transform: translate(-50%, -150%);
+    z-index: 100;
+    transition: opacity 0.2s ease;
+}

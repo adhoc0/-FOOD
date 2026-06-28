@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Tüm Yöresel Tarifler - Türkiye Yöresel Yemekleri{% endblock %}
+
+{% block content %}
+<div class="list-header glassmorphism">
+    {% if search_query %}
+        <h1>"{{ search_query }}" için Arama Sonuçları</h1>
+        <p>Bulunan tarifler aşağıda listelenmiştir.</p>
+    {% else %}
+        <h1>Tüm Yöresel Lezzetler</h1>
+        <p>Türkiye'nin dört bir yanından binlerce tarif.</p>
+    {% endif %}
+</div>
+
+{% if recipes %}
+    <div class="recipe-grid">
+        {% for recipe in recipes %}
+        <div class="recipe-card glassmorphism">
+            <div class="recipe-img-placeholder">
+                <i class="fas fa-utensils"></i>
+            </div>
+            <div class="recipe-content">
+                <h3><a href="{% url 'recipes:detail' recipe.slug %}">{{ recipe.title }}</a></h3>
+                <p class="recipe-desc">{{ recipe.province.name }} Yöresi - {{ recipe.description|truncatechars:60 }}</p>
+                <div class="recipe-meta">
+                    <span><i class="far fa-clock"></i> {{ recipe.prep_time_minutes|add:recipe.cook_time_minutes }} dk</span>
+                    <span class="difficulty {{ recipe.difficulty|lower }}">{{ recipe.difficulty }}</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Paginator -->
+    {% if is_paginated %}
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}" class="btn-primary">&laquo; Önceki</a>
+        {% endif %}
+        
+        <span class="current-page">Sayfa {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+        
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="btn-primary">Sonraki &raquo;</a>
+        {% endif %}
+    </div>
+    {% endif %}
+
+{% else %}
+    <div class="empty-state glassmorphism">
+        <i class="fas fa-folder-open"></i>
+        <p>Sistemde henüz yayınlanmış bir tarif bulunmuyor.</p>
+    </div>
+{% endif %}
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pages/recipes.css' %}">
+{% endblock %}

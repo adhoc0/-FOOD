@@ -1,0 +1,17 @@
+{% load i18n %}
+
+
+{% if messages %}
+<div class="messages" role="alert" aria-live="polite">
+    <div class="container">
+        {% for message in messages %}
+        <div class="message message--{{ message.tags }}" data-message>
+            <span class="message__text">{{ message }}</span>
+            <button class="message__close" aria-label="{% trans 'Mesajı kapat' %}" data-dismiss="message">
+                &times;
+            </button>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}

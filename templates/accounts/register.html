@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Kayıt Ol - Türkiye Yöresel Yemekleri{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card glassmorphism">
+        <div class="auth-header">
+            <h2><i class="fas fa-user-plus"></i> Kayıt Ol</h2>
+            <p>Lezzetleri keşfetmek ve paylaşmak için hemen katılın.</p>
+        </div>
+        
+        <form method="post" class="auth-form" novalidate>
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+                <div class="alert alert-error">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+            
+            {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.help_text %}
+                        <div class="field-help">{{ field.help_text|safe }}</div>
+                    {% endif %}
+                    {% if field.errors %}
+                        <div class="field-error">
+                            {{ field.errors|striptags }}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            
+            <div class="form-actions">
+                <button type="submit" class="btn-primary w-100">Hesap Oluştur</button>
+            </div>
+            
+            <div class="auth-links">
+                <p>Zaten bir hesabınız var mı? <a href="{% url 'accounts:login' %}">Giriş Yapın</a></p>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pages/accounts.css' %}">
+{% endblock %}

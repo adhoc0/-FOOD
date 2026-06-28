@@ -1,0 +1,557 @@
+.list-header {
+    text-align: center;
+    padding: 3rem 2rem;
+    border-radius: 20px;
+    margin-bottom: 2rem;
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+}
+
+.list-header h1 {
+    color: #fff;
+    margin-bottom: 0.5rem;
+    font-size: 2.5rem;
+}
+
+.list-header p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+}
+
+/* Grid ve Card Stilleri (Önceki sayfalardan ortak kullanılabilir) */
+.recipe-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.recipe-card {
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.recipe-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+.recipe-img-placeholder {
+    height: 180px;
+    background: linear-gradient(45deg, #2c3e50, #3498db);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: rgba(255, 255, 255, 0.2);
+}
+
+.recipe-content {
+    padding: 1.5rem;
+}
+
+.recipe-content h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.3rem;
+}
+
+.recipe-content h3 a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.recipe-content h3 a:hover {
+    color: #ff6b6b;
+}
+
+.recipe-desc {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.recipe-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    color: #cbd5e1;
+}
+
+.difficulty {
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.8rem;
+}
+.difficulty.kolay { background: rgba(46, 204, 113, 0.2); color: #2ecc71; }
+.difficulty.orta { background: rgba(241, 196, 15, 0.2); color: #f1c40f; }
+.difficulty.zor { background: rgba(231, 76, 60, 0.2); color: #e74c3c; }
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 3rem;
+}
+
+.current-page {
+    color: #fff;
+    font-weight: 600;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #ff6b6b, #ee5253);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    border-radius: 16px;
+    background: rgba(30, 41, 59, 0.4);
+}
+
+.empty-state i {
+    font-size: 4rem;
+    color: rgba(255,255,255,0.1);
+    margin-bottom: 1rem;
+}
+
+.empty-state p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+}
+
+
+    /* Hero Alanı */
+    .recipe-detail-header {
+        padding: 2rem;
+        border-radius: 20px;
+        margin-bottom: 2rem;
+        background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+    }
+
+    .recipe-hero {
+        display: flex;
+        gap: 2rem;
+    }
+
+    .recipe-hero-image {
+        flex: 1;
+        max-width: 400px;
+    }
+
+    .recipe-hero-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    .image-placeholder {
+        width: 100%;
+        height: 300px;
+        background: linear-gradient(45deg, #2c3e50, #3498db);
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 5rem;
+        color: rgba(255, 255, 255, 0.2);
+    }
+
+    .recipe-hero-info {
+        flex: 2;
+    }
+
+    .province-badge {
+        display: inline-block;
+        background: #ff6b6b;
+        color: white;
+        padding: 0.4rem 1rem;
+        border-radius: 50px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .recipe-hero-info h1 {
+        font-size: 2.5rem;
+        color: #fff;
+        margin-bottom: 1rem;
+    }
+
+    .recipe-description {
+        color: var(--text-secondary);
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+    }
+
+    .recipe-meta-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .meta-item {
+        background: rgba(255,255,255,0.05);
+        padding: 1rem;
+        border-radius: 12px;
+        border: 1px solid rgba(255,255,255,0.1);
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        color: #cbd5e1;
+    }
+
+    .meta-item i {
+        font-size: 1.5rem;
+        color: #feca57;
+    }
+
+    /* Actions */
+    .btn-favorite {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(255,255,255,0.1);
+        color: #fff;
+        border: 1px solid rgba(255,255,255,0.2);
+        padding: 0.8rem 1.5rem;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.3s;
+    }
+
+    .btn-favorite:hover {
+        background: rgba(255,255,255,0.2);
+    }
+
+    .btn-favorite.active {
+        background: rgba(231, 76, 60, 0.2);
+        color: #ff6b6b;
+        border-color: rgba(231, 76, 60, 0.4);
+    }
+    
+    .btn-favorite.active i {
+        color: #ff6b6b;
+    }
+
+    /* Layout */
+    .layout-grid {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 2rem;
+    }
+
+    @media (max-width: 992px) {
+        .layout-grid { grid-template-columns: 1fr; }
+        .recipe-hero { flex-direction: column; }
+        .recipe-hero-image { max-width: 100%; }
+    }
+
+    .sidebar-widget, .content-widget {
+        padding: 2rem;
+        border-radius: 20px;
+        background: rgba(30, 41, 59, 0.6);
+    }
+
+    .mt-2 { margin-top: 2rem; }
+    .mt-1 { margin-top: 1rem; }
+
+    h3 {
+        color: #fff;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        padding-bottom: 0.8rem;
+    }
+
+    /* Malzemeler */
+    .ingredient-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .ingredient-list li {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.8rem 0;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        color: #cbd5e1;
+    }
+
+    .ingredient-list li:last-child {
+        border-bottom: none;
+    }
+
+    .ingredient-name {
+        font-weight: 500;
+    }
+
+    .ingredient-amount {
+        color: #feca57;
+        font-weight: 600;
+    }
+
+    /* Yapılışı */
+    .recipe-instructions {
+        color: #cbd5e1;
+        line-height: 1.8;
+        font-size: 1.05rem;
+    }
+
+    /* Yorumlar */
+    .comment-form-box {
+        background: rgba(0,0,0,0.2);
+        padding: 1.5rem;
+        border-radius: 15px;
+        margin-bottom: 2rem;
+    }
+
+    .comment-form-box h4 {
+        color: #fff;
+        margin-top: 0;
+        margin-bottom: 1rem;
+    }
+
+    .form-control {
+        width: 100%;
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: #fff;
+        padding: 0.8rem;
+        border-radius: 10px;
+        font-family: inherit;
+    }
+    
+    .form-control:focus {
+        outline: none;
+        border-color: #ff6b6b;
+    }
+
+    .rating-input {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .rating-input select {
+        width: auto;
+    }
+
+    .btn-primary {
+        background: linear-gradient(45deg, #ff6b6b, #ee5253);
+        color: white;
+        border: none;
+        padding: 0.8rem 1.5rem;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+    }
+
+    .comment-item {
+        display: flex;
+        gap: 1.5rem;
+        padding: 1.5rem;
+        background: rgba(255,255,255,0.03);
+        border-radius: 15px;
+        margin-bottom: 1rem;
+    }
+
+    .comment-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: #34495e;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: #fff;
+        flex-shrink: 0;
+    }
+
+    .comment-body {
+        flex: 1;
+    }
+
+    .comment-meta {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+        color: #fff;
+    }
+
+    .comment-body p {
+        color: #cbd5e1;
+        margin: 0;
+        line-height: 1.6;
+    }
+
+    .alert-info {
+        background: rgba(52, 152, 219, 0.2);
+        color: #3498db;
+        padding: 1rem;
+        border-radius: 10px;
+        border: 1px solid rgba(52, 152, 219, 0.3);
+    }
+    .alert-info a {
+        color: #fff;
+        font-weight: bold;
+    }
+
+
+    .form-page-container {
+        display: flex;
+        justify-content: center;
+        padding: 2rem 0;
+    }
+
+    .form-card {
+        width: 100%;
+        max-width: 800px;
+        padding: 3rem;
+        border-radius: 20px;
+        background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+    }
+
+    .form-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+    }
+
+    .form-header h2 {
+        color: #fff;
+        font-size: 2.2rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-header p {
+        color: var(--text-secondary);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-row {
+        display: flex;
+        gap: 1.5rem;
+    }
+
+    .half { flex: 1; }
+    .third { flex: 1; }
+
+    @media (max-width: 768px) {
+        .form-row { flex-direction: column; gap: 0; }
+    }
+
+    .recipe-form label {
+        display: block;
+        color: #cbd5e1;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.8rem 1rem;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #fff;
+        font-size: 1rem;
+        font-family: inherit;
+        transition: border-color 0.3s;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: #ff6b6b;
+    }
+
+    .help-text {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        margin-bottom: 0.5rem;
+    }
+
+    .field-error {
+        color: #ff6b6b;
+        font-size: 0.85rem;
+        margin-top: 0.5rem;
+    }
+
+    .alert-error {
+        background: rgba(231, 76, 60, 0.2);
+        color: #ff6b6b;
+        padding: 1rem;
+        border-radius: 10px;
+        border: 1px solid rgba(231, 76, 60, 0.3);
+        margin-bottom: 1.5rem;
+    }
+
+    .form-divider {
+        border: 0;
+        height: 1px;
+        background: rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .mt-2 { margin-top: 2rem; }
+    .w-100 { width: 100%; }
+
+    .btn-primary {
+        background: linear-gradient(45deg, #ff6b6b, #ee5253);
+        color: white;
+        border: none;
+        padding: 0.8rem 1.5rem;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-large {
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+    }

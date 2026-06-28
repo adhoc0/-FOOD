@@ -1,0 +1,2 @@
+# Bu klasör i18n çeviri dosyalarını tutar.
+# Kullanım: python manage.py makemessages -l en
