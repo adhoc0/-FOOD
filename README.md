@@ -1,4 +1,4 @@
-# Türkiye Lezzet Haritası (Turkish Cuisine Map) 🍽️
+# Türkiye Lezzet Haritası (Turkish Cuisine Map) 🍽️ - v1.0.1
 
 Türkiye'nin dört bir yanından, 81 ilimize ait yöresel yemek tariflerini keşfedebileceğiniz, kendi tariflerinizi paylaşabileceğiniz ve diğer lezzet tutkunlarıyla etkileşime geçebileceğiniz interaktif bir web platformu.
 
