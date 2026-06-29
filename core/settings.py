@@ -31,11 +31,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ─────────────────────────────────────────────
 # Security
 # ─────────────────────────────────────────────
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-m+z#1$f=y-4&3f6+l#q+n&n9v&n9v&n9v&n9v&n9v&n9v&n9v')
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-m+z#1$f=y-4&3f6+l#q+n&n9v&n9v&n9v&n9v&n9v&n9v&n9v')
 
-DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost', cast=Csv())
 
 
 # ─────────────────────────────────────────────
@@ -65,7 +65,6 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     'accounts.apps.AccountsConfig',
     'pages.apps.PagesConfig',
-    # Sprint 1'de eklenenler:
     'provinces.apps.ProvincesConfig',
     'recipes.apps.RecipesConfig',
     'interactions.apps.InteractionsConfig',
@@ -79,6 +78,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 # ─────────────────────────────────────────────
 # KRITIK: Bu ayar ilk migration'dan ÖNCE yapılmalıdır.
 # Sonradan değiştirmek tüm migration geçmişini bozar.
+
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
 
@@ -146,11 +146,11 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME', 'yemek_db'),
-        'USER': os.environ.get('DB_USER', 'postgres'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', ''),
-        'HOST': os.environ.get('DB_HOST', 'localhost'),
-        'PORT': os.environ.get('DB_PORT', '5432'),
+        'NAME': config('DB_NAME', default='yemek_db'),
+        'USER': config('DB_USER', default='postgres'),
+        'PASSWORD': config('DB_PASSWORD', default=''),
+        'HOST': config('DB_HOST', default='localhost'),
+        'PORT': config('DB_PORT', default='5432'),
         'OPTIONS': {
             'connect_timeout': 5,
         }

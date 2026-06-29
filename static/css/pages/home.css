@@ -4,7 +4,7 @@
     padding: 4rem 2rem;
     margin-bottom: 3rem;
     border-radius: 20px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
@@ -14,8 +14,9 @@
 .hero h1 {
     font-size: 3rem;
     margin-bottom: 1rem;
-    background: -webkit-linear-gradient(45deg, #ff6b6b, #feca57);
+    background: linear-gradient(45deg, #ff6b6b, #feca57);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     font-weight: 800;
 }
@@ -31,10 +32,7 @@
 .map-container {
     padding: 2rem;
     border-radius: 20px;
-    background: rgba(30, 41, 59, 0.7); /* Koyu mavi/gri glass */
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #ffffff; /* Görseldeki gibi saf beyaz arka plan */
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -43,9 +41,9 @@
 /* SVG Map Styles */
 #svg-turkiye-haritasi {
     width: 100%;
-    max-width: 1000px;
+    max-width: 100%;
     height: auto;
-    filter: drop-shadow(0px 10px 15px rgba(0,0,0,0.5));
+    filter: drop-shadow(5px 10px 15px rgba(0, 0, 0, 0.15)); /* Haritanın dış gölgesi görseldeki gibi belirgin */
 }
 
 #svg-turkiye-haritasi g {
@@ -55,30 +53,101 @@
 
 #svg-turkiye-haritasi g path {
     transition: all 0.3s ease;
-    fill: rgba(255, 255, 255, 0.15);
-    stroke: rgba(255, 255, 255, 0.4);
-    stroke-width: 1.5;
+    fill: #F4F0EA; /* Görseldeki açık krem/bej dolgu */
+    stroke: #A89F91; /* Daha belirgin (koyu) ama doğal sınır çizgileri */
+    stroke-width: 0.2; /* Çok daha ince (kalem ucu gibi keskin) */
 }
 
-#svg-turkiye-haritasi g:hover path {
-    fill: #ff6b6b;
-    stroke: #fff;
-    stroke-width: 2.5;
+/* Kuzey Kıbrıs (Ayrı Ülke Vurgusu) */
+#svg-turkiye-haritasi g#kuzey-kibris path {
+    fill: #EAE3D8; /* Ana haritadan bir tık farklı bej */
+    stroke: #A89F91;
+}
+
+#svg-turkiye-haritasi g[data-iladi]:hover {
+    transform: translateY(-5px);
+}
+
+#svg-turkiye-haritasi g[data-iladi]:hover path {
+    fill: #FF8A3D; /* Şehir (Öne Çıkan) - Turuncu vurgu */
+    stroke: #ffffff;
+    stroke-width: 1.5; 
+}
+
+/* Üzerine gelindiğinde il yazısı beyaz olsun ki arka planda kaybolmasın */
+#svg-turkiye-haritasi g[data-iladi]:hover .province-label tspan {
+    fill: #ffffff !important;
+}
+
+#svg-turkiye-haritasi g#kuzey-kibris:hover path {
+    fill: #A8C99A; /* Hoverda yeşil (Tasarım önerisi) */
 }
 
 /* Tooltip */
 .map-tooltip {
     position: absolute;
-    background: rgba(15, 23, 42, 0.9);
-    color: #fff;
+    background: #ffffff;
+    color: #2E7D32; /* Koyu yeşil metin */
     padding: 0.8rem 1.5rem;
-    border-radius: 12px;
+    border-radius: 8px;
     font-size: 1rem;
     font-weight: 600;
     pointer-events: none;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-    border: 1px solid rgba(255, 107, 107, 0.4);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.05);
     transform: translate(-50%, -150%);
     z-index: 100;
     transition: opacity 0.2s ease;
 }
+
+
+/* Province Labels */
+.province-label tspan {
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+#svg-turkiye-haritasi g[data-iladi]:hover .province-label tspan {
+    fill: #fff !important;
+}
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(5px);
+    z-index: 2000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+}
+.modal-content {
+    background: linear-gradient(145deg, #1e293b, #0f172a);
+    padding: 2.5rem;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    animation: slideUp 0.3s ease;
+}
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    font-size: 2rem;
+    color: #94a3b8;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+.modal-close:hover { color: #ff6b6b; }
+.modal-header h2 { color: #ffffff; font-size: 1.5rem; margin-bottom: 0.5rem; }
+.modal-header p { color: #94a3b8; font-size: 0.9rem; margin-bottom: 1.5rem; }
+.placeholder-svg { width: 100%; border-radius: 15px; margin-bottom: 1.5rem; border: 1px dashed rgba(255,255,255,0.1); }
+.kktc-districts { color: #cbd5e1; font-size: 0.85rem; line-height: 1.8; }
+.kktc-districts span { font-weight: 500; color: #ffffff; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }

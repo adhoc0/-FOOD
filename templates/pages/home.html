@@ -16,6 +16,29 @@
     <!-- SVG Harita burada yüklenecek -->
     {% include "includes/turkey_map.html" %}
 </section>
+
+<!-- KKTC Modal -->
+<div id="kktc-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+        <span class="modal-close">&times;</span>
+        <div class="modal-header">
+            <h2>Kuzey Kıbrıs Türk Cumhuriyeti</h2>
+            <p>İlçe Haritası ve Yöresel Lezzetler</p>
+        </div>
+        <div class="kktc-map-placeholder">
+            <!-- SVG map will be added here in the future -->
+            <svg viewBox="0 0 400 200" class="placeholder-svg">
+                <rect width="400" height="200" fill="#1e293b" rx="15"></rect>
+                <text x="200" y="100" fill="#94a3b8" text-anchor="middle" dominant-baseline="middle" font-size="16">KKTC İlçe Haritası Yakında Eklenecek</text>
+            </svg>
+            <div class="kktc-districts">
+                <span>Lefkoşa</span> • <span>Girne</span> • <span>Gazimağusa</span><br>
+                <span>Güzelyurt</span> • <span>İskele</span> • <span>Lefke</span>
+            </div>
+        </div>
+        <a href="#" class="btn btn--primary mt-lg" onclick="alert('KKTC sayfasına gidiliyor...'); return false;">Yemekleri Keşfet</a>
+    </div>
+</div>
 {% endblock %}
 
 {% block extra_css %}
@@ -30,10 +53,68 @@
         const mapContainer = document.querySelector('.map-container');
 
         provinces.forEach(province => {
+            // Label ekleme mantığı
+            const path = province.querySelector('path');
+            const name = province.getAttribute('data-iladi');
+            const plate = province.getAttribute('data-plakakodu');
+            const isKibris = province.getAttribute('id') === 'kuzey-kibris';
+            
+            if (name && province.getAttribute('id') !== 'turkiye') {
+                const bbox = province.getBBox(); // Grup sınırlarını da hesapla (İstanbul için)
+                const centerX = bbox.x + bbox.width / 2;
+                const centerY = bbox.y + bbox.height / 2;
+
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', centerX);
+                text.setAttribute('y', centerY);
+                text.setAttribute('text-anchor', 'middle');
+                text.setAttribute('dominant-baseline', 'middle');
+                text.setAttribute('class', 'province-label');
+                text.style.pointerEvents = 'none';
+
+                if (isKibris) {
+                    const tspanMain = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+                    tspanMain.setAttribute('x', centerX);
+                    tspanMain.setAttribute('dy', '0');
+                    tspanMain.textContent = "KKTC";
+                    tspanMain.style.fontSize = '12px';
+                    tspanMain.style.fontWeight = 'bold';
+                    tspanMain.style.fill = '#1A1A1A'; // Görseldeki siyah
+                    text.appendChild(tspanMain);
+                } else if (plate) {
+                    const tspanPlate = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+                    tspanPlate.setAttribute('x', centerX);
+                    tspanPlate.setAttribute('dy', '-0.3em'); // Plaka hafif yukarıda
+                    tspanPlate.textContent = plate;
+                    tspanPlate.style.fontSize = '12px';
+                    tspanPlate.style.fontWeight = 'bold';
+                    tspanPlate.style.fill = '#1A1A1A';
+                    tspanPlate.style.transition = 'all 0.3s ease';
+                    text.appendChild(tspanPlate);
+
+                    const tspanName = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+                    tspanName.setAttribute('x', centerX);
+                    tspanName.setAttribute('dy', '1.2em'); // İsim plakanın altında
+                    tspanName.textContent = name;
+                    tspanName.style.fontSize = '9px';
+                    tspanName.style.fontWeight = '400';
+                    tspanName.style.fill = '#1A1A1A';
+                    tspanName.style.transition = 'all 0.3s ease';
+                    text.appendChild(tspanName);
+                }
+
+                province.appendChild(text);
+            }
+
+            // Etkileşimler
             province.addEventListener('mouseenter', (e) => {
                 const name = province.getAttribute('data-iladi');
                 if (name) {
-                    tooltip.innerHTML = `<span style="color:#ff6b6b;">${name}</span> Mutfağı`;
+                    if (isKibris) {
+                        tooltip.innerHTML = `<span style="color:#2E7D32;">Kuzey Kıbrıs Türk Cumhuriyeti</span>`;
+                    } else {
+                        tooltip.innerHTML = `<span style="color:#FF8A3D; font-weight:700;">${name}</span> <span style="color:#2E7D32;">Mutfağı</span>`;
+                    }
                     tooltip.style.display = 'block';
                     tooltip.style.opacity = '1';
                 }
@@ -57,10 +138,23 @@
 
             province.addEventListener('click', () => {
                 const slug = province.getAttribute('id');
-                if (slug && slug !== 'turkiye') {
+                if (isKibris) {
+                    document.getElementById('kktc-modal').style.display = 'flex';
+                } else if (slug && slug !== 'turkiye') {
                     window.location.href = `/il/${slug}/`;
                 }
             });
+        });
+
+        // Modal kapatma mantığı
+        document.querySelector('.modal-close').addEventListener('click', () => {
+            document.getElementById('kktc-modal').style.display = 'none';
+        });
+        window.addEventListener('click', (e) => {
+            const modal = document.getElementById('kktc-modal');
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
         });
     });
 </script>
