@@ -16,6 +16,11 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
+# ── Admin Panel Özelleştirmesi ──
+admin.site.site_header = 'Türkiye Yöresel Yemekleri — Yönetim'
+admin.site.site_title = 'Lezzet Haritası Admin'
+admin.site.index_title = 'Yönetim Paneli'
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('pages.urls')),

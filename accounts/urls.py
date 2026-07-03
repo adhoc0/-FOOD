@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, reverse_lazy
 from django.contrib.auth import views as auth_views
 
 from .views import RegisterView, CustomLoginView, ProfileView
@@ -10,21 +10,31 @@ urlpatterns = [
     path('giris/', CustomLoginView.as_view(), name='login'),
     path('cikis/', auth_views.LogoutView.as_view(), name='logout'),
     path('profil/', ProfileView.as_view(), name='profile'),
-    
+
     # Password Reset URLs
-    path('sifremi-unuttum/', 
-         auth_views.PasswordResetView.as_view(template_name='accounts/password_reset_form.html', success_url='/hesap/sifre-sifirlama-gonderildi/'), 
+    path('sifremi-unuttum/',
+         auth_views.PasswordResetView.as_view(
+             template_name='accounts/password_reset_form.html',
+             success_url=reverse_lazy('accounts:password_reset_done'),
+         ),
          name='password_reset'),
-         
-    path('sifre-sifirlama-gonderildi/', 
-         auth_views.PasswordResetDoneView.as_view(template_name='accounts/password_reset_done.html'), 
+
+    path('sifre-sifirlama-gonderildi/',
+         auth_views.PasswordResetDoneView.as_view(
+             template_name='accounts/password_reset_done.html',
+         ),
          name='password_reset_done'),
-         
-    path('sifre-sifirla/<uidb64>/<token>/', 
-         auth_views.PasswordResetConfirmView.as_view(template_name='accounts/password_reset_confirm.html', success_url='/hesap/sifre-sifirlama-tamamlandi/'), 
+
+    path('sifre-sifirla/<uidb64>/<token>/',
+         auth_views.PasswordResetConfirmView.as_view(
+             template_name='accounts/password_reset_confirm.html',
+             success_url=reverse_lazy('accounts:password_reset_complete'),
+         ),
          name='password_reset_confirm'),
-         
-    path('sifre-sifirlama-tamamlandi/', 
-         auth_views.PasswordResetCompleteView.as_view(template_name='accounts/password_reset_complete.html'), 
+
+    path('sifre-sifirlama-tamamlandi/',
+         auth_views.PasswordResetCompleteView.as_view(
+             template_name='accounts/password_reset_complete.html',
+         ),
          name='password_reset_complete'),
 ]

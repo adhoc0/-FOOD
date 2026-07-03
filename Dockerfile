@@ -1,22 +1,23 @@
 FROM python:3.12-slim
 
 # Ortam değişkenlerini ayarla
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 ENV HOME=/app
 
 WORKDIR $HOME
 
-# Sistem bağımlılıklarını kur (PostgreSQL için gerekli)
+# Sistem bağımlılıklarını kur (PostgreSQL istemci araçları dahil)
 RUN apt-get update && apt-get install -y \
     gcc \
     libpq-dev \
+    postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 
-# Bağımlılıkları kopyala ve kur
-COPY requirements.txt .
+# Bağımlılıkları kopyala ve kur (prod = base + gunicorn)
+COPY requirements/ requirements/
 RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip install -r requirements/prod.txt
 
 # Proje dosyalarını kopyala
 COPY . .

@@ -16,7 +16,6 @@ Mimari Notlar:
   → İleride çoklu dil eklemek tek komutla mümkün
 """
 
-import os
 from pathlib import Path
 # pyrefly: ignore [missing-import]
 from decouple import config, Csv
@@ -146,7 +145,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME', default='yemek_db'),
+        'NAME': config('DB_NAME', default='food_db'),
         'USER': config('DB_USER', default='postgres'),
         'PASSWORD': config('DB_PASSWORD', default=''),
         'HOST': config('DB_HOST', default='localhost'),
@@ -214,7 +213,7 @@ LANGUAGES = [
 # STATIC_URL: Tarayıcıdan erişim URL'i
 # STATICFILES_DIRS: Geliştirme sırasında ek static klasörler
 # STATIC_ROOT: collectstatic komutuyla dosyaların toplandığı yer (production)
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
@@ -244,8 +243,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Authentication URLs
 # ─────────────────────────────────────────────
 LOGIN_URL = 'accounts:login'
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'pages:home'
+LOGOUT_REDIRECT_URL = 'pages:home'
 
 
 # ─────────────────────────────────────────────
@@ -278,13 +277,79 @@ if not DEBUG:
     X_FRAME_OPTIONS = 'DENY'
 
 # ─────────────────────────────────────────────
+# CSRF Trusted Origins
+# ─────────────────────────────────────────────
+# Django 4.0+ HTTPS üzerinde CSRF doğrulaması için gereklidir.
+# Production'da gerçek domain eklenmeli.
+CSRF_TRUSTED_ORIGINS = config(
+    'CSRF_TRUSTED_ORIGINS',
+    default='http://localhost,http://127.0.0.1',
+    cast=Csv(),
+)
+
+
+# ─────────────────────────────────────────────
 # Email Settings (Development)
 # ─────────────────────────────────────────────
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+
 # ─────────────────────────────────────────────
-# Auth Redirects
+# Logging
 # ─────────────────────────────────────────────
-LOGIN_REDIRECT_URL = 'pages:home'
-LOGOUT_REDIRECT_URL = 'pages:home'
-LOGIN_URL = 'accounts:login'
+# Konsol + dosya çıktısı. Production'da Sentry veya benzeri
+# bir hata izleme servisi eklenebilir.
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'logs' / 'django.log',
+            'formatter': 'verbose',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': config('DJANGO_LOG_LEVEL', default='INFO'),
+            'propagate': False,
+        },
+        'django.request': {
+            'handlers': ['file'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+    },
+}
+
+
+# ─────────────────────────────────────────────
+# Cache
+# ─────────────────────────────────────────────
+# Şimdilik local-memory cache. Production'da Redis önerilir:
+# pip install django-redis → 'django_redis.cache.RedisCache'
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'food-cache',
+    }
+}
