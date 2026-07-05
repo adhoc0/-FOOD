@@ -1,31 +1,70 @@
-/* Premium Hero Section */
-.hero {
-    text-align: center;
-    padding: 4rem 2rem;
-    margin-bottom: 3rem;
-    border-radius: 20px;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.18);
+/* Premium Hero Section (artık harita üstte) */
+.hero-section {
+    padding: 2rem 0;
 }
 
-.hero h1 {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    background: linear-gradient(45deg, #ff6b6b, #feca57);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-weight: 800;
+/* Map Container adjustments */
+.map-container.section {
+    padding-top: 1rem;
+    padding-bottom: 2rem;
 }
 
-.hero p {
-    font-size: 1.2rem;
-    color: var(--text-secondary);
-    max-width: 600px;
-    margin: 0 auto;
+/* Stats Section Compact */
+.stats-container {
+    margin-top: -3rem; /* Haritaya biraz daha yakın olsun */
+    position: relative;
+    z-index: 10;
+}
+
+.hero-stats.compact {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    background: var(--color-surface);
+    padding: 1.5rem;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    gap: 1.5rem;
+}
+
+.hero-stats.compact .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.hero-stats.compact .stat-item strong {
+    font-size: 1.25rem;
+    color: var(--color-text);
+    line-height: 1;
+}
+
+.hero-stats.compact .stat-item span {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+}
+
+/* Recipe Grid */
+.recipe-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    padding-bottom: 3rem;
+}
+
+@media (max-width: 992px) {
+    .recipe-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+}
+@media (max-width: 576px) {
+    .hero-stats.compact {
+        flex-direction: column;
+        align-items: center;
+    }
+    .recipe-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* Map Container */
@@ -53,15 +92,15 @@
 
 #svg-turkiye-haritasi g path {
     transition: all 0.3s ease;
-    fill: #F4F0EA; /* Görseldeki açık krem/bej dolgu */
-    stroke: #A89F91; /* Daha belirgin (koyu) ama doğal sınır çizgileri */
-    stroke-width: 0.2; /* Çok daha ince (kalem ucu gibi keskin) */
+    fill: var(--color-bg); /* Krem/Bej dolgu */
+    stroke: #D6C5A5; /* İnce koyu sınır çizgileri */
+    stroke-width: 0.5;
 }
 
 /* Kuzey Kıbrıs (Ayrı Ülke Vurgusu) */
 #svg-turkiye-haritasi g#kuzey-kibris path {
-    fill: #EAE3D8; /* Ana haritadan bir tık farklı bej */
-    stroke: #A89F91;
+    fill: #EAE3D8;
+    stroke: #D6C5A5;
 }
 
 #svg-turkiye-haritasi g[data-iladi]:hover {
@@ -69,18 +108,35 @@
 }
 
 #svg-turkiye-haritasi g[data-iladi]:hover path {
-    fill: #FF8A3D; /* Şehir (Öne Çıkan) - Turuncu vurgu */
-    stroke: #ffffff;
+    fill: var(--color-primary); /* Şehir (Öne Çıkan) - Hardal vurgu */
+    stroke: var(--color-surface);
     stroke-width: 1.5; 
 }
 
-/* Üzerine gelindiğinde il yazısı beyaz olsun ki arka planda kaybolmasın */
+/* Province Labels styling defaults */
+.province-label tspan {
+    pointer-events: none;
+    transition: all 0.3s ease;
+    fill: var(--color-text);
+}
+
+/* Üzerine gelindiğinde il yazısı siyah kalsın */
 #svg-turkiye-haritasi g[data-iladi]:hover .province-label tspan {
-    fill: #ffffff !important;
+    fill: var(--color-text) !important;
+}
+
+/* Aktif (Seçili) durum class'ı (il sayfaları için) */
+#svg-turkiye-haritasi g[data-iladi].active path {
+    fill: var(--color-accent); /* Koyu yeşil */
+    stroke: var(--color-surface);
+}
+
+#svg-turkiye-haritasi g[data-iladi].active .province-label tspan {
+    fill: var(--color-surface) !important; /* Yeşil arka planda beyaz yazı */
 }
 
 #svg-turkiye-haritasi g#kuzey-kibris:hover path {
-    fill: #A8C99A; /* Hoverda yeşil (Tasarım önerisi) */
+    fill: var(--color-secondary); /* Hoverda yeşil (Tasarım önerisi) */
 }
 
 /* Tooltip */
@@ -98,6 +154,46 @@
     transform: translate(-50%, -150%);
     z-index: 100;
     transition: opacity 0.2s ease;
+}
+
+/* Selected Action Card */
+.map-action-card {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-accent);
+    color: var(--color-surface);
+    padding: 0.8rem 1.5rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    z-index: 105;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.map-action-card:hover {
+    background: var(--color-secondary-dark);
+    color: var(--color-surface);
+    transform: translateX(-50%) translateY(-2px);
+}
+
+.action-card-content {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.action-card-content strong {
+    font-size: 1.2rem;
+}
+
+.action-card-content span {
+    font-size: 1.1rem;
+    font-weight: 500;
 }
 
 

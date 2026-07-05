@@ -1,0 +1,137 @@
+/* ===========================================================
+   DESIGN SYSTEM
+   Türkiye Yöresel Yemekleri
+   Version : 1.0
+=========================================================== */
+
+:root {
+
+   /* =======================================================
+       COLORS
+    ======================================================= */
+
+   --color-background: #FAF7F2;
+
+   --color-surface: #FFFFFF;
+
+   --color-map: #F8F5EF;
+
+   --color-map-border: #DDD6C8;
+
+   --color-primary: #2E7D5B;
+
+   --color-primary-hover: #347F61;
+
+   --color-primary-dark: #205842;
+
+   --color-accent: #D4A017;
+
+   --color-accent-hover: #C39212;
+
+   --color-danger: #D64545;
+
+   --color-text: #1F2937;
+
+   --color-text-light: #6B7280;
+
+   --color-text-muted: #9CA3AF;
+
+   --color-success: #2E7D32;
+
+   --color-warning: #F59E0B;
+
+   --color-border: #E9E4DA;
+
+   --color-border-light: #F3F0EA;
+
+   --color-white: #FFFFFF;
+
+
+
+   /* =======================================================
+       SHADOWS
+    ======================================================= */
+
+   --shadow-xs:
+
+      0 2px 6px rgba(0, 0, 0, .03);
+
+   --shadow-sm:
+
+      0 6px 14px rgba(0, 0, 0, .05);
+
+   --shadow-md:
+
+      0 14px 35px rgba(0, 0, 0, .08);
+
+   --shadow-lg:
+
+      0 24px 60px rgba(0, 0, 0, .12);
+
+   --shadow-hover:
+
+      0 30px 70px rgba(46, 125, 91, .18);
+
+
+
+   /* =======================================================
+       BORDER RADIUS
+    ======================================================= */
+
+   --radius-xs: 8px;
+
+   --radius-sm: 12px;
+
+   --radius-md: 18px;
+
+   --radius-lg: 24px;
+
+   --radius-xl: 32px;
+
+
+
+   /* =======================================================
+       SPACING
+    ======================================================= */
+
+   --space-xs: .25rem;
+
+   --space-sm: .5rem;
+
+   --space-md: 1rem;
+
+   --space-lg: 1.5rem;
+
+   --space-xl: 2rem;
+
+   --space-2xl: 3rem;
+
+   --space-3xl: 5rem;
+
+
+
+   /* =======================================================
+       TRANSITIONS
+    ======================================================= */
+
+   --transition-fast: .20s ease;
+
+   --transition: .30s ease;
+
+   --transition-slow: .45s ease;
+
+
+
+   /* =======================================================
+       TYPOGRAPHY
+    ======================================================= */
+
+   --font-family:
+
+      Inter,
+
+      "Segoe UI",
+
+      sans-serif;
+
+}

@@ -1,0 +1,250 @@
+FOOD/
+├── .editorconfig
+├── .env
+├── .env.example
+├── .gitignore
+├── Dockerfile
+├── README.md
+├── accounts
+│   ├── __init__.py
+│   ├── admin
+│   ├── apps.py
+│   ├── forms.py
+│   ├── migrations
+│   │   ├── 0001_initial.py
+│   │   └── __init__.py
+│   ├── models
+│   ├── selectors
+│   ├── services
+│   ├── tests.py
+│   ├── urls.py
+│   ├── validators
+│   └── views.py
+├── analytics
+├── api
+├── core
+│   ├── __init__.py
+│   ├── asgi.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+├── docker-compose.yml
+├── docs
+│   ├── AI_CONTEXT.md
+│   ├── ARCHITECTURE.md
+│   ├── CODING_STANDARDS.md
+│   ├── DATABASE.md
+│   ├── DEPLOYMENT.md
+│   ├── README.md
+│   ├── ROADMAP.md
+│   ├── SECURITY.md
+│   └── SEO.md
+├── entrypoint.sh
+├── fixtures
+│   ├── categories.json
+│   └── regions.json
+├── humans.txt
+├── interactions
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── migrations
+│   │   ├── 0001_initial.py
+│   │   └── __init__.py
+│   ├── models
+│   │   ├── __init__.py
+│   │   ├── comment.py
+│   │   ├── favorite.py
+│   │   └── rating.py
+│   ├── tests.py
+│   ├── urls.py
+│   └── views.py
+├── locale
+├── logs
+│   ├── .gitkeep
+│   └── django.log
+├── manage.py
+├── management
+├── media
+│   └── .gitkeep
+├── mypy.ini
+├── nginx
+│   └── nginx.conf
+├── notifications
+├── pages
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── migrations
+│   │   └── __init__.py
+│   ├── models.py
+│   ├── tests.py
+│   ├── urls.py
+│   └── views.py
+├── provinces
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── management
+│   │   ├── __init__.py
+│   │   └── commands
+│   │       ├── __init__.py
+│   │       └── load_provinces.py
+│   ├── migrations
+│   │   ├── 0001_initial.py
+│   │   └── __init__.py
+│   ├── models
+│   │   ├── __init__.py
+│   │   ├── province.py
+│   │   └── region.py
+│   ├── tests.py
+│   ├── urls.py
+│   └── views.py
+├── pyproject.toml
+├── recipes
+│   ├── __init__.py
+│   ├── admin
+│   │   ├── __init__.py
+│   │   ├── category.py
+│   │   ├── cuisine.py
+│   │   ├── ingredient.py
+│   │   ├── recipe.py
+│   │   ├── recipe_image.py
+│   │   └── tag.py
+│   ├── apps.py
+│   ├── choices.py
+│   ├── migrations
+│   │   ├── 0001_initial.py
+│   │   └── __init__.py
+│   ├── models
+│   │   ├── __init__.py
+│   │   ├── category.py
+│   │   ├── cuisine.py
+│   │   ├── ingredient.py
+│   │   ├── recipe.py
+│   │   ├── recipe_category.py
+│   │   ├── recipe_image.py
+│   │   ├── recipe_ingredient.py
+│   │   ├── recipe_tag.py
+│   │   └── tag.py
+│   ├── selectors
+│   │   ├── __init__.py
+│   │   └── recipe_selector.py
+│   ├── services
+│   │   ├── __init__.py
+│   │   ├── image_service.py
+│   │   ├── recipe_service.py
+│   │   └── search_service.py
+│   ├── signals
+│   │   ├── __init__.py
+│   │   └── recipe_signals.py
+│   ├── tests.py
+│   ├── urls.py
+│   ├── validators
+│   │   ├── __init__.py
+│   │   ├── image_validator.py
+│   │   └── recipe_validator.py
+│   └── views.py
+├── requirements
+│   ├── base.txt
+│   ├── dev.txt
+│   └── prod.txt
+├── requirements.txt
+├── ruff.toml
+├── search
+├── sitemap.xml
+├── sitemaps
+├── static
+│   ├── css
+│   │   ├── base
+│   │   │   ├── reset.css
+│   │   │   ├── typography.css
+│   │   │   ├── utilities.css
+│   │   │   └── variables.css
+│   │   ├── components
+│   │   │   ├── action-card.css
+│   │   │   ├── buttons.css
+│   │   │   ├── map.css
+│   │   │   ├── modal.css
+│   │   │   ├── pagination.css
+│   │   │   ├── recipe-card.css
+│   │   │   ├── search.css
+│   │   │   └── tooltip.css
+│   │   ├── layout
+│   │   │   ├── container.css
+│   │   │   ├── footer.css
+│   │   │   ├── grid.css
+│   │   │   ├── header.css
+│   │   │   └── navbar.css
+│   │   └── pages
+│   │       ├── accounts.css
+│   │       ├── home.css
+│   │       ├── profile.css
+│   │       ├── provinces.css
+│   │       └── recipes.css
+│   ├── fonts
+│   ├── icons
+│   ├── images
+│   │   └── map
+│   │       └── .gitkeep
+│   ├── js
+│   │   ├── components
+│   │   │   ├── favorites.js
+│   │   │   ├── map.js
+│   │   │   ├── modal.js
+│   │   │   ├── search.js
+│   │   │   └── tooltip.js
+│   │   ├── core
+│   │   │   ├── api.js
+│   │   │   ├── app.js
+│   │   │   └── helpers.js
+│   │   ├── modules
+│   │   │   ├── comment.js
+│   │   │   ├── favorite.js
+│   │   │   └── rating.js
+│   │   └── pages
+│   │       ├── home.js
+│   │       ├── province.js
+│   │       └── recipe.js
+│   └── svg
+├── templates
+│   ├── accounts
+│   │   ├── login.html
+│   │   ├── password_reset_complete.html
+│   │   ├── password_reset_confirm.html
+│   │   ├── password_reset_done.html
+│   │   ├── password_reset_form.html
+│   │   ├── profile.html
+│   │   └── register.html
+│   ├── base.html
+│   ├── components
+│   │   ├── breadcrumb.html
+│   │   ├── footer.html
+│   │   ├── map
+│   │   │   ├── action_card.html
+│   │   │   ├── legend.html
+│   │   │   ├── loading.html
+│   │   │   ├── map.html
+│   │   │   └── tooltip.html
+│   │   ├── modal.html
+│   │   ├── navbar.html
+│   │   ├── pagination.html
+│   │   ├── province_card.html
+│   │   ├── rating.html
+│   │   ├── recipe_card.html
+│   │   └── search_box.html
+│   ├── layouts
+│   │   ├── auth.html
+│   │   └── default.html
+│   └── pages
+│       ├── home.html
+│       ├── profile.html
+│       ├── province_detail.html
+│       ├── recipe_detail.html
+│       └── search.html
+└── test
+    ├── __init__.py
+    ├── test_models.py
+    ├── test_selectors.py
+    ├── test_services.py
+    └── test_views.py

@@ -46,7 +46,7 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost', cast=Csv(
 # Local apps: Bizim yazdığımız uygulamalar
 # → Bir bakışta "bu dependency nereden geliyor?" sorusuna cevap verir
 
-DJANGO_APPS = [
+BASE_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -61,15 +61,15 @@ THIRD_PARTY_APPS = [
     # İleride buraya DRF, django-axes vb. eklenecek
 ]
 
-LOCAL_APPS = [
-    'accounts.apps.AccountsConfig',
+LOCAL_APPS = [   
     'pages.apps.PagesConfig',
+    'accounts.apps.AccountsConfig',
     'provinces.apps.ProvincesConfig',
     'recipes.apps.RecipesConfig',
     'interactions.apps.InteractionsConfig',
 ]
 
-INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+INSTALLED_APPS = BASE_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 
 # ─────────────────────────────────────────────
@@ -243,8 +243,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Authentication URLs
 # ─────────────────────────────────────────────
 LOGIN_URL = 'accounts:login'
-LOGIN_REDIRECT_URL = 'pages:home'
-LOGOUT_REDIRECT_URL = 'pages:home'
+# GIN_REDIRECT_URL = 'pages:home'
+# GOUT_REDIRECT_URL = 'pages:home'
 
 
 # ─────────────────────────────────────────────

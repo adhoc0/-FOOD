@@ -4,17 +4,74 @@
 {% block title %}Ana Sayfa - Türkiye Yöresel Yemekleri{% endblock %}
 
 {% block content %}
-<section class="hero glassmorphism">
-    <div class="hero-content">
-        <h1 class="animate-fade-in-up">Türkiye'nin Lezzet Haritası</h1>
-        <p class="animate-fade-in-up delay-100">81 ilin binlerce yöresel tarifini keşfet. Kendi favorilerini oluştur, yeni lezzetler dene.</p>
-        <div class="map-tooltip" id="map-tooltip" style="display: none;"></div>
+<div class="map-tooltip" id="map-tooltip" style="display: none;"></div>
+
+<!-- 1. Türkiye Haritası -->
+<section class="map-container glassmorphism animate-fade-in-up section">
+    {% include "includes/turkey_map.html" %}
+    
+    <a href="#" id="map-action-card" class="map-action-card" style="display: none;"></a>
+</section>
+
+<!-- 2. Dinamik İstatistikler (Daha az yer kaplayan, sade tasarım) -->
+<section class="container stats-container animate-fade-in-up delay-100">
+    <div class="hero-stats compact">
+        <div class="stat-item">
+            <i class="fas fa-map-marker-alt" style="color:var(--color-primary); font-size:1.5rem;"></i>
+            <div><strong>{{ stats.provinces }}</strong><span>İl</span></div>
+        </div>
+        <div class="stat-item">
+            <i class="fas fa-utensils" style="color:var(--color-primary); font-size:1.5rem;"></i>
+            <div><strong>{{ stats.recipes }}+</strong><span>Tarif</span></div>
+        </div>
+        <div class="stat-item">
+            <i class="fas fa-users" style="color:var(--color-primary); font-size:1.5rem;"></i>
+            <div><strong>{{ stats.users }}+</strong><span>Kullanıcı</span></div>
+        </div>
+        <div class="stat-item">
+            <i class="fas fa-star" style="color:var(--color-primary); font-size:1.5rem;"></i>
+            <div><strong>{{ stats.avg_rating }}</strong><span>Ort. Puan</span></div>
+        </div>
     </div>
 </section>
 
-<section class="map-container glassmorphism animate-fade-in-up delay-200">
-    <!-- SVG Harita burada yüklenecek -->
-    {% include "includes/turkey_map.html" %}
+<!-- 3. En Çok Beğenilen İlk 10 Yemek -->
+<section class="container top-recipes-section section animate-fade-in-up delay-200">
+    <div class="section-header" style="text-align:center; margin-bottom: 3rem;">
+        <h2 style="font-family: var(--font-heading); color: var(--color-primary-dark); font-size: 2.5rem;">Türkiye'nin En Çok Beğenilen İlk 10 Yemeği</h2>
+        <p style="color: var(--color-text-secondary);">Kullanıcılarımızın oylarıyla belirlenen efsanevi yöresel lezzetler</p>
+    </div>
+    
+    <div class="recipe-grid">
+        {% for recipe in top_10_recipes %}
+        <a href="{% url 'recipes:detail' slug=recipe.slug %}" class="recipe-card">
+            <div class="recipe-card__img-wrapper">
+                {% if recipe.images.first %}
+                <img src="{{ recipe.images.first.image.url }}" alt="{{ recipe.title }}">
+                {% else %}
+                <img src="https://images.unsplash.com/photo-1628293998952-6ab5cc1c38fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Yemek">
+                {% endif %}
+            </div>
+            <div class="recipe-card__content">
+                <h4 class="recipe-card__title">{{ recipe.title }}</h4>
+                <div class="recipe-card__location">
+                    <i class="fas fa-map-marker-alt"></i> {{ recipe.province.name }}
+                </div>
+                <div class="recipe-card__footer">
+                    <div class="recipe-card__rating">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                        {{ recipe.avg_score|default:"0.0"|floatformat:1 }} ({{ recipe.ratings.count }})
+                    </div>
+                    <button class="recipe-card__fav-btn">
+                        <i class="far fa-heart"></i> {{ recipe.like_count }}
+                    </button>
+                </div>
+            </div>
+        </a>
+        {% empty %}
+        <p style="text-align:center; grid-column: 1/-1;">Henüz yeterli değerlendirme bulunmuyor.</p>
+        {% endfor %}
+    </div>
 </section>
 
 <!-- KKTC Modal -->
@@ -46,116 +103,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const provinces = document.querySelectorAll('#svg-turkiye-haritasi g');
-        const tooltip = document.getElementById('map-tooltip');
-        const mapContainer = document.querySelector('.map-container');
-
-        provinces.forEach(province => {
-            // Label ekleme mantığı
-            const path = province.querySelector('path');
-            const name = province.getAttribute('data-iladi');
-            const plate = province.getAttribute('data-plakakodu');
-            const isKibris = province.getAttribute('id') === 'kuzey-kibris';
-            
-            if (name && province.getAttribute('id') !== 'turkiye') {
-                const bbox = province.getBBox(); // Grup sınırlarını da hesapla (İstanbul için)
-                const centerX = bbox.x + bbox.width / 2;
-                const centerY = bbox.y + bbox.height / 2;
-
-                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                text.setAttribute('x', centerX);
-                text.setAttribute('y', centerY);
-                text.setAttribute('text-anchor', 'middle');
-                text.setAttribute('dominant-baseline', 'middle');
-                text.setAttribute('class', 'province-label');
-                text.style.pointerEvents = 'none';
-
-                if (isKibris) {
-                    const tspanMain = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
-                    tspanMain.setAttribute('x', centerX);
-                    tspanMain.setAttribute('dy', '0');
-                    tspanMain.textContent = "KKTC";
-                    tspanMain.style.fontSize = '12px';
-                    tspanMain.style.fontWeight = 'bold';
-                    tspanMain.style.fill = '#1A1A1A'; // Görseldeki siyah
-                    text.appendChild(tspanMain);
-                } else if (plate) {
-                    const tspanPlate = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
-                    tspanPlate.setAttribute('x', centerX);
-                    tspanPlate.setAttribute('dy', '-0.3em'); // Plaka hafif yukarıda
-                    tspanPlate.textContent = plate;
-                    tspanPlate.style.fontSize = '12px';
-                    tspanPlate.style.fontWeight = 'bold';
-                    tspanPlate.style.fill = '#1A1A1A';
-                    tspanPlate.style.transition = 'all 0.3s ease';
-                    text.appendChild(tspanPlate);
-
-                    const tspanName = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
-                    tspanName.setAttribute('x', centerX);
-                    tspanName.setAttribute('dy', '1.2em'); // İsim plakanın altında
-                    tspanName.textContent = name;
-                    tspanName.style.fontSize = '9px';
-                    tspanName.style.fontWeight = '400';
-                    tspanName.style.fill = '#1A1A1A';
-                    tspanName.style.transition = 'all 0.3s ease';
-                    text.appendChild(tspanName);
-                }
-
-                province.appendChild(text);
-            }
-
-            // Etkileşimler
-            province.addEventListener('mouseenter', (e) => {
-                const name = province.getAttribute('data-iladi');
-                if (name) {
-                    if (isKibris) {
-                        tooltip.innerHTML = `<span style="color:#2E7D32;">Kuzey Kıbrıs Türk Cumhuriyeti</span>`;
-                    } else {
-                        tooltip.innerHTML = `<span style="color:#FF8A3D; font-weight:700;">${name}</span> <span style="color:#2E7D32;">Mutfağı</span>`;
-                    }
-                    tooltip.style.display = 'block';
-                    tooltip.style.opacity = '1';
-                }
-            });
-
-            province.addEventListener('mousemove', (e) => {
-                const containerRect = mapContainer.getBoundingClientRect();
-                const x = e.clientX - containerRect.left;
-                const y = e.clientY - containerRect.top;
-                
-                tooltip.style.left = `${x}px`;
-                tooltip.style.top = `${y}px`;
-            });
-
-            province.addEventListener('mouseleave', () => {
-                tooltip.style.opacity = '0';
-                setTimeout(() => {
-                    tooltip.style.display = 'none';
-                }, 200);
-            });
-
-            province.addEventListener('click', () => {
-                const slug = province.getAttribute('id');
-                if (isKibris) {
-                    document.getElementById('kktc-modal').style.display = 'flex';
-                } else if (slug && slug !== 'turkiye') {
-                    window.location.href = `/il/${slug}/`;
-                }
-            });
-        });
-
-        // Modal kapatma mantığı
-        document.querySelector('.modal-close').addEventListener('click', () => {
-            document.getElementById('kktc-modal').style.display = 'none';
-        });
-        window.addEventListener('click', (e) => {
-            const modal = document.getElementById('kktc-modal');
-            if (e.target === modal) {
-                modal.style.display = 'none';
-            }
-        });
-    });
-</script>
+<script src="{% static 'js/pages/home.js' %}"></script>
 {% endblock %}
