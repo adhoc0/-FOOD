@@ -1,0 +1,33 @@
+<section class="featured-recipes" aria-labelledby="featured-title">
+
+    <div class="container">
+
+        <header class="section-header">
+
+            <h2 id="featured-title">
+                Öne Çıkan Tarifler
+            </h2>
+
+            <p>
+                Editörlerimizin seçtiği yöresel lezzetler.
+            </p>
+
+        </header>
+
+        <div class="recipe-grid">
+
+            {% for recipe in featured_recipes %}
+
+            {% include "components/cards/recipe_card.html" %}
+
+            {% empty %}
+
+            <p>Henüz öne çıkan tarif bulunmuyor.</p>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>

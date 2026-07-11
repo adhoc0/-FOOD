@@ -1,4 +1,3 @@
-````md
 # SEO
 
 ## Amaç
@@ -558,4 +557,3 @@ JavaScript ile oluşturulan kritik SEO içeriği kullanmak.
 Noindex olması gereken sayfaları indekslemek.
 
 SEO kurallarını sonradan eklemeye çalışmak.
-````

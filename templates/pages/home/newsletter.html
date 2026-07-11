@@ -1,0 +1,35 @@
+<section class="newsletter" aria-labelledby="newsletter-title">
+
+    <div class="container">
+
+        <div class="newsletter-box">
+
+            <h2 id="newsletter-title">
+                Yeni Tariflerden Haberdar Olun
+            </h2>
+
+            <p>
+
+                Yeni eklenen yöresel tarifleri e-posta ile alın.
+
+            </p>
+
+            <form action="#" method="post">
+
+                {% csrf_token %}
+
+                <input type="email" name="email" placeholder="E-posta adresiniz" required>
+
+                <button type="submit" class="btn btn-primary">
+
+                    Abone Ol
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>

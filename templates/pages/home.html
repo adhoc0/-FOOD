@@ -1,105 +1,39 @@
-{% extends "base.html" %}
+{% extends "layouts/default.html" %}
+
 {% load static %}
 
-{% block title %}Ana Sayfa - Türkiye Yöresel Yemekleri{% endblock %}
+{% block title %}
+Türkiye Yöresel Yemekleri
+{% endblock %}
 
-{% block content %}
-<div class="map-tooltip" id="map-tooltip" style="display: none;"></div>
-
-<!-- 1. Türkiye Haritası -->
-<section class="map-container glassmorphism animate-fade-in-up section">
-    {% include "includes/turkey_map.html" %}
-    
-    <a href="#" id="map-action-card" class="map-action-card" style="display: none;"></a>
-</section>
-
-<!-- 2. Dinamik İstatistikler (Daha az yer kaplayan, sade tasarım) -->
-<section class="container stats-container animate-fade-in-up delay-100">
-    <div class="hero-stats compact">
-        <div class="stat-item">
-            <i class="fas fa-map-marker-alt" style="color:var(--color-primary); font-size:1.5rem;"></i>
-            <div><strong>{{ stats.provinces }}</strong><span>İl</span></div>
-        </div>
-        <div class="stat-item">
-            <i class="fas fa-utensils" style="color:var(--color-primary); font-size:1.5rem;"></i>
-            <div><strong>{{ stats.recipes }}+</strong><span>Tarif</span></div>
-        </div>
-        <div class="stat-item">
-            <i class="fas fa-users" style="color:var(--color-primary); font-size:1.5rem;"></i>
-            <div><strong>{{ stats.users }}+</strong><span>Kullanıcı</span></div>
-        </div>
-        <div class="stat-item">
-            <i class="fas fa-star" style="color:var(--color-primary); font-size:1.5rem;"></i>
-            <div><strong>{{ stats.avg_rating }}</strong><span>Ort. Puan</span></div>
-        </div>
-    </div>
-</section>
-
-<!-- 3. En Çok Beğenilen İlk 10 Yemek -->
-<section class="container top-recipes-section section animate-fade-in-up delay-200">
-    <div class="section-header" style="text-align:center; margin-bottom: 3rem;">
-        <h2 style="font-family: var(--font-heading); color: var(--color-primary-dark); font-size: 2.5rem;">Türkiye'nin En Çok Beğenilen İlk 10 Yemeği</h2>
-        <p style="color: var(--color-text-secondary);">Kullanıcılarımızın oylarıyla belirlenen efsanevi yöresel lezzetler</p>
-    </div>
-    
-    <div class="recipe-grid">
-        {% for recipe in top_10_recipes %}
-        <a href="{% url 'recipes:detail' slug=recipe.slug %}" class="recipe-card">
-            <div class="recipe-card__img-wrapper">
-                {% if recipe.images.first %}
-                <img src="{{ recipe.images.first.image.url }}" alt="{{ recipe.title }}">
-                {% else %}
-                <img src="https://images.unsplash.com/photo-1628293998952-6ab5cc1c38fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Yemek">
-                {% endif %}
-            </div>
-            <div class="recipe-card__content">
-                <h4 class="recipe-card__title">{{ recipe.title }}</h4>
-                <div class="recipe-card__location">
-                    <i class="fas fa-map-marker-alt"></i> {{ recipe.province.name }}
-                </div>
-                <div class="recipe-card__footer">
-                    <div class="recipe-card__rating">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        {{ recipe.avg_score|default:"0.0"|floatformat:1 }} ({{ recipe.ratings.count }})
-                    </div>
-                    <button class="recipe-card__fav-btn">
-                        <i class="far fa-heart"></i> {{ recipe.like_count }}
-                    </button>
-                </div>
-            </div>
-        </a>
-        {% empty %}
-        <p style="text-align:center; grid-column: 1/-1;">Henüz yeterli değerlendirme bulunmuyor.</p>
-        {% endfor %}
-    </div>
-</section>
-
-<!-- KKTC Modal -->
-<div id="kktc-modal" class="modal-overlay" style="display: none;">
-    <div class="modal-content">
-        <span class="modal-close">&times;</span>
-        <div class="modal-header">
-            <h2>Kuzey Kıbrıs Türk Cumhuriyeti</h2>
-            <p>İlçe Haritası ve Yöresel Lezzetler</p>
-        </div>
-        <div class="kktc-map-placeholder">
-            <!-- SVG map will be added here in the future -->
-            <svg viewBox="0 0 400 200" class="placeholder-svg">
-                <rect width="400" height="200" fill="#1e293b" rx="15"></rect>
-                <text x="200" y="100" fill="#94a3b8" text-anchor="middle" dominant-baseline="middle" font-size="16">KKTC İlçe Haritası Yakında Eklenecek</text>
-            </svg>
-            <div class="kktc-districts">
-                <span>Lefkoşa</span> • <span>Girne</span> • <span>Gazimağusa</span><br>
-                <span>Güzelyurt</span> • <span>İskele</span> • <span>Lefke</span>
-            </div>
-        </div>
-        <a href="#" class="btn btn--primary mt-lg" onclick="alert('KKTC sayfasına gidiliyor...'); return false;">Yemekleri Keşfet</a>
-    </div>
-</div>
+{% block meta_description %}
+Türkiye'nin 81 iline ait yöresel yemekleri keşfedin.
 {% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/pages/home.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{% include "pages/home/hero.html" %}
+
+{% include "pages/home/search.html" %}
+
+{% include "pages/home/turkey_map.html" %}
+
+{% include "pages/home/featured_recipes.html" %}
+
+{% include "pages/home/latest_recipes.html" %}
+
+{% include "pages/home/popular_provinces.html" %}
+
+{% include "pages/home/categories.html" %}
+
+{% include "pages/home/statistics.html" %}
+
+{% include "pages/home/newsletter.html" %}
+
 {% endblock %}
 
 {% block extra_js %}

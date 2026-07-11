@@ -1,0 +1,29 @@
+<section class="popular-provinces" aria-labelledby="province-title">
+
+    <div class="container">
+
+        <header class="section-header">
+
+            <h2 id="province-title">
+                Popüler İller
+            </h2>
+
+        </header>
+
+        <div class="province-grid">
+
+            {% for province in popular_provinces %}
+
+            {% include "components/cards/province_card.html" %}
+
+            {% empty %}
+
+            <p>Henüz il bulunmuyor.</p>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>

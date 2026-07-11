@@ -1,0 +1,33 @@
+<section class="categories" aria-labelledby="category-title">
+
+    <div class="container">
+
+        <header class="section-header">
+
+            <h2 id="category-title">
+                Kategoriler
+            </h2>
+
+        </header>
+
+        <div class="category-grid">
+
+            {% for category in categories %}
+
+            <a href="#" class="category-card">
+
+                {{ category.name }}
+
+            </a>
+
+            {% empty %}
+
+            <p>Henüz kategori bulunmuyor.</p>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>

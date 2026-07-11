@@ -1,0 +1,29 @@
+<section class="latest-recipes" aria-labelledby="latest-title">
+
+    <div class="container">
+
+        <header class="section-header">
+
+            <h2 id="latest-title">
+                Son Eklenen Tarifler
+            </h2>
+
+        </header>
+
+        <div class="recipe-grid">
+
+            {% for recipe in latest_recipes %}
+
+            {% include "components/cards/recipe_card.html" %}
+
+            {% empty %}
+
+            <p>Henüz tarif eklenmedi.</p>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>

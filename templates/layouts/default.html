@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block layout %}
+
+<a href="#main-content" class="skip-link">
+    İçeriğe geç
+</a>
+
+{% include "components/navigation/navbar.html" %}
+
+{% include "components/feedback/messages.html" %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+<main id="main-content">
+
+    {% block content %}
+    {% endblock %}
+
+</main>
+
+{% include "components/layout/footer.html" %}
+
+{% endblock %}

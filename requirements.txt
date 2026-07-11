@@ -1,3 +1,14 @@
 # This file mirrors requirements/base.txt for local development.
 # For Docker/production, use requirements/prod.txt instead.
--r requirements/base.txt
+Django>=6.0,<6.1
+psycopg[binary]>=3.3.4
+django-stubs>=6.0
+mypy>=1.16
+pre-commit>=4.2
+pytest>=8.4
+pytest-django>=4.6.0
+ruff>=0.12
+coverage>=7.8
+coverage-report>=7.0
+django-debug-toolbar>=6.0
+django-extensions>=4.0.0    

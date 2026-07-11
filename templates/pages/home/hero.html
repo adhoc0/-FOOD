@@ -1,0 +1,32 @@
+{% load static %}
+
+<section class="hero">
+    <div class="container">
+        <div class="hero__content">
+            <span class="hero__eyebrow">
+                🇹🇷 Türkiye'nin Lezzet Haritası
+            </span>
+            <h1 class="hero__title">
+                Türkiye'nin
+                <span>81 İlindeki</span>
+                Yöresel Yemekleri Keşfedin
+            </h1>
+            <p class="hero__description">
+                Geleneksel tarifler, yöresel lezzetler, binlerce yemek tarifi ve
+                Türkiye'nin gastronomi kültürü tek platformda.
+            </p>
+            <div class="hero__actions">
+                <a href="#turkey-map" class="btn btn-primary">
+                    Haritayı Keşfet
+                </a>
+                <a href="#" class="btn btn-outline">
+                    Tariflere Göz At
+                </a>
+            </div>
+        </div>
+        <div class="hero__image">
+            <img src="{% static 'images/hero/hero.webp' %}" alt="Türkiye Yöresel Yemekleri" loading="eager" width="700"
+                height="650">
+        </div>
+    </div>
+</section>

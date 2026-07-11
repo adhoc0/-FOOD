@@ -1,8 +1,13 @@
+from django.http import HttpResponse
 from django.urls import path
-from .views import ProvinceDetailView
 
-app_name = 'provinces'
+
+def province_placeholder(request, slug):
+    return HttpResponse(f"Province: {slug}")
+
+
+app_name = "provinces"
 
 urlpatterns = [
-    path('il/<slug:slug>/', ProvinceDetailView.as_view(), name='province_detail'),
+    path("<slug:slug>/",province_placeholder,name="province_detail",),
 ]

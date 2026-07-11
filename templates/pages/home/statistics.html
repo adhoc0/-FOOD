@@ -1,0 +1,51 @@
+<section class="statistics" aria-labelledby="statistics-title">
+
+    <div class="container">
+
+        <header class="section-header">
+
+            <h2 id="statistics-title">
+                Platform İstatistikleri
+            </h2>
+
+        </header>
+
+        <div class="statistics-grid">
+
+            <article class="stat-card">
+
+                <strong>{{ total_provinces|default:"81" }}</strong>
+
+                <span>İl</span>
+
+            </article>
+
+            <article class="stat-card">
+
+                <strong>{{ total_recipes|default:"0" }}</strong>
+
+                <span>Tarif</span>
+
+            </article>
+
+            <article class="stat-card">
+
+                <strong>{{ total_categories|default:"0" }}</strong>
+
+                <span>Kategori</span>
+
+            </article>
+
+            <article class="stat-card">
+
+                <strong>{{ total_users|default:"0" }}</strong>
+
+                <span>Üye</span>
+
+            </article>
+
+        </div>
+
+    </div>
+
+</section>

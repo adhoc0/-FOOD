@@ -61,7 +61,7 @@ THIRD_PARTY_APPS = [
     # İleride buraya DRF, django-axes vb. eklenecek
 ]
 
-LOCAL_APPS = [   
+MY_APPS = [   
     'pages.apps.PagesConfig',
     'accounts.apps.AccountsConfig',
     'provinces.apps.ProvincesConfig',
@@ -69,7 +69,7 @@ LOCAL_APPS = [
     'interactions.apps.InteractionsConfig',
 ]
 
-INSTALLED_APPS = BASE_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+INSTALLED_APPS = BASE_APPS + THIRD_PARTY_APPS + MY_APPS
 
 
 # ─────────────────────────────────────────────

@@ -1,0 +1,47 @@
+/* TEAM */
+
+Project: FOOD
+Description: Turkish Regional Food Platform
+
+Lead Developer:
+Aytaç
+
+Website:
+https://yemekharitasi.tr
+
+Email:
+[EMAIL_ADDRESS]
+
+Location:
+Türkiye
+
+/* SITE */
+
+Backend:
+Python
+Django
+
+Database:
+PostgreSQL
+
+Frontend:
+HTML
+CSS
+JavaScript
+
+Infrastructure:
+Docker
+Nginx
+
+Hosting:
+Linux
+
+Version:
+1.0.0
+
+Encoding:
+UTF-8
+
+Language:
+Turkish
+English

@@ -1,24 +1,60 @@
+from __future__ import annotations
+
 from django.db import models
 from django.utils.text import slugify
+from django.utils.translation import gettext_lazy as _
+
 
 class Ingredient(models.Model):
-    """
-    Malzemeler (Örn: Un, Şeker, Domates).
-    """
-    name = models.CharField('Malzeme Adı', max_length=100, unique=True)
-    slug = models.SlugField('URL Uzantısı', max_length=100, unique=True, blank=True)
+    """Recipe ingredient."""
+
+    name = models.CharField(
+        verbose_name=_("Name"),
+        max_length=150,
+        unique=True,
+    )
+
+    slug = models.SlugField(
+        verbose_name=_("Slug"),
+        max_length=170,
+        unique=True,
+        db_index=True,
+    )
+
+    description = models.TextField(
+        verbose_name=_("Description"),
+        blank=True,
+    )
+
+    is_active = models.BooleanField(
+        verbose_name=_("Active"),
+        default=True,
+        db_index=True,
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True,
+    )
 
     class Meta:
-        verbose_name = 'Malzeme'
-        verbose_name_plural = 'Malzemeler'
-        ordering = ['name']
+        ordering = [
+            "name",
+        ]
+        verbose_name = _("Ingredient")
+        verbose_name_plural = _("Ingredients")
 
     def __str__(self):
         return self.name
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            tr_map = str.maketrans('çğıöşüÇĞIÖŞÜ', 'cgiosuCGIOSU')
-            mapped_name = self.name.translate(tr_map)
-            self.slug = slugify(mapped_name)
+            self.slug = slugify(
+                self.name,
+                allow_unicode=True,
+            )
+
         super().save(*args, **kwargs)
