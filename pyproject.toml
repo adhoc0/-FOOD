@@ -1,13 +1,14 @@
 [project]
 name = "food"
-version = "1.0.0"
+version = "0.3.0"
 description = "Turkish Regional Food Platform"
 readme = "README.md"
 requires-python = ">=3.14,<3.15"
+
 license = { text = "Proprietary" }
 
 authors = [
-    { name = "FOOD Project" }
+    { name = "FOOD Project" },
 ]
 
 keywords = [
@@ -19,42 +20,87 @@ keywords = [
 ]
 
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
+    "Development Status :: 3 - Alpha",
     "Framework :: Django",
     "Intended Audience :: Developers",
-    "License :: Other/Proprietary License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.14",
 ]
 
 dependencies = [
-    "Django>=6.0,<6.1",
-    "psycopg[binary]>=3.2",
+    "Django>=6.0.7,<6.1",
+    "Pillow>=12.3.0",
+    "psycopg[binary]>=3.3",
+    "python-decouple>=3.8",
 ]
+
+[project.urls]
+Repository = "https://github.com/adhoc0/food"
 
 [project.optional-dependencies]
 
 dev = [
     "coverage[toml]>=7.8",
-    "django-stubs>=6.0",
-    "mypy>=1.16",
-    "pre-commit>=4.2",
+    "django-debug-toolbar>=6.0",
+    "django-stubs>=5.2",
+    "django-stubs-ext>=5.2",
+    "factory-boy>=3.3",
+    "Faker>=37",
+    "mypy>=1.18",
+    "pre-commit>=4.3",
+    "pyright>=1.1",
     "pytest>=8.4",
-    "pytest-django>=4.6.0",
-    "ruff>=0.12",
+    "pytest-django>=4.11",
+    "ruff>=0.13",
+    "typing-extensions>=4.15",
 ]
 
-
-
 [build-system]
+
 requires = [
-    "setuptools>=75",
+    "setuptools>=80",
+    "wheel",
 ]
 
 build-backend = "setuptools.build_meta"
 
+[tool.setuptools]
 
+include-package-data = true
+
+[tool.setuptools.packages.find]
+
+where = [
+    ".",
+]
+
+include = [
+    "accounts*",
+    "analytics*",
+    "api*",
+    "config*",
+    "core*",
+    "interactions*",
+    "management*",
+    "notifications*",
+    "pages*",
+    "provinces*",
+    "recipes*",
+    "search*",
+    "sitemaps*",
+]
+
+exclude = [
+    "tests*",
+    "docs*",
+    "media*",
+    "staticfiles*",
+    "build*",
+    "dist*",
+]
+
+namespaces = false
 
 [tool.ruff]
 
@@ -72,15 +118,13 @@ exclude = [
     ".pytest_cache",
     ".mypy_cache",
     ".ruff_cache",
-    "node_modules",
     "build",
     "dist",
     "media",
     "staticfiles",
+    "node_modules",
     "**/migrations",
 ]
-
-
 
 [tool.ruff.lint]
 
@@ -98,13 +142,17 @@ select = [
     "RUF",
 ]
 
-ignore = []
+ignore = [
+    "RUF001",
+    "RUF002",
+    "RUF003",
+    "RUF012",
+    "DJ012",
+]
 
 fixable = [
     "ALL",
 ]
-
-
 
 [tool.ruff.lint.per-file-ignores]
 
@@ -112,8 +160,6 @@ fixable = [
     "E501",
     "N806",
 ]
-
-
 
 [tool.ruff.format]
 
@@ -123,11 +169,13 @@ line-ending = "lf"
 docstring-code-format = true
 skip-magic-trailing-comma = false
 
-
-
 [tool.pytest.ini_options]
 
-DJANGO_SETTINGS_MODULE = "config.settings"
+DJANGO_SETTINGS_MODULE = "core.test_settings"
+
+pythonpath = [
+    ".",
+]
 
 python_files = [
     "tests.py",
@@ -137,51 +185,61 @@ python_files = [
 
 testpaths = [
     "tests",
-]
-
-pythonpath = [
-    ".",
+    "accounts",
+    "interactions",
+    "pages",
+    "provinces",
+    "recipes",
 ]
 
 addopts = [
     "-ra",
+    "--strict-markers",
 ]
-
-
 
 [tool.mypy]
 
-python_version = "3.13"
+python_version = "3.14"
 
-plugins = [
-    "mypy_django_plugin.main",
-]
+# plugins = [
+#    "mypy_django_plugin.main",
+# ]
+
 
 strict = true
 
+
+disallow_any_generics = true
+disallow_untyped_defs = true
+no_implicit_optional = true
 warn_unused_configs = true
 warn_unused_ignores = true
 warn_return_any = true
-warn_no_return = true
 warn_unreachable = true
-
 show_error_codes = true
 pretty = true
 
-
-
 [tool.django-stubs]
 
-django_settings_module = "config.settings"
-
-
+django_settings_module = "core.settings"
 
 [tool.coverage.run]
 
 branch = true
 
 source = [
-    "apps",
+    "accounts",
+    "analytics",
+    "api",
+    "config",
+    "core",
+    "interactions",
+    "notifications",
+    "pages",
+    "provinces",
+    "recipes",
+    "search",
+    "sitemaps",
 ]
 
 omit = [
@@ -189,8 +247,6 @@ omit = [
     "*/tests/*",
     "manage.py",
 ]
-
-
 
 [tool.coverage.report]
 
@@ -203,4 +259,42 @@ exclude_lines = [
     "if TYPE_CHECKING:",
     "raise NotImplementedError",
     "pass",
+]
+
+[tool.pyright]
+
+include = [
+    ".",
+]
+
+exclude = [
+    ".git",
+    ".github",
+    ".idea",
+    ".venv",
+    ".vscode",
+    "__pycache__",
+    ".pytest_cache",
+    ".mypy_cache",
+    ".ruff_cache",
+    "build",
+    "dist",
+    "media",
+    "staticfiles",
+    "node_modules",
+    "**/migrations",
+]
+
+venvPath = "."
+venv = ".venv"
+
+pythonVersion = "3.14"
+
+typeCheckingMode = "basic"
+
+reportMissingImports = true
+reportMissingTypeStubs = false
+
+executionEnvironments = [
+    { root = ".", extraPaths = ["."] },
 ]

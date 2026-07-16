@@ -68,3 +68,14 @@ erişilebilirlik ve production doğrulaması ayrıca tamamlanmalıdır.
 
 Redis, Celery, API, çoklu dil, mobil uygulama, öneri sistemi ve premium özellikler;
 çekirdek ürün production kalitesine ulaşmadan geliştirme kapsamına alınmayacaktır.
+
+## Faz 2 — Güvenlik ve Veri Bütünlüğü Başlangıcı
+
+- [x] Rating puanı için servis doğrulaması
+- [x] Rating puanı için PostgreSQL `CheckConstraint`
+- [x] RecipeImage model ve service girişlerinde görsel doğrulaması
+- [x] Geçersiz rating ve görsel akışları için regresyon testleri
+- [x] Hassas POST uçları için cache tabanlı rate limiting
+- [x] CSP ve Permissions-Policy güvenlik başlıkları
+- [x] Dependency ve secret taraması
+- [x] Yetkilendirme matrisi ve kapsamlı permission testleri

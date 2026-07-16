@@ -15,6 +15,15 @@ olduğu için `0.x` sürümlerinde geriye dönük uyumsuz değişiklikler yapıl
 - Uygulama testlerinin toplanmasını engelleyen yanlış accounts test import'u düzeltildi.
 - Test ortamında production HTTPS yönlendirmesinin test istemcilerini etkilemesi düzeltildi.
 - Mevcut kullanım şartları şablonu için eksik URL ve view bağlantısı tamamlandı.
+- Rating puanı servis ve PostgreSQL constraint ile 1–5 aralığında zorunlu kılındı.
+- RecipeImage model ve service girişlerine boyut, uzantı ve magic-byte doğrulaması bağlandı.
+- Faz 2 veri bütünlüğü regresyon testleri eklendi.
+- Hassas POST uçları için cache tabanlı rate limiting middleware'i eklendi.
+- CSP ve Permissions-Policy başlıkları merkezi security middleware'ine eklendi.
+- Rate limiting ve güvenlik başlıkları için birim testleri eklendi.
+- Kaynak ağacında bilinen secret anahtar biçimleri için tarama yapıldı; gerçek secret bulunmadı.
+- Etkileşim ve yönetim uçları için anonim erişim permission testleri eklendi.
+- pip-audit bulguları doğrultusunda Django 6.0.7 ve Pillow 12.3.0 güvenli sürümlerine yükseltildi.
 
 ### Removed
 
