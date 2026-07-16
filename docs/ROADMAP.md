@@ -1,147 +1,70 @@
 # ROADMAP
 
-## 1. Proje Durumu
-- Mevcut geliştirme aşaması
-- Tamamlanan modüller
-- Devam eden geliştirmeler
-- Yayına hazır olmayan bölümler
+## Proje Durumu
 
----
+- Sürüm: `0.3.0` (alpha)
+- Aşama: Temel alan modelleri ve kullanıcı etkileşimleri geliştiriliyor.
+- Yayın durumu: Production'a hazır değil.
+- Aktif uygulamalar: `accounts`, `pages`, `provinces`, `recipes`, `interactions`.
+- Temel risk: Büyük ve henüz atomik commitlere ayrılmamış çalışma ağacı.
 
-## 2. Proje Fazları
+## Tamamlanan Temel Altyapı
 
-### Faz 1 - Altyapı
-- Proje mimarisi
-- Django kurulumu
-- PostgreSQL
-- Docker
-- Nginx
-- Güvenlik ayarları
-- Kod standartları
+- Django 6 ve Python 3.14 proje yapısı
+- PostgreSQL bağlantı yapılandırması
+- Custom User modeli
+- Region, Province, Recipe, Category, Cuisine, Ingredient ve Tag modelleri
+- Favori, puan ve yorum modelleri
+- Service, selector, validator ve queryset katmanlarının başlangıç yapısı
+- Docker, Gunicorn ve Nginx geliştirme altyapısı
+- Ruff yapılandırması ve temel test paketi
+- Dinamik sitemap ve temel SEO şablonları
 
-### Faz 2 - Temel Modeller
-- Region
-- Province
-- Category
-- Cuisine
-- Ingredient
-- Recipe
-- RecipeImage
-- Tag
+Bu maddeler tamamlanmış ürün özelliği anlamına gelmez. Her modülün test, güvenlik,
+erişilebilirlik ve production doğrulaması ayrıca tamamlanmalıdır.
 
-### Faz 3 - Kullanıcı Sistemi
-- Kayıt
-- Giriş
-- Profil
-- Şifre sıfırlama
-- E-posta doğrulama
+## Mevcut Çalışma — Faz 0
 
-### Faz 4 - Tarif Sistemi
-- Tarif oluşturma
-- Tarif düzenleme
-- Tarif görüntüleme
-- Tarif silme
-- Taslak sistemi
+- [x] Projenin mevcut durumunu mimari ve güvenlik açısından denetle
+- [x] Gerçek sürümü alpha olarak işaretle
+- [x] ROADMAP ve CHANGELOG'u gerçek durumla eşleştir
+- [x] Dinamik sitemap ile çakışan boş statik sitemap dosyasını kaldır
+- [x] Gereksiz statik sayfa şablon yönlendirme katmanlarını kaldır
+- [x] Mevcut büyük değişiklik kümesi için mantıksal commit planı hazırla
+- [ ] Planlanan grupları ayrı dallarda doğrulayıp atomik commitlere ayır
+- [ ] Eski ve yeni paralel dosyaların kalanlarını dosya bazında sınıflandır
+- [ ] Geçici analiz ve ağaç çıktılarının saklama politikasını kararlaştır
 
-### Faz 5 - Etkileşim
-- Favoriler
-- Puanlama
-- Yorumlar
-- Raporlama
+## Mevcut Aşama — Faz 1: Test ve Doğrulama Altyapısı
 
-### Faz 6 - Harita Sistemi
-- Türkiye SVG
-- İl sayfaları
-- İl filtreleme
-- İl arama
+- [x] Ayrı test settings modülü
+- [x] Docker tabanlı test PostgreSQL'i
+- [x] Bütün uygulama test klasörlerinin pytest tarafından toplanması
+- [x] Migration, lint, test ve güvenlik kontrollerinin CI üzerinde çalıştırılması
+- [x] PostgreSQL üzerinde tüm mevcut testleri çalıştır
+- [ ] Kritik kullanıcı ve veri bütünlüğü akışlarının test kapsamını tamamla
 
-### Faz 7 - Arama
-- Tarif arama
-- İl arama
-- Kategori arama
-- Malzeme arama
+## Planlanan Ürün Sırası
 
-### Faz 8 - SEO
-- Sitemap
-- Robots
-- Meta
-- OpenGraph
-- Schema.org
+1. Veri bütünlüğü ve güvenlik
+2. Mimari sadeleştirme
+3. İl, kategori ve tarif liste/detay akışları
+4. Arama ve filtreleme
+5. Kullanıcı hesabı ve profil akışları
+6. Favori, puan, yorum ve moderasyon
+7. SEO, erişilebilirlik ve performans doğrulaması
+8. Staging ve production deployment
 
-### Faz 9 - Performans
-- Cache
-- Lazy Load
-- Image Optimization
-- Query Optimization
+## Yayın Öncesi Zorunlu Koşullar
 
-### Faz 10 - Deployment
-- Docker
-- Gunicorn
-- Nginx
-- HTTPS
-- Backup
+- Tüm otomatik testler geçmeli
+- Migration geçmişi ileri yönlü ve doğrulanmış olmalı
+- Yetkilendirme, dosya yükleme ve rate limiting tamamlanmalı
+- Production settings, HTTPS, e-posta, loglama ve backup doğrulanmalı
+- Lighthouse, erişilebilirlik ve sorgu sayısı ölçümleri yapılmalı
+- ROADMAP, CHANGELOG ve mimari karar kayıtları güncel olmalı
 
----
+## Uzun Vadeli Konular
 
-## 3. Yapılacaklar
-
-### Çok Yüksek Öncelik
-
-### Yüksek Öncelik
-
-### Normal Öncelik
-
-### Düşük Öncelik
-
----
-
-## 4. Teknik Borçlar
-
----
-
-## 5. Bilinen Problemler
-
----
-
-## 6. İyileştirme Listesi
-
----
-
-## 7. Gelecek Özellikler
-
----
-
-## 8. Yayın Öncesi Kontrol Listesi
-
-- Güvenlik
-- SEO
-- Performans
-- Responsive
-- Testler
-- Kod Temizliği
-
----
-
-## 9. Sürüm Planı
-
-v0.1
-
-v0.5
-
-v1.0
-
-v1.5
-
-v2.0
-
----
-
-## 10. Uzun Vadeli Hedefler
-
-- Mobil uygulama
-- API
-- Çoklu dil
-- AI destekli tarif önerileri
-- Premium üyelik
-- Reklam sistemi
-- Restoran entegrasyonu
+Redis, Celery, API, çoklu dil, mobil uygulama, öneri sistemi ve premium özellikler;
+çekirdek ürün production kalitesine ulaşmadan geliştirme kapsamına alınmayacaktır.

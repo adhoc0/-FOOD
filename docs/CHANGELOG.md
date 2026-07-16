@@ -1,236 +1,47 @@
-```md
 # CHANGELOG
 
-Bu dosya projedeki tüm önemli değişikliklerin tarihsel kaydını tutar.
-
-Semantic Versioning (SemVer) kullanılmaktadır.
-
-Sürüm formatı:
-
-MAJOR.MINOR.PATCH
-
-MAJOR
-Geriye dönük uyumluluğu bozan büyük değişiklikler.
-
-MINOR
-Yeni özellikler.
-
-PATCH
-Hata düzeltmeleri ve küçük iyileştirmeler.
-
----
+Bu proje [Semantic Versioning](https://semver.org/) kullanır. Proje alpha aşamasında
+olduğu için `0.x` sürümlerinde geriye dönük uyumsuz değişiklikler yapılabilir.
 
 ## [Unreleased]
 
-### Added
-
-Henüz yayınlanmamış yeni özellikler.
-
 ### Changed
 
-Değiştirilen özellikler.
-
-### Fixed
-
-Düzeltilen hatalar.
+- Proje durumu gerçek geliştirme seviyesiyle uyumlu olacak şekilde alpha olarak tanımlandı.
+- ROADMAP, tamamlanan ve bekleyen işleri gösterecek biçimde güncellendi.
+- Statik sayfa view'ları doğrudan asıl şablonlara bağlandı.
+- Büyük çalışma ağacını atomik commitlere ayırmak için sınıflandırma planı eklendi.
+- Test ayarları, test PostgreSQL compose dosyası ve temel CI kalite hattı eklendi.
+- Uygulama testlerinin toplanmasını engelleyen yanlış accounts test import'u düzeltildi.
+- Test ortamında production HTTPS yönlendirmesinin test istemcilerini etkilemesi düzeltildi.
+- Mevcut kullanım şartları şablonu için eksik URL ve view bağlantısı tamamlandı.
 
 ### Removed
 
-Kaldırılan özellikler.
+- Django dinamik sitemap endpoint'iyle çakışan boş kök `sitemap.xml` kaldırıldı.
+- Yalnızca başka bir şablonu genişleten gereksiz statik sayfa ara şablonları kaldırıldı.
+- Kullanılmayan toplu `pages.views.views` modülü kaldırıldı.
 
-### Security
-
-Güvenlik iyileştirmeleri.
-
----
-
-## [1.0.0] - YYYY-MM-DD
+## [0.3.0] - 2026-07-16
 
 ### Added
 
-- İlk kararlı sürüm.
-- Türkiye haritası.
-- İl bazlı tarif sistemi.
-- Tarif detay sayfaları.
-- Kullanıcı sistemi.
-- Favoriler.
-- Puanlama sistemi.
-- Yorum sistemi.
-- SEO altyapısı.
-- Responsive tasarım.
-- Admin paneli.
-- Docker desteği.
-- PostgreSQL desteği.
-- Sitemap.
-- Robots.
-- OpenGraph.
-- JSON-LD.
+- Accounts, provinces, recipes, pages ve interactions uygulamalarının temel yapıları.
+- Service, selector, validator ve özel queryset katmanlarının başlangıç uygulamaları.
+- Region, Province, Recipe, Category, Cuisine, Ingredient, Tag, Favorite, Rating ve Comment modelleri.
+- Docker, Gunicorn, Nginx ve PostgreSQL geliştirme yapılandırmaları.
+- Temel sitemap, SEO bileşenleri, test fabrikaları ve otomatik testler.
 
-### Changed
+### Known Issues
 
-- Yayın öncesi performans optimizasyonları.
+- PostgreSQL servisi olmadan veritabanı kullanan testler çalışmıyor.
+- Uygulama içi bazı test klasörleri mevcut pytest toplama kapsamının dışında.
+- Production e-posta, HTTPS, rate limiting, monitoring ve backup doğrulanmış değil.
+- Çalışma ağacı henüz mantıksal ve atomik commitlere ayrılmadı.
 
-### Fixed
+## Sürümleme Kuralları
 
-- Yayın öncesi tüm kritik hatalar giderildi.
-
-### Security
-
-- CSRF koruması.
-- XSS koruması.
-- SQL Injection koruması.
-- Dosya yükleme güvenliği.
-- Yetkilendirme kontrolleri.
-
----
-
-## [0.9.0] - YYYY-MM-DD
-
-### Added
-
-- Deployment altyapısı.
-- Docker.
-- Nginx.
-- Gunicorn.
-- HTTPS hazırlıkları.
-- Cache sistemi.
-
-### Changed
-
-- Veritabanı optimizasyonları.
-- CSS optimizasyonları.
-- JavaScript optimizasyonları.
-
-### Fixed
-
-- Performans sorunları.
-
----
-
-## [0.8.0] - YYYY-MM-DD
-
-### Added
-
-- SEO altyapısı.
-- Breadcrumb.
-- Canonical URL.
-- Meta sistemi.
-- OpenGraph.
-- Twitter Cards.
-- Sitemap.
-- Robots.
-
----
-
-## [0.7.0] - YYYY-MM-DD
-
-### Added
-
-- Arama sistemi.
-- Filtreleme.
-- Sıralama.
-- Sayfalama.
-
----
-
-## [0.6.0] - YYYY-MM-DD
-
-### Added
-
-- Favori sistemi.
-- Puanlama sistemi.
-- Yorum sistemi.
-- Admin onay sistemi.
-
----
-
-## [0.5.0] - YYYY-MM-DD
-
-### Added
-
-- Tarif sistemi.
-- Kategori sistemi.
-- Malzeme sistemi.
-- Etiket sistemi.
-- Tarif görselleri.
-
----
-
-## [0.4.0] - YYYY-MM-DD
-
-### Added
-
-- İl sayfaları.
-- Türkiye SVG haritası.
-- Bölge sistemi.
-- İl filtreleme.
-
----
-
-## [0.3.0] - YYYY-MM-DD
-
-### Added
-
-- Kullanıcı kayıt sistemi.
-- Giriş sistemi.
-- Profil sistemi.
-- Şifre sıfırlama.
-
----
-
-## [0.2.0] - YYYY-MM-DD
-
-### Added
-
-- PostgreSQL desteği.
-- Django Admin.
-- Statik dosya yapısı.
-- Template mimarisi.
-- Component sistemi.
-- CSS mimarisi.
-- JavaScript mimarisi.
-
----
-
-## [0.1.0] - YYYY-MM-DD
-
-### Added
-
-- Proje oluşturuldu.
-- Clean Architecture yapısı oluşturuldu.
-- Klasör yapısı oluşturuldu.
-- Dokümantasyon oluşturuldu.
-- Docker altyapısı oluşturuldu.
-- Kod standartları belirlendi.
-- Güvenlik standartları belirlendi.
-- AI geliştirme kuralları oluşturuldu.
-
----
-
-# Changelog Kuralları
-
-Her commit bu dosyaya eklenmez.
-
-Sadece kullanıcıyı veya geliştiriciyi etkileyen değişiklikler eklenir.
-
-Her değişiklik aşağıdaki başlıklardan biri altında yazılır:
-
-- Added
-- Changed
-- Deprecated
-- Removed
-- Fixed
-- Security
-
-Değişiklikler kronolojik sırada tutulur.
-
-En yeni sürüm her zaman en üstte bulunur.
-
-Küçük refactoring işlemleri changelog'a eklenmez.
-
-Kod biçimlendirme değişiklikleri changelog'a eklenmez.
-
-Her sürüm bir tarih içermelidir.
-
-Her sürüm Semantic Versioning kurallarına uygun olmalıdır.
-```
+- Kullanıcıyı veya geliştiriciyi etkileyen değişiklikler kaydedilir.
+- Başlıklar `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed` ve `Security` biçimindedir.
+- Sürüm kayıtları tarih içerir ve en yeni kayıt üstte tutulur.
+- Yalnızca biçimlendirme ve davranış değiştirmeyen küçük düzenlemeler kaydedilmez.
