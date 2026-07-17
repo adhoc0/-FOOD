@@ -1,0 +1,12 @@
+.newsletter__wrapper {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: var(--space-xl);
+}
+
+@media (max-width: 700px) {
+    .newsletter__wrapper {
+        grid-template-columns: 1fr;
+    }
+}
