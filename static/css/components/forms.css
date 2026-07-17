@@ -1,0 +1,10 @@
+label {
+    color: var(--color-text);
+    font-weight: 600;
+}
+
+input,
+select,
+textarea {
+    max-width: 100%;
+}
