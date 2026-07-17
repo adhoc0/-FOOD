@@ -1,342 +1,140 @@
-/* ===========================================================
-   DESIGN SYSTEM
-   Türkiye Yöresel Yemekleri
-   Version : 1.0
-=========================================================== */
-
+/*
+ * FOOD tasarım sistemi
+ * Renk ve görsel kararların tek kaynağıdır.
+ * Bileşenlerde sabit renk değeri kullanılmaz; yalnızca bu token'lar kullanılır.
+ */
 :root {
-
-   /* =======================================================
-       COLORS
-    ======================================================= */
-
-   /* Kurumsal palet: tüm renk kullanımları bu dosyadan türetilir. */
-   --color-background: #F5E9D6;
-   --color-cream: var(--color-background);
-
-   --color-surface: #FFFFFF;
-
-   --color-map: var(--color-background);
-
-   --color-map-border: color-mix(in srgb, var(--color-text) 18%, var(--color-surface));
-
-   --color-primary: #2E7D5B;
-
-   --color-primary-hover: color-mix(in srgb, var(--color-primary) 88%, var(--color-text));
-
-   --color-primary-dark: color-mix(in srgb, var(--color-primary) 72%, var(--color-text));
-
-   --color-accent: #D4A017;
-
-   --color-accent-hover: color-mix(in srgb, var(--color-accent) 88%, var(--color-text));
-
-   --color-danger: var(--color-accent);
-
-   --color-text: #1F2937;
-
-   --color-text-light: color-mix(in srgb, var(--color-text) 65%, var(--color-surface));
-
-   --color-text-muted: color-mix(in srgb, var(--color-text) 45%, var(--color-surface));
-
-   --color-focus: var(--color-accent);
-
-   --color-overlay: color-mix(in srgb, var(--color-text) 60%, transparent);
-   --color-primary-soft: color-mix(in srgb, var(--color-primary) 8%, transparent);
-   --color-accent-soft: color-mix(in srgb, var(--color-accent) 8%, transparent);
-
-   --color-success: var(--color-primary);
-
-   --color-warning: var(--color-accent);
-
-   --color-border: color-mix(in srgb, var(--color-text) 14%, var(--color-surface));
-
-   --color-border-light: color-mix(in srgb, var(--color-text) 7%, var(--color-surface));
-
-   --border-width: 1px;
-
-   --color-white: #FFFFFF;
-
-
-
-   /* =======================================================
-       SHADOWS
-    ======================================================= */
-
-   --shadow-xs: 0 2px 6px color-mix(in srgb, var(--color-text) 3%, transparent);
-   --shadow-sm: 0 6px 14px color-mix(in srgb, var(--color-text) 5%, transparent);
-   --shadow-md: 0 14px 35px color-mix(in srgb, var(--color-text) 8%, transparent);
-   --shadow-lg: 0 24px 60px color-mix(in srgb, var(--color-text) 12%, transparent);
-
-   --shadow-hover: 0 30px 70px color-mix(in srgb, var(--color-primary) 18%, transparent);
-
-
-
-   /* =======================================================
-       BORDER RADIUS
-    ======================================================= */
-
-   --radius-xs: 8px;
-
-   --radius-sm: 12px;
-
-   --radius-md: 18px;
-
-   --radius-lg: 24px;
-
-   --radius-xl: 32px;
-
-
-   /* =======================================================
-       SEMANTIC TOKENS
-    ======================================================= */
-
-   /* ---------- Page ---------- */
-
-   --page-background: var(--color-background);
-
-   --page-surface: var(--color-surface);
-
-   --page-text: var(--color-text);
-
-   --page-text-light: var(--color-text-light);
-
-
-
-   /* ---------- Cards ---------- */
-
-   --card-background: var(--color-surface);
-
-   --card-border: var(--color-border);
-
-   --card-shadow: var(--shadow-sm);
-
-   --card-hover-shadow: var(--shadow-hover);
-
-
-
-   /* ---------- Buttons ---------- */
-
-   --button-primary-bg: var(--color-primary);
-
-   --button-primary-hover: var(--color-primary-hover);
-
-   --button-primary-text: var(--color-white);
-
-   --button-secondary-bg: var(--color-accent);
-
-   --button-secondary-hover: var(--color-accent-hover);
-
-   --button-secondary-text: var(--color-white);
-
-
-
-   /* ---------- Links ---------- */
-
-   --link-color: var(--color-primary);
-
-   --link-hover: var(--color-primary-hover);
-
-
-
-   /* ---------- Inputs ---------- */
-
-   --input-background: var(--color-white);
-
-   --input-border: var(--color-border);
-
-   --input-focus: var(--color-focus);
-
-   --input-text: var(--color-text);
-
-   --input-placeholder: var(--color-text-muted);
-
-
-
-   /* ---------- Navbar ---------- */
-
-   --navbar-background: var(--color-surface);
-
-   --navbar-text: var(--color-text);
-
-   --navbar-shadow: var(--shadow-sm);
-
-
-
-   /* ---------- Footer ---------- */
-
-   --footer-background: var(--color-primary-dark);
-
-   --footer-text: var(--color-white);
-
-
-
-   /* ---------- Recipe Cards ---------- */
-
-   --recipe-card-background: var(--color-surface);
-
-   --recipe-card-border: var(--color-border);
-
-   --recipe-card-shadow: var(--shadow-sm);
-
-   --recipe-card-hover-shadow: var(--shadow-hover);
-
-
-
-   /* ---------- Province Cards ---------- */
-
-   --province-card-background: var(--color-surface);
-
-   --province-card-border: var(--color-border);
-
-   --province-card-shadow: var(--shadow-sm);
-
-
-
-   /* ---------- Category Cards ---------- */
-
-   --category-card-background: var(--color-surface);
-
-   --category-card-border: var(--color-border);
-
-   --category-card-shadow: var(--shadow-sm);
-
-
-
-   /* ---------- Map ---------- */
-
-   --map-background: var(--color-map);
-
-   --map-border: var(--color-map-border);
-
-   --map-province-fill: var(--color-primary);
-
-   --map-province-hover: var(--color-primary-hover);
-
-   --map-label: var(--color-text);
-
-
-
-   /* ---------- Alerts ---------- */
-
-   --alert-success-bg: var(--color-success);
-
-   --alert-warning-bg: var(--color-warning);
-
-   --alert-danger-bg: var(--color-danger);
-
-   --alert-text: var(--color-white);
-
-
-
-   /* ---------- Modal ---------- */
-
-   --modal-background: var(--color-surface);
-
-   --modal-overlay: var(--color-overlay);
-
-
-
-   /* ---------- Breadcrumb ---------- */
-
-   --breadcrumb-color: var(--color-text-light);
-
-   --breadcrumb-active: var(--color-primary);
-
-
-
-   /* ---------- Pagination ---------- */
-
-   --pagination-background: var(--color-surface);
-
-   --pagination-active: var(--color-primary);
-
-   --pagination-text: var(--color-text);
-
-
-
-   /* ---------- Badges ---------- */
-
-   --badge-background: var(--color-accent);
-
-   --badge-text: var(--color-white);
-
-
-
-   /* ---------- Hero ---------- */
-
-   --hero-background: var(--color-background);
-
-   --hero-title: var(--color-text);
-
-   --hero-description: var(--color-text-light);
-
-
-
-   /* ---------- Statistics ---------- */
-
-   --stats-background: var(--color-surface);
-
-   --stats-number: var(--color-primary);
-
-   --stats-label: var(--color-text-light);
-
-
-
-   /* =======================================================
-       SPACING
-    ======================================================= */
-
-   --space-xs: .25rem;
-
-   --space-sm: .5rem;
-
-   --space-md: 1rem;
-
-   --space-lg: 1.5rem;
-
-   --space-xl: 2rem;
-
-   --space-2xl: 3rem;
-
-   --space-3xl: 5rem;
-
-   --text-sm: .875rem;
-   --text-lg: 1.125rem;
-   --text-xl: 1.5rem;
-   --font-semibold: 600;
-   --line-tight: 1.2;
-   --line-relaxed: 1.7;
-
-   /* =======================================================
-       LAYOUT
-    ======================================================= */
-
-   --container-padding: 1rem;
-
-   --section-spacing: clamp(3.5rem, 8vw, 6rem);
-
-   /* =======================================================
-       TRANSITIONS
-    ======================================================= */
-
-   --transition-fast: .20s ease;
-
-   --transition: .30s ease;
-
-   --transition-slow: .45s ease;
-
-
-
-   /* =======================================================
-       TYPOGRAPHY
-    ======================================================= */
-
-   --font-family: Inter, "Segoe UI", sans-serif;
-
-   --font-family-display: Georgia, "Times New Roman", serif;
-
-   --font-size-body: 1rem;
-
-   --line-height-body: 1.6;
-
+  /* 1. Kurumsal ana palet */
+  --color-text: #1F2937;
+  --color-accent: #D4A017;
+  --color-primary: #2E7D5B;
+  --color-background: #F5E9D6;
+  --color-surface: #FFFFFF;
+
+  /* 2. Renk türevleri */
+  --color-white: var(--color-surface);
+  --color-cream: var(--color-background);
+  --color-primary-hover: color-mix(in srgb, var(--color-primary) 88%, var(--color-text));
+  --color-primary-dark: color-mix(in srgb, var(--color-primary) 72%, var(--color-text));
+  --color-accent-hover: color-mix(in srgb, var(--color-accent) 88%, var(--color-text));
+  --color-text-light: color-mix(in srgb, var(--color-text) 65%, var(--color-surface));
+  --color-text-muted: color-mix(in srgb, var(--color-text) 45%, var(--color-surface));
+  --color-border: color-mix(in srgb, var(--color-text) 14%, var(--color-surface));
+  --color-border-light: color-mix(in srgb, var(--color-text) 7%, var(--color-surface));
+  --color-map: var(--color-background);
+  --color-map-border: color-mix(in srgb, var(--color-text) 18%, var(--color-surface));
+  --color-primary-soft: color-mix(in srgb, var(--color-primary) 8%, transparent);
+  --color-accent-soft: color-mix(in srgb, var(--color-accent) 8%, transparent);
+  --color-overlay: color-mix(in srgb, var(--color-text) 60%, transparent);
+
+  /* 3. Durum renkleri paletten türetilir */
+  --color-success: var(--color-primary);
+  --color-warning: var(--color-accent);
+  --color-danger: var(--color-accent);
+  --color-focus: var(--color-accent);
+  --alert-success-bg: var(--color-success);
+  --alert-warning-bg: var(--color-warning);
+  --alert-danger-bg: var(--color-danger);
+  --alert-text: var(--color-white);
+
+  /* 4. Gölge ve kenarlık */
+  --border-width: 1px;
+  --shadow-xs: 0 2px 6px color-mix(in srgb, var(--color-text) 3%, transparent);
+  --shadow-sm: 0 6px 14px color-mix(in srgb, var(--color-text) 5%, transparent);
+  --shadow-md: 0 14px 35px color-mix(in srgb, var(--color-text) 8%, transparent);
+  --shadow-lg: 0 24px 60px color-mix(in srgb, var(--color-text) 12%, transparent);
+  --shadow-hover: 0 30px 70px color-mix(in srgb, var(--color-primary) 18%, transparent);
+
+  /* 5. Yüzey ve bileşen token'ları */
+  --page-background: var(--color-background);
+  --page-surface: var(--color-surface);
+  --page-text: var(--color-text);
+  --page-text-light: var(--color-text-light);
+  --card-background: var(--color-surface);
+  --card-border: var(--color-border);
+  --card-shadow: var(--shadow-sm);
+  --card-hover-shadow: var(--shadow-hover);
+  --button-primary-bg: var(--color-primary);
+  --button-primary-hover: var(--color-primary-hover);
+  --button-primary-text: var(--color-white);
+  --button-secondary-bg: var(--color-accent);
+  --button-secondary-hover: var(--color-accent-hover);
+  --button-secondary-text: var(--color-white);
+  --link-color: var(--color-primary);
+  --link-hover: var(--color-primary-hover);
+  --input-background: var(--color-surface);
+  --input-border: var(--color-border);
+  --input-focus: var(--color-focus);
+  --input-text: var(--color-text);
+  --input-placeholder: var(--color-text-muted);
+  --navbar-background: var(--color-surface);
+  --navbar-text: var(--color-text);
+  --navbar-shadow: var(--shadow-sm);
+  --footer-background: var(--color-primary-dark);
+  --footer-text: var(--color-white);
+  --modal-background: var(--color-surface);
+  --modal-overlay: var(--color-overlay);
+  --breadcrumb-color: var(--color-text-light);
+  --breadcrumb-active: var(--color-primary);
+  --pagination-background: var(--color-surface);
+  --pagination-active: var(--color-primary);
+  --pagination-text: var(--color-text);
+  --badge-background: var(--color-accent);
+  --badge-text: var(--color-white);
+  --hero-background: var(--color-background);
+  --hero-title: var(--color-text);
+  --hero-description: var(--color-text-light);
+  --stats-background: var(--color-surface);
+  --stats-number: var(--color-primary);
+  --stats-label: var(--color-text-light);
+  --map-background: var(--color-map);
+  --map-border: var(--color-map-border);
+  --map-province-fill: var(--color-primary);
+  --map-province-hover: var(--color-primary-hover);
+  --map-label: var(--color-text);
+  --recipe-card-background: var(--color-surface);
+  --recipe-card-border: var(--color-border);
+  --recipe-card-shadow: var(--shadow-sm);
+  --recipe-card-hover-shadow: var(--shadow-hover);
+  --province-card-background: var(--color-surface);
+  --province-card-border: var(--color-border);
+  --province-card-shadow: var(--shadow-sm);
+  --category-card-background: var(--color-surface);
+  --category-card-border: var(--color-border);
+  --category-card-shadow: var(--shadow-sm);
+
+  /* 6. Tipografi */
+  --font-family: Inter, "Segoe UI", sans-serif;
+  --font-family-display: Georgia, "Times New Roman", serif;
+  --font-size-body: 1rem;
+  --line-height-body: 1.6;
+  --line-tight: 1.2;
+  --line-relaxed: 1.7;
+  --font-semibold: 600;
+  --font-bold: 700;
+  --text-sm: .875rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.5rem;
+  --text-secondary: var(--color-text-light);
+
+  /* 7. Aralık, yerleşim ve yuvarlaklık */
+  --space-xs: .25rem;
+  --space-sm: .5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 5rem;
+  --container-padding: 1rem;
+  --section-spacing: clamp(3.5rem, 8vw, 6rem);
+  --radius-xs: 8px;
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+
+  /* 8. Hareket */
+  --transition-fast: .2s ease;
+  --transition: .3s ease;
+  --transition-slow: .45s ease;
 }
