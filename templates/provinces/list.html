@@ -1,11 +1,3 @@
 {% extends "layouts/default.html" %}
-
-{% block title %}
-Başlık | Türkiye Yöresel Yemekleri
-{% endblock %}
-
-{% block content %}
-<section class="container">
-    <h1>Sayfa İçeriği</h1>
-</section>
-{% endblock %}
+{% block title %}İller | Türkiye Yöresel Lezzetleri{% endblock %}
+{% block content %}<section class="container content-page"><p class="eyebrow">81 İL</p><h1>Türkiye’nin lezzet durakları</h1><p class="lead">İllere göre tarifleri ve mutfak hikâyelerini keşfedin.</p><div class="chip-list" aria-label="Bölgeler">{% for region in regions %}<a class="chip {% if region.slug == current_region %}is-active{% endif %}" href="?region={{ region.slug }}">{{ region.name }}</a>{% endfor %}</div><div class="card-grid card-grid--three">{% for province in provinces %}<a class="province-card" href="{{ province.get_absolute_url }}"><span class="province-card__code">{{ province.plate_code|stringformat:'02d' }}</span><h2>{{ province.name }}</h2><span>{{ province.region.name }}</span></a>{% empty %}<p>Henüz il bulunamadı.</p>{% endfor %}</div>{% include "components/feedback/pagination.html" %}</section>{% endblock %}

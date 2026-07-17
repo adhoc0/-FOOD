@@ -1,0 +1,9 @@
+<form class="rating-form" method="post" action="{{ action }}">
+    {% csrf_token %}
+    <label for="rating-score">Puanınız</label>
+    <select id="rating-score" name="score" required>
+        <option value="">Seçin</option>
+        {% for score in "12345" %}<option value="{{ score }}">{{ score }} / 5</option>{% endfor %}
+    </select>
+    <button class="btn btn-primary" type="submit">Puanla</button>
+</form>

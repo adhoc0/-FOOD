@@ -17,6 +17,12 @@
 @import url("components/messages.css");
 @import url("components/pagination.css");
 @import url("components/breadcrumb.css");
+@import url("components/alerts.css");
+@import url("components/badges.css");
+@import url("components/rating.css");
+@import url("components/search.css");
+@import url("layout/grid.css");
+@import url("pages/content.css");
 @import url("components/cards/recipe-card.css");
 @import url("components/cards/province-card.css");
 @import url("components/cards/category-card.css");

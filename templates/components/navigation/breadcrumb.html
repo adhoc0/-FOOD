@@ -1,3 +1,9 @@
 <!-- breadcrumb component -->
 <div class="breadcrumb">
 </div>
+{% if breadcrumbs %}
+<nav class="breadcrumb" aria-label="İçerik yolu">
+    <a href="{% url 'pages:home' %}">Ana Sayfa</a>
+    {% for crumb in breadcrumbs %}<span aria-hidden="true">/</span>{% if crumb.url %}<a href="{{ crumb.url }}">{{ crumb.title }}</a>{% else %}<span aria-current="page">{{ crumb.title }}</span>{% endif %}{% endfor %}
+</nav>
+{% endif %}

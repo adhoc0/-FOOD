@@ -1,16 +1,3 @@
 {% extends "layouts/default.html" %}
-
-{% block title %}Kategoriler{% endblock %}
-
-{% block content %}
-<div class="container">
-    <h1>Kategoriler</h1>
-    <ul>
-        {% for category in categories %}
-            <li><a href="{% url 'recipes:category_detail' category.slug %}">{{ category.name }} ({{ category.recipe_count|default:0 }})</a></li>
-        {% empty %}
-            <li>Henüz kategori bulunmamaktadır.</li>
-        {% endfor %}
-    </ul>
-</div>
-{% endblock %}
+{% block title %}Kategoriler | Türkiye Yöresel Lezzetleri{% endblock %}
+{% block content %}<section class="container content-page"><p class="eyebrow">KEŞFET</p><h1>Tarif kategorileri</h1><p class="lead">Aradığınız lezzeti mutfak türüne göre bulun.</p><div class="card-grid card-grid--three">{% for category in categories %}<a class="province-card" href="{% url 'recipes:category_detail' category.slug %}"><h2>{{ category.name }}</h2><p>{{ category.description|truncatewords:18 }}</p><span>{{ category.recipe_count|default:0 }} tarif</span></a>{% empty %}<p>Henüz kategori bulunmamaktadır.</p>{% endfor %}</div></section>{% endblock %}

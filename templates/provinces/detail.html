@@ -1,11 +1,3 @@
 {% extends "layouts/default.html" %}
-
-{% block title %}
-Başlık | Türkiye Yöresel Yemekleri
-{% endblock %}
-
-{% block content %}
-<section class="container">
-    <h1>Sayfa İçeriği</h1>
-</section>
-{% endblock %}
+{% block title %}{{ province.name }} Yöresel Tarifleri{% endblock %}
+{% block content %}<section class="container content-page"><p class="eyebrow">{{ province.region.name }} · {{ province.plate_code|stringformat:'02d' }}</p><h1>{{ province.name }} mutfağı</h1><p class="lead">{{ province.description|default:"Bu ilin yöresel tariflerini keşfedin." }}</p><div class="province-detail__stats"><span>Koordinat: {{ province.latitude }}, {{ province.longitude }}</span></div><h2>Öne çıkan tarifler</h2><div class="card-grid card-grid--three">{% for recipe in province.recipes.all|slice:':6' %}{% include "components/cards/recipe_card.html" with recipe=recipe %}{% empty %}<p>Bu il için henüz tarif eklenmedi.</p>{% endfor %}</div></section>{% endblock %}

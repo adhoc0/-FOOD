@@ -1,20 +1,3 @@
 {% extends "layouts/default.html" %}
-
-{% block title %}{{ category.name }} Tarifleri{% endblock %}
-
-{% block content %}
-<div class="container">
-    <h1>{{ category.name }}</h1>
-    <p>{{ category.description }}</p>
-
-    <ul>
-        {% for recipe in recipes %}
-            <li><a href="{{ recipe.get_absolute_url }}">{{ recipe.title }}</a></li>
-        {% empty %}
-            <li>Bu kategoride henüz tarif bulunmamaktadır.</li>
-        {% endfor %}
-    </ul>
-
-    {% include "components/feedback/pagination.html" %}
-</div>
-{% endblock %}
+{% block title %}{{ category.name }} Tarifleri | Türkiye Yöresel Lezzetleri{% endblock %}
+{% block content %}<section class="container content-page"><p class="eyebrow">KATEGORİ</p><h1>{{ category.name }}</h1><p class="lead">{{ category.description }}</p><p class="muted">{{ recipe_count }} tarif</p><div class="card-grid card-grid--three">{% for recipe in recipes %}{% include "components/cards/recipe_card.html" with recipe=recipe %}{% empty %}<p>Bu kategoride henüz tarif bulunmamaktadır.</p>{% endfor %}</div>{% include "components/feedback/pagination.html" %}</section>{% endblock %}

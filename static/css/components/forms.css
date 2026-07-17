@@ -3,6 +3,9 @@ label {
     font-weight: 600;
 }
 
+.comment-form,
+.rating-form { display: grid; gap: .6rem; max-width: 32rem; }
+
 input,
 select,
 textarea {
