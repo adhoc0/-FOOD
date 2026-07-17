@@ -48,6 +48,8 @@
 
    --color-border-light: #F3F0EA;
 
+   --border-width: 1px;
+
    --color-white: #FFFFFF;
 
 
@@ -306,6 +308,13 @@
    --space-2xl: 3rem;
 
    --space-3xl: 5rem;
+
+   --text-sm: .875rem;
+   --text-lg: 1.125rem;
+   --text-xl: 1.5rem;
+   --font-semibold: 600;
+   --line-tight: 1.2;
+   --line-relaxed: 1.7;
 
    /* =======================================================
        LAYOUT

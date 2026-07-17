@@ -1,0 +1,12 @@
+.home-map {
+    padding: var(--space-3xl) 0;
+}
+
+.section-header {
+    margin-bottom: var(--space-xl);
+}
+
+.section-header p {
+    max-width: 60ch;
+    color: var(--color-text-light);
+}
