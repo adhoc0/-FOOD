@@ -37,3 +37,9 @@ class TestHomePageView:
         assert response.status_code == 200
         assert category_url.encode() in response.content
         assert Client().get(category_url).status_code == 200
+
+    def test_map_markup_is_rendered_on_homepage(self):
+        response = Client().get(reverse("pages:home"))
+
+        assert response.status_code == 200
+        assert b"turkey-map__land" in response.content
