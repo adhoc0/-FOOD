@@ -5,6 +5,7 @@ from django.views.generic import ListView
 
 from recipes.constants import DEFAULT_PAGE_SIZE
 from recipes.models import Category, Recipe
+from recipes.selectors import CategorySelector
 
 
 class CategoryListView(ListView):
@@ -15,13 +16,7 @@ class CategoryListView(ListView):
     context_object_name = "categories"
 
     def get_queryset(self):
-        return (
-            Category.objects.filter(
-                is_active=True,
-            ).order_by(
-                "name",
-            )
-        )
+        return CategorySelector.get_all_active()
 
 
 class CategoryDetailView(ListView):
@@ -33,12 +28,7 @@ class CategoryDetailView(ListView):
     paginate_by = DEFAULT_PAGE_SIZE
 
     def get_category(self) -> Category:
-        category = (
-            Category.objects.filter(
-                is_active=True,
-                slug=self.kwargs["slug"],
-            ).first()
-        )
+        category = CategorySelector.get_by_slug(self.kwargs["slug"])
 
         if category is None:
             raise Http404("Category not found.")
@@ -47,13 +37,8 @@ class CategoryDetailView(ListView):
 
     def get_queryset(self):
         self.category = self.get_category()
-
-        return (
-            Recipe.objects
-            .published_with_related()
-            .by_category(self.category)
-            .recent()
-        )
+        _, recipes = CategorySelector.get_published_recipes(self.category.slug)
+        return recipes
 
     def get_context_data(
         self,
