@@ -13,7 +13,12 @@ class ProfileSelector:
     def get_favorites(user: CustomUser) -> QuerySet[Favorite]:
         return (
             Favorite.objects.filter(user=user)
-            .select_related("recipe", "recipe__province", "recipe__category")
+            .select_related(
+                "recipe",
+                "recipe__province",
+                "recipe__category",
+                "recipe__cover_image",
+            )
             .order_by("-created_at")
         )
 
