@@ -2,16 +2,26 @@
  * FOOD tasarım sistemi
  * Renk ve görsel kararların tek kaynağıdır.
  * Bileşenlerde sabit renk değeri kullanılmaz; yalnızca bu token'lar kullanılır.
+ * Müdahale rehberi:
+ *   - Marka rengini değiştir: --color-primary / --color-accent
+ *   - Sayfa zeminini değiştir: --color-background
+ *   - Metin kontrastını değiştir: --color-text
+ *   - Kart ve input yüzeyini değiştir: --color-surface
+ * Değişkenleri kullanan sayfalar ayrıca düzenlenmez.
  */
 :root {
-  /* 1. Kurumsal ana palet */
+  /* 1. KURUMSAL ANA PALET
+   * Sitede doğrudan değiştireceğiniz tek bölüm burasıdır.
+   * Marka renkleri: metin, vurgu, yeşil aksiyon, krem zemin ve beyaz yüzey. */
   --color-text: #1F2937;
   --color-accent: #D4A017;
   --color-primary: #2E7D5B;
   --color-background: #F5E9D6;
   --color-surface: #FFFFFF;
 
-  /* 2. Renk türevleri */
+  /* 2. RENK TÜREVLERİ
+   * Hover, border, muted ve transparan renkler ana paletten hesaplanır.
+   * Ana palet değiştiğinde bu değerler otomatik olarak uyum sağlar. */
   --color-white: var(--color-surface);
   --color-cream: var(--color-background);
   --color-primary-hover: color-mix(in srgb, var(--color-primary) 88%, var(--color-text));
@@ -27,7 +37,9 @@
   --color-accent-soft: color-mix(in srgb, var(--color-accent) 8%, transparent);
   --color-overlay: color-mix(in srgb, var(--color-text) 60%, transparent);
 
-  /* 3. Durum renkleri paletten türetilir */
+  /* 3. DURUM RENKLERİ
+   * Başarı/uyarı/hata renkleri de kurumsal paletten türetilir; burada
+   * bileşenlerin hangi anlamı hangi token ile kullanacağı belirlenir. */
   --color-success: var(--color-primary);
   --color-warning: var(--color-accent);
   --color-danger: var(--color-accent);
@@ -37,7 +49,8 @@
   --alert-danger-bg: var(--color-danger);
   --alert-text: var(--color-white);
 
-  /* 4. Gölge ve kenarlık */
+  /* 4. GÖLGE VE KENARLIK
+   * Opaklıklar sabit renk yerine text token'ından hesaplanır. */
   --border-width: 1px;
   --shadow-xs: 0 2px 6px color-mix(in srgb, var(--color-text) 3%, transparent);
   --shadow-sm: 0 6px 14px color-mix(in srgb, var(--color-text) 5%, transparent);
@@ -45,7 +58,9 @@
   --shadow-lg: 0 24px 60px color-mix(in srgb, var(--color-text) 12%, transparent);
   --shadow-hover: 0 30px 70px color-mix(in srgb, var(--color-primary) 18%, transparent);
 
-  /* 5. Yüzey ve bileşen token'ları */
+  /* 5. YÜZEY VE BİLEŞEN TOKEN'LARI
+   * Bileşen CSS'leri bu katmanı kullanır. Örneğin buton veya kart rengini
+   * değiştirmek için ilgili --button-* ya da --card-* token'ını düzenleyin. */
   --page-background: var(--color-background);
   --page-surface: var(--color-surface);
   --page-text: var(--color-text);
@@ -103,7 +118,8 @@
   --category-card-border: var(--color-border);
   --category-card-shadow: var(--shadow-sm);
 
-  /* 6. Tipografi */
+  /* 6. TİPOGRAFİ
+   * Font ailesi, gövde ölçüsü ve başlık/okuma satır aralıkları. */
   --font-family: Inter, "Segoe UI", sans-serif;
   --font-family-display: Georgia, "Times New Roman", serif;
   --font-size-body: 1rem;
@@ -117,7 +133,8 @@
   --text-xl: 1.5rem;
   --text-secondary: var(--color-text-light);
 
-  /* 7. Aralık, yerleşim ve yuvarlaklık */
+  /* 7. ARALIK, YERLEŞİM VE YUVARLAKLIK
+   * Responsive boşluklar ve kart köşe yarıçapları. */
   --space-xs: .25rem;
   --space-sm: .5rem;
   --space-md: 1rem;
@@ -133,7 +150,8 @@
   --radius-lg: 24px;
   --radius-xl: 32px;
 
-  /* 8. Hareket */
+  /* 8. HAREKET
+   * Hover/focus geçişlerinin ortak süreleri. */
   --transition-fast: .2s ease;
   --transition: .3s ease;
   --transition-slow: .45s ease;
