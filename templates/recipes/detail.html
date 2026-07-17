@@ -1,7 +1,10 @@
 {% extends "layouts/default.html" %}
 
-{% block title %}
-Başlık | Türkiye Yöresel Yemekleri
+{% block title %}{{ recipe.title }} | Türkiye Yöresel Yemekleri{% endblock %}
+
+{% block extra_css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/pages/recipes/detail.css' %}">
 {% endblock %}
 
 {% block structured_data %}
@@ -11,7 +14,30 @@ Başlık | Türkiye Yöresel Yemekleri
 {% endblock %}
 
 {% block content %}
-<section class="container">
-    <h1>Sayfa İçeriği</h1>
-</section>
+<article class="recipe-detail">
+    <div class="container">
+        <header class="recipe-detail__header">
+            <p class="page-heading__eyebrow">{{ recipe.category.name }} · {{ recipe.province.name }}</p>
+            <h1>{{ recipe.title }}</h1>
+            <p class="recipe-detail__summary">{{ recipe.summary }}</p>
+            <div class="recipe-detail__meta" aria-label="Tarif bilgileri">
+                <span>Hazırlık {{ recipe.preparation_time }} dk</span>
+                <span>Pişirme {{ recipe.cooking_time }} dk</span>
+                <span>{{ recipe.servings }} kişilik</span>
+                <span>★ {{ recipe.average_rating }} ({{ recipe.rating_count }})</span>
+            </div>
+        </header>
+        <div class="recipe-detail__body">
+            <section aria-labelledby="instructions-title">
+                <h2 id="instructions-title">Hazırlanışı</h2>
+                <div class="recipe-detail__instructions">{{ recipe.instructions|linebreaks }}</div>
+            </section>
+            <aside class="recipe-detail__aside" aria-label="Tarif özeti">
+                <strong>{{ recipe.province.name }}</strong>
+                <span>{{ recipe.category.name }}</span>
+                <a class="btn btn-primary" href="{% url 'provinces:detail' recipe.province.slug %}">İli keşfet</a>
+            </aside>
+        </div>
+    </div>
+</article>
 {% endblock %}

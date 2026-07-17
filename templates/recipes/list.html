@@ -1,11 +1,27 @@
 {% extends "layouts/default.html" %}
 
-{% block title %}
-Başlık | Türkiye Yöresel Yemekleri
+{% block title %}Yöresel Tarifler | Türkiye Yöresel Yemekleri{% endblock %}
+
+{% block extra_css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/pages/recipes/list.css' %}">
 {% endblock %}
 
 {% block content %}
-<section class="container">
-    <h1>Sayfa İçeriği</h1>
+<section class="recipe-list-page">
+    <div class="container">
+        <header class="page-heading">
+            <p class="page-heading__eyebrow">Lezzet arşivi</p>
+            <h1>Yöresel Tarifler</h1>
+            <p>Türkiye’nin farklı şehirlerinden gelen tarifleri keşfedin.</p>
+        </header>
+        <div class="recipe-grid">
+            {% for recipe in recipes %}
+                {% include "components/cards/recipe_card.html" with recipe=recipe %}
+            {% empty %}
+                <p>Henüz yayınlanmış tarif bulunmuyor.</p>
+            {% endfor %}
+        </div>
+    </div>
 </section>
 {% endblock %}
