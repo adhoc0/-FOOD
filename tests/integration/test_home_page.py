@@ -42,4 +42,5 @@ class TestHomePageView:
         response = Client().get(reverse("pages:home"))
 
         assert response.status_code == 200
-        assert b"turkey-map__land" in response.content
+        assert b"turkey-map" in response.content
+        assert b"images/map/turkey-provinces.svg" in response.content
