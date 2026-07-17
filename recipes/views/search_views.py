@@ -8,10 +8,11 @@ from __future__ import annotations
 
 from django.views.generic import ListView
 
-from provinces.models import Province
+from provinces.selectors import ProvinceSelector
 from recipes.choices import Difficulty
 from recipes.constants import SEARCH_PAGE_SIZE
-from recipes.models import Category, Recipe
+from recipes.models import Recipe
+from recipes.selectors import CategorySelector
 from recipes.services import SearchService
 
 
@@ -93,7 +94,7 @@ class SearchView(ListView):
             ],
         }
 
-        return queryset.order_by(
+        self._result_queryset = queryset.order_by(
             *ordering_map.get(
                 self.ordering,
                 [
@@ -102,6 +103,7 @@ class SearchView(ListView):
                 ],
             ),
         )
+        return self._result_queryset
 
     def get_context_data(
         self,
@@ -115,35 +117,12 @@ class SearchView(ListView):
         context["current_difficulty"] = self.difficulty
         context["current_sort"] = self.ordering
 
-        context["provinces"] = (
-            Province.objects.filter(
-                is_active=True,
-            )
-            .order_by(
-                "name",
-            )
-            .values(
-                "name",
-                "slug",
-            )
-        )
-
-        context["categories"] = (
-            Category.objects.filter(
-                is_active=True,
-            )
-            .order_by(
-                "name",
-            )
-            .values(
-                "name",
-                "slug",
-            )
-        )
+        context["provinces"] = ProvinceSelector.get_active_list()
+        context["categories"] = CategorySelector.get_all_active()
 
         context["difficulties"] = Difficulty.choices
 
-        context["total_results"] = self.get_queryset().count()
+        context["total_results"] = self._result_queryset.count()
 
         context["meta_title"] = (
             f'"{self.query}" Arama Sonuçları | Türkiye Yöresel Yemekleri'
