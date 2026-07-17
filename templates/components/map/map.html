@@ -1,3 +1,21 @@
-<!-- map component -->
-<div class="map">
+<div class="map-container" role="img" aria-label="Türkiye iller haritası">
+    <svg class="turkey-map" viewBox="0 0 960 420" aria-hidden="true" focusable="false">
+        <path class="turkey-map__land" d="M54 188 105 139 179 130 243 94 321 112 390 80 463 110 538 92 616 119 693 92 770 126 887 143 920 205 879 254 804 267 734 299 648 282 574 319 489 292 414 334 332 302 253 326 183 286 104 293 58 251Z" />
+        <g class="turkey-map__markers">
+            <circle cx="178" cy="174" r="14" /><circle cx="278" cy="143" r="14" />
+            <circle cx="395" cy="178" r="14" /><circle cx="520" cy="151" r="14" />
+            <circle cx="640" cy="190" r="14" /><circle cx="756" cy="176" r="14" />
+            <circle cx="470" cy="248" r="14" /><circle cx="612" cy="245" r="14" />
+        </g>
+        <g class="turkey-map__labels">
+            <text x="165" y="178">34</text><text x="265" y="147">06</text>
+            <text x="382" y="182">16</text><text x="507" y="155">55</text>
+            <text x="627" y="194">61</text><text x="743" y="180">25</text>
+            <text x="457" y="252">01</text><text x="599" y="249">21</text>
+        </g>
+    </svg>
+    <div class="map-container__legend">
+        <span><i></i> İl seçerek tarifleri keşfedin</span>
+        <a href="{% url 'provinces:list' %}" class="btn btn-outline">Tüm illeri gör</a>
+    </div>
 </div>

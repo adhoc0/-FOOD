@@ -1,4 +1,66 @@
 .map-container {
+    position: relative;
+    min-height: 22rem;
+    padding: clamp(1rem, 4vw, 3rem);
+    background: var(--map-background);
+    border: var(--border-width) solid var(--map-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+}
+
+.turkey-map {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.turkey-map__land {
+    fill: #f9f2e6;
+    stroke: #d8cbb8;
+    stroke-width: 3;
+}
+
+.turkey-map__markers circle {
+    fill: var(--color-primary);
+    opacity: .9;
+}
+
+.turkey-map__labels {
+    fill: var(--color-white);
+    font-family: var(--font-family);
+    font-size: 15px;
+    font-weight: 700;
+    text-anchor: middle;
+}
+
+.map-container__legend {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    margin-top: var(--space-lg);
+    color: var(--color-text-light);
+    font-size: var(--text-sm);
+}
+
+.map-container__legend i {
+    display: inline-block;
+    width: .65rem;
+    height: .65rem;
+    margin-right: .35rem;
+    background: var(--color-primary);
+    border-radius: 50%;
+}
+
+@media (max-width: 600px) {
+    .map-container__legend {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+/* Mevcut harita etkileşim sınıfları için ortak yüzey. */
+.map-container {
 
     position: relative;
 
