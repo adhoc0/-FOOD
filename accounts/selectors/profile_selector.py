@@ -17,7 +17,6 @@ class ProfileSelector:
                 "recipe",
                 "recipe__province",
                 "recipe__category",
-                "recipe__cover_image",
             )
             .order_by("-created_at")
         )
