@@ -54,13 +54,9 @@
     font-size: 3rem;
 }
 
-.password-reset-icon {
-    color: #feca57;
-}
+.password-reset-icon { color: var(--color-accent); }
 
-.password-reset-success-icon {
-    color: #2ecc71;
-}
+.password-reset-success-icon { color: var(--color-primary); }
 
 .password-reset-link {
     display: inline-block;

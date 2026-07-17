@@ -57,7 +57,7 @@
 
     border-radius: 50%;
 
-    background: rgba(46, 125, 91, .08);
+    background: var(--color-primary-soft);
 
 }
 

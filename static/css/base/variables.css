@@ -10,43 +10,46 @@
        COLORS
     ======================================================= */
 
-   --color-background: #F5E9D6;
+   /* Kurumsal palet: tüm renk kullanımları bu dosyadan türetilir. */
+   --color-background: #F5D5BB;
 
    --color-surface: #FFFFFF;
 
-   --color-map: #F8F5EF;
+   --color-map: var(--color-background);
 
-   --color-map-border: #DDD6C8;
+   --color-map-border: color-mix(in srgb, var(--color-text) 18%, var(--color-surface));
 
    --color-primary: #2E7D5B;
 
-   --color-primary-hover: #347F61;
+   --color-primary-hover: color-mix(in srgb, var(--color-primary) 88%, var(--color-text));
 
-   --color-primary-dark: #205842;
+   --color-primary-dark: color-mix(in srgb, var(--color-primary) 72%, var(--color-text));
 
    --color-accent: #D4A017;
 
-   --color-accent-hover: #C39212;
+   --color-accent-hover: color-mix(in srgb, var(--color-accent) 88%, var(--color-text));
 
-   --color-danger: #D64545;
+   --color-danger: var(--color-accent);
 
    --color-text: #1F2937;
 
-   --color-text-light: #6B7280;
+   --color-text-light: color-mix(in srgb, var(--color-text) 65%, var(--color-surface));
 
-   --color-text-muted: #9CA3AF;
+   --color-text-muted: color-mix(in srgb, var(--color-text) 45%, var(--color-surface));
 
    --color-focus: #D4A017;
 
-   --color-overlay: rgb(31 41 55 / 60%);
+   --color-overlay: color-mix(in srgb, var(--color-text) 60%, transparent);
+   --color-primary-soft: color-mix(in srgb, var(--color-primary) 8%, transparent);
+   --color-accent-soft: color-mix(in srgb, var(--color-accent) 8%, transparent);
 
-   --color-success: #2E7D32;
+   --color-success: var(--color-primary);
 
-   --color-warning: #F59E0B;
+   --color-warning: var(--color-accent);
 
-   --color-border: #E9E4DA;
+   --color-border: color-mix(in srgb, var(--color-text) 14%, var(--color-surface));
 
-   --color-border-light: #F3F0EA;
+   --color-border-light: color-mix(in srgb, var(--color-text) 7%, var(--color-surface));
 
    --border-width: 1px;
 
@@ -74,9 +77,7 @@
 
       0 24px 60px rgba(0, 0, 0, .12);
 
-   --shadow-hover:
-
-      0 30px 70px rgba(46, 125, 91, .18);
+   --shadow-hover: 0 30px 70px color-mix(in srgb, var(--color-primary) 18%, transparent);
 
 
 
