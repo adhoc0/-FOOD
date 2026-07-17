@@ -12,6 +12,7 @@
 
    /* Kurumsal palet: tüm renk kullanımları bu dosyadan türetilir. */
    --color-background: #F5E9D6;
+   --color-cream: var(--color-background);
 
    --color-surface: #FFFFFF;
 
@@ -37,7 +38,7 @@
 
    --color-text-muted: color-mix(in srgb, var(--color-text) 45%, var(--color-surface));
 
-   --color-focus: #D4A017;
+   --color-focus: var(--color-accent);
 
    --color-overlay: color-mix(in srgb, var(--color-text) 60%, transparent);
    --color-primary-soft: color-mix(in srgb, var(--color-primary) 8%, transparent);
@@ -61,21 +62,10 @@
        SHADOWS
     ======================================================= */
 
-   --shadow-xs:
-
-      0 2px 6px rgba(0, 0, 0, .03);
-
-   --shadow-sm:
-
-      0 6px 14px rgba(0, 0, 0, .05);
-
-   --shadow-md:
-
-      0 14px 35px rgba(0, 0, 0, .08);
-
-   --shadow-lg:
-
-      0 24px 60px rgba(0, 0, 0, .12);
+   --shadow-xs: 0 2px 6px color-mix(in srgb, var(--color-text) 3%, transparent);
+   --shadow-sm: 0 6px 14px color-mix(in srgb, var(--color-text) 5%, transparent);
+   --shadow-md: 0 14px 35px color-mix(in srgb, var(--color-text) 8%, transparent);
+   --shadow-lg: 0 24px 60px color-mix(in srgb, var(--color-text) 12%, transparent);
 
    --shadow-hover: 0 30px 70px color-mix(in srgb, var(--color-primary) 18%, transparent);
 
