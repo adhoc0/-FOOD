@@ -10,7 +10,7 @@
        COLORS
     ======================================================= */
 
-   --color-background: #FAF7F2;
+   --color-background: #F5E9D6;
 
    --color-surface: #FFFFFF;
 
@@ -35,6 +35,10 @@
    --color-text-light: #6B7280;
 
    --color-text-muted: #9CA3AF;
+
+   --color-focus: #D4A017;
+
+   --color-overlay: rgb(31 41 55 / 60%);
 
    --color-success: #2E7D32;
 
@@ -327,12 +331,12 @@
        TYPOGRAPHY
     ======================================================= */
 
-   --font-family:
+   --font-family: Inter, "Segoe UI", sans-serif;
 
-      Inter,
+   --font-family-display: Georgia, "Times New Roman", serif;
 
-      "Segoe UI",
+   --font-size-body: 1rem;
 
-      sans-serif;
+   --line-height-body: 1.6;
 
 }
