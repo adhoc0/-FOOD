@@ -65,6 +65,28 @@
     border-bottom: var(--border-width) solid var(--color-border);
 }
 
+.recipe-interaction-form,
+.recipe-favorite-form {
+    display: grid;
+    max-width: 42rem;
+    gap: var(--space-sm);
+    margin-top: var(--space-lg);
+}
+
+.recipe-interaction-form textarea,
+.recipe-interaction-form select {
+    width: 100%;
+    padding: .75rem;
+    background: var(--input-background);
+    border: var(--border-width) solid var(--input-border);
+    border-radius: var(--radius-xs);
+}
+
+.recipe-interaction-form button,
+.recipe-favorite-form button {
+    justify-self: start;
+}
+
 .recipe-detail__instructions {
     max-width: 70ch;
 }

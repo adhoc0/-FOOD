@@ -44,6 +44,25 @@
             <section aria-labelledby="comments-title">
                 <h2 id="comments-title">Yorumlar</h2>
                 <p>{{ approved_comments|length }} onaylı yorum</p>
+                {% if user.is_authenticated %}
+                    <form class="recipe-interaction-form" action="{% url 'interactions:add_comment' recipe.id %}" method="post">
+                        {% csrf_token %}
+                        <label for="recipe-comment">Yorumunuz</label>
+                        <textarea id="recipe-comment" name="content" rows="4" maxlength="2000" required></textarea>
+                        <label for="recipe-score">Puanınız</label>
+                        <select id="recipe-score" name="score">
+                            <option value="">Puan seçin</option>
+                            {% for score in "12345" %}<option value="{{ score }}">{{ score }} / 5</option>{% endfor %}
+                        </select>
+                        <button class="btn btn-primary" type="submit">Yorum gönder</button>
+                    </form>
+                    <form class="recipe-favorite-form" action="{% url 'interactions:toggle_favorite' recipe.id %}" method="post">
+                        {% csrf_token %}
+                        <button class="btn btn-outline" type="submit">Favorilerime ekle/çıkar</button>
+                    </form>
+                {% else %}
+                    <p><a href="{% url 'accounts:login' %}">Giriş yaparak</a> yorum yazabilir ve favorilerinize ekleyebilirsiniz.</p>
+                {% endif %}
             </section>
             <aside class="recipe-detail__aside" aria-label="Tarif özeti">
                 <strong>{{ recipe.province.name }}</strong>
