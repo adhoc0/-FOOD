@@ -1,4 +1,8 @@
-<!-- Gallery Component -->
-<div class="gallery">
-    Gallery
-</div>
+{% load static %}
+<section class="recipe-gallery" aria-label="Tarif görselleri">
+    {% for image in recipe_images %}
+        <img src="{{ image.image.url }}" alt="{{ image.alt_text|default:recipe.title }}" loading="lazy" width="800" height="600">
+    {% empty %}
+        <img src="{% static 'images/placeholders/recipe.svg' %}" alt="{{ recipe.title }}" width="800" height="600">
+    {% endfor %}
+</section>

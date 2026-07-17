@@ -28,9 +28,22 @@
             </div>
         </header>
         <div class="recipe-detail__body">
+            {% include "recipes/detail/gallery.html" %}
+            <section aria-labelledby="ingredients-title">
+                <h2 id="ingredients-title">Malzemeler</h2>
+                {% include "recipes/detail/ingredients.html" %}
+            </section>
             <section aria-labelledby="instructions-title">
                 <h2 id="instructions-title">Hazırlanışı</h2>
                 <div class="recipe-detail__instructions">{{ recipe.instructions|linebreaks }}</div>
+            </section>
+            <section aria-labelledby="history-title">
+                <h2 id="history-title">Yörenin hikâyesi</h2>
+                <p>{{ recipe.province.description|default:"Bu tarif, yöresel mutfak kültürünün nesilden nesile aktarılan lezzetlerinden biridir." }}</p>
+            </section>
+            <section aria-labelledby="comments-title">
+                <h2 id="comments-title">Yorumlar</h2>
+                <p>{{ approved_comments|length }} onaylı yorum</p>
             </section>
             <aside class="recipe-detail__aside" aria-label="Tarif özeti">
                 <strong>{{ recipe.province.name }}</strong>

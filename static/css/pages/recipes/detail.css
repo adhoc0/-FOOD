@@ -37,6 +37,34 @@
     padding-top: var(--space-2xl);
 }
 
+.recipe-gallery {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: var(--space-md);
+}
+
+.recipe-gallery img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-sm);
+    object-fit: cover;
+}
+
+.recipe-ingredients {
+    display: grid;
+    gap: .75rem;
+    max-width: 42rem;
+    padding: 0;
+    list-style: none;
+}
+
+.recipe-ingredients li {
+    padding: .75rem 1rem;
+    background: var(--color-surface);
+    border-bottom: var(--border-width) solid var(--color-border);
+}
+
 .recipe-detail__instructions {
     max-width: 70ch;
 }

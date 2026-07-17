@@ -1,4 +1,7 @@
-<!-- Ingredients Component -->
-<div class="ingredients">
-    Ingredients
-</div>
+<ul class="recipe-ingredients">
+    {% for item in recipe_ingredients %}
+        <li><strong>{{ item.quantity }} {{ item.get_unit_display }}</strong> {{ item.ingredient.name }}{% if item.note %} <small>({{ item.note }})</small>{% endif %}</li>
+    {% empty %}
+        <li>Malzeme bilgisi henüz eklenmemiş.</li>
+    {% endfor %}
+</ul>

@@ -10,6 +10,7 @@ from __future__ import annotations
 from django.http import Http404
 from django.views.generic import DetailView, ListView
 
+from interactions.services import CommentService
 from recipes.constants import DEFAULT_PAGE_SIZE
 from recipes.models import Recipe
 from recipes.selectors import RecipeSelector
@@ -110,6 +111,9 @@ class RecipeDetailView(DetailView):
 
         context["average_rating"] = recipe.average_rating
         context["rating_count"] = recipe.rating_count
+        context["recipe_images"] = recipe.recipe_images.all()
+        context["recipe_ingredients"] = recipe.recipe_ingredients.select_related("ingredient").all()
+        context["approved_comments"] = CommentService.get_approved_comments(recipe)
 
         context["meta_title"] = (
             recipe.meta_title
