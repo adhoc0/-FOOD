@@ -1,108 +1,52 @@
-from django.db.models import Q
+from __future__ import annotations
 
-from recipes.models import Recipe
-from recipes.models.recipe import Status
+from django.db.models import QuerySet
+
+from provinces.models import Province
+from recipes.models import Category, Recipe
 
 
 class RecipeSelector:
-    """Read-only queries for recipes."""
+    """Tarif verisini yalnızca okuyan sorgular."""
 
     @staticmethod
-    def get_queryset():
-        return (
-            Recipe.objects.filter(
-                status=Status.PUBLISHED,
-                is_active=True,
-            )
-            .select_related(
-                "province",
-                "category",
-                "author",
-            )
-            .prefetch_related(
-                "images",
-                "ingredients",
-                "tags",
-            )
-        )
+    def get_published_list() -> QuerySet[Recipe]:
+        return Recipe.objects.published_with_related().recent()
 
     @staticmethod
-    def get_all():
-        return (
-            RecipeSelector.get_queryset()
-            .order_by(
-                "-published_at",
-                "-created_at",
-            )
-        )
+    def get_filtered_published_list(
+        *,
+        province_slug: str = "",
+        category_slug: str = "",
+    ) -> QuerySet[Recipe]:
+        """Yayındaki tarifleri filtreleriyle birlikte okur."""
+        queryset = Recipe.objects.published_with_related().recent()
+        if province_slug:
+            queryset = queryset.by_province_slug(province_slug)
+        if category_slug:
+            queryset = queryset.by_category_slug(category_slug)
+        return queryset
 
     @staticmethod
-    def get_by_slug(slug: str):
-        return (
-            RecipeSelector.get_queryset()
-            .filter(slug=slug)
-            .first()
-        )
+    def get_recipe_detail(slug: str) -> Recipe | None:
+        return Recipe.objects.published_with_related().by_slug(slug).first()
 
     @staticmethod
-    def get_featured(limit: int = 8):
-        return (
-            RecipeSelector.get_queryset()
-            .filter(
-                is_featured=True,
-            )
-            .order_by(
-                "-published_at",
-            )[:limit]
-        )
+    def get_featured() -> QuerySet[Recipe]:
+        return Recipe.objects.featured().with_related().recent()
 
     @staticmethod
-    def get_latest(limit: int = 12):
-        return (
-            RecipeSelector.get_queryset()
-            .order_by(
-                "-published_at",
-                "-created_at",
-            )[:limit]
-        )
+    def get_by_province(province: Province) -> QuerySet[Recipe]:
+        return Recipe.objects.published_with_related().by_province(province).recent()
 
     @staticmethod
-    def get_by_province(province):
-        return (
-            RecipeSelector.get_queryset()
-            .filter(
-                province=province,
-            )
-            .order_by(
-                "title",
-            )
-        )
+    def get_by_category(category: Category) -> QuerySet[Recipe]:
+        return Recipe.objects.published_with_related().by_category(category).recent()
 
     @staticmethod
-    def get_by_category(category):
-        return (
-            RecipeSelector.get_queryset()
-            .filter(
-                category=category,
-            )
-            .order_by(
-                "title",
-            )
-        )
+    def get_related_recipes(recipe: Recipe) -> QuerySet[Recipe]:
+        return Recipe.objects.related(recipe)
 
     @staticmethod
-    def search(query: str):
-        return (
-            RecipeSelector.get_queryset()
-            .filter(
-                Q(title__icontains=query)
-                | Q(summary__icontains=query)
-                | Q(province__name__icontains=query)
-                | Q(category__name__icontains=query)
-            )
-            .distinct()
-        )
-
-    @staticmethod
-    def get_count() -> int:
-        return RecipeSelector.get_queryset().count()
+    def get_published_count() -> int:
+        return Recipe.objects.published().count()

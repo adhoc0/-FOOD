@@ -4,8 +4,6 @@ from django.urls import reverse
 
 class StaticPageSitemap(Sitemap):
     protocol = "https"
-    priority = 0.8
-    changefreq = "monthly"
 
     def items(self):
         return [
@@ -14,7 +12,6 @@ class StaticPageSitemap(Sitemap):
             "pages:contact",
             "pages:privacy",
             "pages:cookies",
-            "pages:terms",
             "pages:kvkk",
         ]
 

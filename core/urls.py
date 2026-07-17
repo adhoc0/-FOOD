@@ -19,14 +19,18 @@ sitemaps = {
 }
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
-
+    path(settings.ADMIN_URL, admin.site.urls),
     path("", include("pages.urls")),
-    path("", include("provinces.urls")),
+    path("il/", include("provinces.urls")),
     path("tarifler/", include("recipes.urls")),
     path("etkilesim/", include("interactions.urls")),
     path("hesap/", include("accounts.urls")),
-    path("sitemap.xml", sitemap, {"sitemaps": sitemaps},name="django.contrib.sitemaps.views.sitemap",),
+    path(
+        "sitemap.xml",
+        sitemap,
+        {"sitemaps": sitemaps},
+        name="django.contrib.sitemaps.views.sitemap",
+    ),
 ]
 
 if settings.DEBUG:

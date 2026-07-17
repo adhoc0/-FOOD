@@ -1,0 +1,17 @@
+{% extends "layouts/default.html" %}
+
+{% block title %}
+Başlık | Türkiye Yöresel Yemekleri
+{% endblock %}
+
+{% block structured_data %}
+{{ block.super }}
+{% include "components/seo/recipe_schema.html" %}
+{% include "components/seo/breadcrumbs_schema.html" %}
+{% endblock %}
+
+{% block content %}
+<section class="container">
+    <h1>Sayfa İçeriği</h1>
+</section>
+{% endblock %}

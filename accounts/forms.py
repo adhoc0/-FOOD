@@ -1,30 +1,22 @@
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from __future__ import annotations
 
-from .models import CustomUser
+from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import UserCreationForm
+
+User = get_user_model()
 
 
-class CustomUserCreationForm(UserCreationForm):
-    """
-    Kullanıcı oluşturma formu.
-
-    Django'nun UserCreationForm'u varsayılan User modeline bağlıdır.
-    Custom User Model kullandığımız için bu formu override etmeliyiz.
-    Aksi halde admin panelinde kullanıcı oluşturma hata verir.
-    """
+class UserRegistrationForm(UserCreationForm):
+    """User registration form."""
 
     class Meta:
-        model = CustomUser
-        fields = ('username', 'email')
+        model = User
 
-
-class CustomUserChangeForm(UserChangeForm):
-    """
-    Kullanıcı düzenleme formu.
-
-    Aynı sebepten ötürü UserChangeForm'u da override ediyoruz.
-    İleride profil düzenleme sayfasında da bu form kullanılacak.
-    """
-
-    class Meta:
-        model = CustomUser
-        fields = ('username', 'email', 'first_name', 'last_name')
+        fields = (
+            "username",
+            "email",
+            "first_name",
+            "last_name",
+            "password1",
+            "password2",
+        )

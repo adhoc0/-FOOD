@@ -1,30 +1,21 @@
+from __future__ import annotations
+
+from django.db.models import QuerySet
+
 from recipes.models import Category
 
 
 class CategorySelector:
-    """Read-only queries for categories."""
+    """Kategori verisini yalnızca okuyan sorgular."""
 
     @staticmethod
-    def get_all():
-        return (
-            Category.objects.filter(
-                is_active=True,
-            )
-            .order_by(
-                "sort_order",
-                "name",
-            )
-        )
+    def get_all_active() -> QuerySet[Category]:
+        return Category.objects.active().sort_by_name()
 
     @staticmethod
-    def get_by_slug(slug: str):
-        return Category.objects.filter(
-            slug=slug,
-            is_active=True,
-        ).first()
+    def get_by_slug(slug: str) -> Category | None:
+        return Category.objects.active().by_slug(slug).first()
 
     @staticmethod
-    def get_count() -> int:
-        return Category.objects.filter(
-            is_active=True,
-        ).count()
+    def get_with_recipe_count() -> QuerySet[Category]:
+        return Category.objects.active_with_recipe_count()

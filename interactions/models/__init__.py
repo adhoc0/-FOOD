@@ -1,3 +1,9 @@
-from .rating import Rating
-from .favorite import Favorite
-from .comment import Comment
+from .comment import Comment as Comment
+from .favorite import Favorite as Favorite
+from .rating import Rating as Rating
+
+__all__ = [
+    "Comment",
+    "Favorite",
+    "Rating",
+]

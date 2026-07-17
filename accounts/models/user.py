@@ -1,35 +1,38 @@
+from __future__ import annotations
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils.translation import gettext_lazy as _
+
+from accounts.managers import UserManager
+
 
 class CustomUser(AbstractUser):
-    """
-    Özel kullanıcı modeli.
+    """Custom user model."""
 
-    Neden AbstractUser?
-    ─────────────────────────────────────────────
-    1. AbstractUser, username/email/first_name/last_name gibi
-       temel alanları hazır getirir. Sıfırdan yazmaya gerek yok.
+    objects = UserManager()
 
-    2. AbstractBaseUser'dan farklı olarak, Django'nun tüm
-       izin sistemi (groups, permissions) dahildir.
-
-    3. Şu an ekstra alan eklenmese bile, ileride (profil fotoğrafı,
-       bio, favori sayısı vb.) sorunsuzca genişletilebilir.
-
-    UYARI: Bu model ilk migration'dan ÖNCE tanımlanmalıdır.
-    Sonradan AUTH_USER_MODEL değiştirmek migration cehennemine
-    yol açar.
-    """
+    email = models.EmailField(
+        _("Email Address"),
+        unique=True,
+        db_index=True,
+    )
 
     class Meta:
-        verbose_name = 'Kullanıcı'
-        verbose_name_plural = 'Kullanıcılar'
-        ordering = ['-date_joined']
+        verbose_name = _("User")
+        verbose_name_plural = _("Users")
 
-    def __str__(self):
-        """
-        Admin panelinde ve shell'de kullanıcıyı temsil eder.
-        full_name varsa onu, yoksa username gösterir.
-        """
+        ordering = [
+            "-date_joined",
+        ]
+
+        indexes = [
+            models.Index(fields=["email"]),
+            models.Index(fields=["date_joined"]),
+            models.Index(fields=["is_active"]),
+        ]
+
+    def __str__(self) -> str:
         full_name = self.get_full_name()
+
         return full_name if full_name else self.username

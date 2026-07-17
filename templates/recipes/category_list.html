@@ -1,0 +1,16 @@
+{% extends "layouts/default.html" %}
+
+{% block title %}Kategoriler{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Kategoriler</h1>
+    <ul>
+        {% for category in categories %}
+            <li><a href="{% url 'recipes:category_detail' category.slug %}">{{ category.name }} ({{ category.recipe_count|default:0 }})</a></li>
+        {% empty %}
+            <li>Henüz kategori bulunmamaktadır.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

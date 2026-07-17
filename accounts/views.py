@@ -1,45 +1,34 @@
-from django.urls import reverse_lazy
-from django.views.generic import CreateView, TemplateView
-from django.contrib.auth.views import LoginView
+from __future__ import annotations
+
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView, LogoutView
+from django.views.generic import CreateView, TemplateView
 
-from .forms import CustomUserCreationForm
-from interactions.models import Favorite, Comment
-
-
-class RegisterView(CreateView):
-    """
-    Yeni kullanıcı kayıt görünümü.
-    """
-    form_class = CustomUserCreationForm
-    success_url = reverse_lazy('accounts:login')
-    template_name = 'accounts/register.html'
+from accounts.forms import UserRegistrationForm
+from accounts.selectors import ProfileSelector
 
 
-class CustomLoginView(LoginView):
-    """
-    Giriş yapma görünümü.
-    """
-    template_name = 'accounts/login.html'
-    redirect_authenticated_user = True
+class UserLoginView(LoginView):
+    template_name = "accounts/login.html"
 
 
-class ProfileView(LoginRequiredMixin, TemplateView):
-    """
-    Kullanıcı profili görünümü.
-    Sadece giriş yapmış kullanıcılar erişebilir.
-    """
-    template_name = 'accounts/profile.html'
+class UserLogoutView(LogoutView):
+    pass
+
+
+class UserRegisterView(CreateView):
+    template_name = "accounts/register.html"
+    form_class = UserRegistrationForm
+    success_url = "/"
+
+
+class UserProfileView(LoginRequiredMixin, TemplateView):
+    """Giriş yapan kullanıcının profil özetini gösterir."""
+
+    template_name = "accounts/profile.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Giriş yapan kullanıcının verilerini al
-        user = self.request.user
-        
-        # Favoriye eklenen tarifler
-        context['favorites'] = Favorite.objects.filter(user=user).select_related('recipe')
-        
-        # Kullanıcının yaptığı yorumlar
-        context['comments'] = Comment.objects.filter(user=user).select_related('recipe')
-        
+        context["favorites"] = ProfileSelector.get_favorites(self.request.user)
+        context["comments"] = ProfileSelector.get_comments(self.request.user)
         return context

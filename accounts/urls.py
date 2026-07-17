@@ -1,40 +1,35 @@
-from django.urls import path, reverse_lazy
-from django.contrib.auth import views as auth_views
+from __future__ import annotations
 
-from .views import RegisterView, CustomLoginView, ProfileView
+from django.urls import path
 
-app_name = 'accounts'
+from accounts.views import (
+    UserLoginView,
+    UserLogoutView,
+    UserProfileView,
+    UserRegisterView,
+)
+
+app_name = "accounts"
 
 urlpatterns = [
-    path('kayit/', RegisterView.as_view(), name='register'),
-    path('giris/', CustomLoginView.as_view(), name='login'),
-    path('cikis/', auth_views.LogoutView.as_view(), name='logout'),
-    path('profil/', ProfileView.as_view(), name='profile'),
-
-    # Password Reset URLs
-    path('sifremi-unuttum/',
-         auth_views.PasswordResetView.as_view(
-             template_name='accounts/password_reset_form.html',
-             success_url=reverse_lazy('accounts:password_reset_done'),
-         ),
-         name='password_reset'),
-
-    path('sifre-sifirlama-gonderildi/',
-         auth_views.PasswordResetDoneView.as_view(
-             template_name='accounts/password_reset_done.html',
-         ),
-         name='password_reset_done'),
-
-    path('sifre-sifirla/<uidb64>/<token>/',
-         auth_views.PasswordResetConfirmView.as_view(
-             template_name='accounts/password_reset_confirm.html',
-             success_url=reverse_lazy('accounts:password_reset_complete'),
-         ),
-         name='password_reset_confirm'),
-
-    path('sifre-sifirlama-tamamlandi/',
-         auth_views.PasswordResetCompleteView.as_view(
-             template_name='accounts/password_reset_complete.html',
-         ),
-         name='password_reset_complete'),
+    path(
+        "login/",
+        UserLoginView.as_view(),
+        name="login",
+    ),
+    path(
+        "logout/",
+        UserLogoutView.as_view(),
+        name="logout",
+    ),
+    path(
+        "register/",
+        UserRegisterView.as_view(),
+        name="register",
+    ),
+    path(
+        "profil/",
+        UserProfileView.as_view(),
+        name="profile",
+    ),
 ]

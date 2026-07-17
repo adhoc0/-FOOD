@@ -14,19 +14,13 @@
 
             </p>
 
-            <form action="#" method="post">
+            <p>
+                E-posta aboneliği şu anda kullanıma açık değildir.
+            </p>
 
-                {% csrf_token %}
-
-                <input type="email" name="email" placeholder="E-posta adresiniz" required>
-
-                <button type="submit" class="btn btn-primary">
-
-                    Abone Ol
-
-                </button>
-
-            </form>
+            <a href="{% url 'pages:contact' %}" class="btn btn-primary">
+                İletişime Geçin
+            </a>
 
         </div>
 

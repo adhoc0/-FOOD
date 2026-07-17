@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 520" role="img" aria-labelledby="title description">
+  <title id="title">İl görseli yer tutucusu</title>
+  <desc id="description">Yeşil tepeler ve gün batımı</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f8d9a7"/>
+      <stop offset="1" stop-color="#f8f0de"/>
+    </linearGradient>
+  </defs>
+  <rect width="840" height="520" fill="url(#sky)"/>
+  <circle cx="648" cy="126" r="58" fill="#e99c4b"/>
+  <path d="M0 350 156 218l120 104 132-138 170 168 120-97 142 95v170H0Z" fill="#7baa6c"/>
+  <path d="M0 395 206 278l108 91 154-125 183 151 96-72 93 59v138H0Z" fill="#3f7657"/>
+  <path d="M0 438c168-52 304-5 432 21 128 26 249-11 408-51v112H0Z" fill="#275842"/>
+</svg>

@@ -1,0 +1,8 @@
+<!-- Twitter Card Meta Tags -->
+<meta name="twitter:card" content="{% if recipe and recipe.cover_image %}summary_large_image{% else %}summary{% endif %}">
+<meta name="twitter:title" content="{{ meta_title|default:'Türkiye Yöresel Yemekleri'|escapejs }}">
+<meta name="twitter:description" content="{{ meta_description|default:'Türkiye nin 81 iline ait yöresel yemekleri keşfedin.'|escapejs }}">
+<meta name="twitter:url" content="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
+{% if recipe and recipe.cover_image %}
+<meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{ recipe.cover_image.image.url }}">
+{% endif %}

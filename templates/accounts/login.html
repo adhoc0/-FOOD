@@ -1,4 +1,4 @@
-﻿{% extends "base.html" %}
+{% extends "layouts/auth.html" %}
 {% load static %}
 
 {% block title %}Giriş Yap - Türkiye Yöresel Yemekleri{% endblock %}
@@ -37,7 +37,6 @@
             </div>
             
             <div class="auth-links">
-                <a href="{% url 'accounts:password_reset' %}">Şifremi Unuttum</a>
                 <p>Hesabınız yok mu? <a href="{% url 'accounts:register' %}">Kayıt Olun</a></p>
             </div>
         </form>

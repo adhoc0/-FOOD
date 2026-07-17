@@ -1,0 +1,14 @@
+<!-- WebSite Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Türkiye Yöresel Yemekleri",
+  "url": "{{ request.scheme }}://{{ request.get_host }}",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "{{ request.scheme }}://{{ request.get_host }}/recipes/search/?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>

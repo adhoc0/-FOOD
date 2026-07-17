@@ -1,0 +1,87 @@
+{% load static %}
+
+<article class="recipe-card">
+
+    <a href="{{ recipe.get_absolute_url }}" class="recipe-card__image-link" aria-label="{{ recipe.title }}">
+
+        {% if recipe.cover_image %}
+        <img src="{{ recipe.cover_image.image.url }}" alt="{{ recipe.title }}" class="recipe-card__image" loading="lazy"
+            width="420" height="280">
+        {% else %}
+        <img src="{% static 'images/placeholders/recipe.svg' %}" alt="{{ recipe.title }}" class="recipe-card__image"
+            loading="lazy" width="420" height="280">
+        {% endif %}
+
+    </a>
+
+    <div class="recipe-card__content">
+
+        <div class="recipe-card__category">
+
+            <a href="{% url 'recipes:category_detail' recipe.category.slug %}">
+                {{ recipe.category.name }}
+            </a>
+
+        </div>
+
+        <h3 class="recipe-card__title">
+
+            <a href="{{ recipe.get_absolute_url }}">
+                {{ recipe.title }}
+            </a>
+
+        </h3>
+
+        <p class="recipe-card__summary">
+
+            {{ recipe.summary|truncatechars:120 }}
+
+        </p>
+
+        <div class="recipe-card__meta">
+
+            <span class="recipe-card__province">
+
+                📍 {{ recipe.province.name }}
+
+            </span>
+
+            <span>
+
+                ⏱ {{ recipe.preparation_time }} dk
+
+            </span>
+
+            <span>
+
+                🍽 {{ recipe.servings }}
+
+            </span>
+
+        </div>
+
+        <div class="recipe-card__footer">
+
+            <div class="recipe-card__rating">
+
+                ⭐ {{ recipe.average_rating }}
+
+                <small>
+
+                    ({{ recipe.rating_count }})
+
+                </small>
+
+            </div>
+
+            <div class="recipe-card__favorite">
+
+                ❤ {{ recipe.favorite_count }}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</article>

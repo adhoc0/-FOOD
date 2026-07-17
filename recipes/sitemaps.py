@@ -9,13 +9,10 @@ class RecipeSitemap(Sitemap):
     priority = 0.8
 
     def items(self):
-        return (
-            Recipe.objects.filter(
-                status=Status.PUBLISHED,
-                is_active=True,
-            )
-            .order_by("-published_at")
-        )
+        return Recipe.objects.filter(
+            status=Status.PUBLISHED,
+            is_active=True,
+        ).order_by("-published_at")
 
     def lastmod(self, obj):
         return obj.updated_at

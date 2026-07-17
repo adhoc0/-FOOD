@@ -1,13 +1,23 @@
-from django.http import HttpResponse
+from __future__ import annotations
+
 from django.urls import path
 
-
-def province_placeholder(request, slug):
-    return HttpResponse(f"Province: {slug}")
-
+from .views import (
+    ProvinceDetailView,
+    ProvinceListView,
+)
 
 app_name = "provinces"
 
 urlpatterns = [
-    path("<slug:slug>/",province_placeholder,name="province_detail",),
+    path(
+        "",
+        ProvinceListView.as_view(),
+        name="list",
+    ),
+    path(
+        "<slug:slug>/",
+        ProvinceDetailView.as_view(),
+        name="detail",
+    ),
 ]

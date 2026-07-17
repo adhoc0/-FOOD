@@ -1,0 +1,50 @@
+/*
+ * Tüm sayfalarda gereken ortak stil giriş noktası.
+ * Sayfaya özel stiller ilgili şablonun extra_css bloğunda yüklenir.
+ */
+
+@import url("base/variables.css");
+@import url("base/accessibility.css");
+@import url("components/cards/recipe-card.css");
+@import url("components/cards/province-card.css");
+@import url("components/cards/category-card.css");
+@import url("components/map/map.css");
+
+/* Profil ve şifre akışlarında CSP uyumlu yardımcı sınıflar. */
+.profile-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.profile-action-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+}
+
+.profile-logout-form {
+    margin: 0;
+}
+
+.password-reset-icon,
+.password-reset-success-icon {
+    display: block;
+    margin-bottom: 1rem;
+    font-size: 3rem;
+}
+
+.password-reset-icon {
+    color: #feca57;
+}
+
+.password-reset-success-icon {
+    color: #2ecc71;
+}
+
+.password-reset-link {
+    display: inline-block;
+    width: auto;
+}

@@ -1,33 +1,26 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING, ClassVar
+
 from django.conf import settings
 from django.db import models
 from django.urls import reverse
-from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
 from provinces.models import Province
-
-from recipes.managers.recipe_manager import RecipeManager
+from recipes.choices import Difficulty, Status
+from recipes.querysets.recipe_queryset import RecipeManager
 
 from .category import Category
 
-
-class Difficulty(models.TextChoices):
-    EASY = "easy", _("Easy")
-    MEDIUM = "medium", _("Medium")
-    HARD = "hard", _("Hard")
-
-
-class Status(models.TextChoices):
-    DRAFT = "draft", _("Draft")
-    PUBLISHED = "published", _("Published")
-    ARCHIVED = "archived", _("Archived")
+if TYPE_CHECKING:
+    from .recipe_image import RecipeImage
 
 
 class Recipe(models.Model):
     """Recipe model."""
 
+    objects: ClassVar[RecipeManager] = RecipeManager()
 
     title = models.CharField(
         _("Title"),
@@ -38,7 +31,6 @@ class Recipe(models.Model):
         _("Slug"),
         max_length=255,
         unique=True,
-        db_index=True,
     )
 
     province = models.ForeignKey(
@@ -49,6 +41,12 @@ class Recipe(models.Model):
 
     category = models.ForeignKey(
         Category,
+        on_delete=models.PROTECT,
+        related_name="recipes",
+    )
+
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
         on_delete=models.PROTECT,
         related_name="recipes",
     )
@@ -81,22 +79,21 @@ class Recipe(models.Model):
         default=Difficulty.MEDIUM,
     )
 
-    author = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.PROTECT,
-        related_name="recipes",
+    status = models.CharField(
+        _("Status"),
+        max_length=20,
+        choices=Status.choices,
+        default=Status.DRAFT,
     )
 
     is_featured = models.BooleanField(
         _("Featured"),
         default=False,
-        db_index=True,
     )
 
     is_active = models.BooleanField(
         _("Active"),
         default=True,
-        db_index=True,
     )
 
     view_count = models.PositiveIntegerField(
@@ -109,12 +106,21 @@ class Recipe(models.Model):
         default=0,
     )
 
-    status = models.CharField(
-        _("Status"),
-        max_length=20,
-        choices=Status.choices,
-        default=Status.DRAFT,
-        db_index=True,
+    rating_count = models.PositiveIntegerField(
+        _("Rating Count"),
+        default=0,
+    )
+
+    average_rating = models.DecimalField(
+        _("Average Rating"),
+        max_digits=3,
+        decimal_places=1,
+        default=0,
+    )
+
+    comment_count = models.PositiveIntegerField(
+        _("Comment Count"),
+        default=0,
     )
 
     meta_title = models.CharField(
@@ -145,8 +151,6 @@ class Recipe(models.Model):
         null=True,
     )
 
-    objects = RecipeManager()
-
     created_at = models.DateTimeField(
         _("Created At"),
         auto_now_add=True,
@@ -156,14 +160,18 @@ class Recipe(models.Model):
         _("Updated At"),
         auto_now=True,
     )
-    
+
     class Meta:
         verbose_name = _("Recipe")
         verbose_name_plural = _("Recipes")
+
         ordering = [
             "-published_at",
             "-created_at",
         ]
+
+        get_latest_by = "published_at"
+
         indexes = [
             models.Index(fields=["slug"]),
             models.Index(fields=["status"]),
@@ -171,22 +179,46 @@ class Recipe(models.Model):
             models.Index(fields=["is_featured"]),
             models.Index(fields=["province"]),
             models.Index(fields=["category"]),
+            models.Index(fields=["published_at"]),
+            models.Index(fields=["created_at"]),
+            models.Index(fields=["view_count"]),
+            models.Index(fields=["favorite_count"]),
+            models.Index(fields=["rating_count"]),
+            models.Index(fields=["average_rating"]),
         ]
 
     def __str__(self) -> str:
         return self.title
 
-    def get_absolute_url(self):
+    def get_absolute_url(self) -> str:
         return reverse(
-            "recipes:detail",
-            kwargs={"slug": self.slug},
+            "recipes:recipe_detail",
+            kwargs={
+                "slug": self.slug,
+            },
         )
 
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(
-                self.title,
-                allow_unicode=True,
-            )
+    @property
+    def cover_image(self) -> RecipeImage | None:
+        """Önceden yüklenmiş görseller arasından kapak görselini döndürür."""
 
-        super().save(*args, **kwargs)
+        return next(
+            (
+                image
+                for image in self.recipe_images.all()
+                if image.is_cover
+            ),
+            None,
+        )
+
+    @property
+    def total_time(self) -> int:
+        """Return total preparation time."""
+
+        return self.preparation_time + self.cooking_time
+
+    @property
+    def is_published(self) -> bool:
+        """Return whether the recipe is published."""
+
+        return self.status == Status.PUBLISHED

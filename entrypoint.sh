@@ -1,37 +1,33 @@
 #!/bin/sh
-set -e
+set -eu
 
-# ─────────────────────────────────────────────
-# Veritabanı bağlantısı bekle (DB_HOST ve DB_PORT kullanır)
-# ─────────────────────────────────────────────
+# Uygulama komutunu çalıştırmadan önce PostgreSQL'in bağlantı kabul etmesini bekler.
 DB_HOST="${DB_HOST:-localhost}"
 DB_PORT="${DB_PORT:-5432}"
+DB_NAME="${DB_NAME:-food_db}"
+DB_USER="${DB_USER:-postgres}"
 MAX_RETRIES=30
 RETRY_INTERVAL=2
 
 echo "Veritabanı bağlantısı bekleniyor... ($DB_HOST:$DB_PORT)"
 
 retries=0
-until pg_isready -h "$DB_HOST" -p "$DB_PORT" -q 2>/dev/null; do
+until pg_isready -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" -q; do
     retries=$((retries + 1))
     if [ "$retries" -ge "$MAX_RETRIES" ]; then
-        echo "HATA: Veritabanına $MAX_RETRIES deneme sonrası bağlanılamadı!"
+        echo "HATA: Veritabanına $MAX_RETRIES deneme sonrasında bağlanılamadı!"
         exit 1
     fi
+
     echo "Veritabanı hazır değil, bekleniyor... ($retries/$MAX_RETRIES)"
     sleep "$RETRY_INTERVAL"
 done
 
-echo "Veritabanı bağlantısı başarılı!"
+echo "Veritabanı bağlantısı başarılı."
 
-# ─────────────────────────────────────────────
-# Django işlemleri
-# ─────────────────────────────────────────────
-echo "Statik dosyalar toplanıyor..."
-python manage.py collectstatic --noinput
+if [ "$#" -eq 0 ]; then
+    echo "HATA: Çalıştırılacak uygulama komutu belirtilmedi."
+    exit 1
+fi
 
-echo "Veritabanı migration işlemleri uygulanıyor..."
-python manage.py migrate --noinput
-
-echo "Gunicorn başlatılıyor..."
-exec gunicorn core.wsgi:application --bind 0.0.0.0:8000 --workers 3
+exec "$@"

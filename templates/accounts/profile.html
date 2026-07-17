@@ -1,4 +1,4 @@
-﻿{% extends "base.html" %}
+{% extends "layouts/default.html" %}
 {% load static %}
 
 {% block title %}Profilim - Türkiye Yöresel Yemekleri{% endblock %}
@@ -15,22 +15,21 @@
             <p class="profile-date">Katılma Tarihi: {{ user.date_joined|date:"d F Y" }}</p>
         </div>
     </div>
-    <div class="profile-actions" style="display: flex; gap: 1rem; align-items: center;">
-        <a href="{% url 'recipes:create' %}" class="btn-primary" style="display:inline-flex; align-items:center; gap:0.5rem; text-decoration:none;"><i class="fas fa-plus"></i> Tarif Gönder</a>
-        <a href="#" class="btn-outline" style="display:inline-flex; align-items:center; gap:0.5rem; text-decoration:none;"><i class="fas fa-edit"></i> Profili Düzenle</a>
-        <form action="{% url 'accounts:logout' %}" method="post" style="margin: 0;">
+    <div class="profile-actions">
+        <a href="{% url 'accounts:profile' %}" class="btn-outline profile-action-link"><i class="fas fa-edit"></i> Profili Düzenle</a>
+        <form action="{% url 'accounts:logout' %}" method="post" class="profile-logout-form">
             {% csrf_token %}
             <button type="submit" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Çıkış Yap</button>
         </form>
     </div>
 </div>
 
-<div class="profile-tabs glassmorphism">
-    <button class="tab-btn active" onclick="openTab('favoriler')"><i class="fas fa-heart"></i> Favori Tariflerim ({{ favorites.count }})</button>
-    <button class="tab-btn" onclick="openTab('yorumlar')"><i class="fas fa-comment"></i> Yorumlarım ({{ comments.count }})</button>
+<div class="profile-tabs glassmorphism" aria-label="Profil bölümleri" data-tab-list>
+    <button id="favorites-tab" type="button" class="tab-btn active" aria-controls="favoriler" aria-pressed="true" data-tab-target="favoriler"><i class="fas fa-heart"></i> Favori Tariflerim ({{ favorites.count }})</button>
+    <button id="comments-tab" type="button" class="tab-btn" aria-controls="yorumlar" aria-pressed="false" data-tab-target="yorumlar"><i class="fas fa-comment"></i> Yorumlarım ({{ comments.count }})</button>
 </div>
 
-<div id="favoriler" class="tab-content active">
+<div id="favoriler" class="tab-content active" role="region" aria-labelledby="favorites-tab">
     {% if favorites %}
     <div class="recipe-grid">
         {% for favorite in favorites %}
@@ -39,7 +38,7 @@
                 <i class="fas fa-utensils"></i>
             </div>
             <div class="recipe-content">
-                <h3><a href="{% url 'recipes:detail' favorite.recipe.slug %}">{{ favorite.recipe.title }}</a></h3>
+                <h3><a href="{% url 'recipes:recipe_detail' favorite.recipe.slug %}">{{ favorite.recipe.title }}</a></h3>
                 <p class="recipe-desc">{{ favorite.recipe.province.name }} Yöresi</p>
                 <div class="recipe-meta">
                     <span class="text-muted"><i class="fas fa-calendar"></i> {{ favorite.created_at|date:"d M Y" }}</span>
@@ -57,13 +56,13 @@
     {% endif %}
 </div>
 
-<div id="yorumlar" class="tab-content">
+<div id="yorumlar" class="tab-content" role="region" aria-labelledby="comments-tab" hidden>
     {% if comments %}
     <div class="comments-list">
         {% for comment in comments %}
         <div class="comment-card glassmorphism">
             <div class="comment-header">
-                <h4><a href="{% url 'recipes:detail' comment.recipe.slug %}">{{ comment.recipe.title }}</a></h4>
+                <h4><a href="{% url 'recipes:recipe_detail' comment.recipe.slug %}">{{ comment.recipe.title }}</a></h4>
                 <span class="comment-status {% if comment.is_approved %}approved{% else %}pending{% endif %}">
                     {% if comment.is_approved %}Onaylandı{% else %}Onay Bekliyor{% endif %}
                 </span>
@@ -85,24 +84,4 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/pages/accounts.css' %}">
-{% endblock %}
-
-{% block extra_js %}
-<script>
-    function openTab(tabName) {
-        // Tüm tab içeriklerini gizle
-        document.querySelectorAll('.tab-content').forEach(tab => {
-            tab.classList.remove('active');
-        });
-        
-        // Tüm tab butonlarından active sınıfını kaldır
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.classList.remove('active');
-        });
-        
-        // İstenilen tab'ı ve butonu aktif et
-        document.getElementById(tabName).classList.add('active');
-        event.currentTarget.classList.add('active');
-    }
-</script>
 {% endblock %}

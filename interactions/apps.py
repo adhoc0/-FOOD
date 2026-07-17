@@ -2,6 +2,9 @@ from django.apps import AppConfig
 
 
 class InteractionsConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'interactions'
-    verbose_name = 'Kullanıcı Etkileşimleri'
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "interactions"
+    verbose_name = "Kullanıcı Etkileşimleri"
+
+    def ready(self):
+        import interactions.signals  # noqa: F401

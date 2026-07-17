@@ -20,9 +20,12 @@
 
     <meta name="robots" content="{% block robots %}index,follow{% endblock %}">
 
-    <link rel="canonical" href="{% block canonical %}{{ request.build_absolute_uri }}{% endblock %}">
+    <link rel="canonical" href="{% block canonical %}{{ request.scheme }}://{{ request.get_host }}{{ request.path }}{% endblock %}">
 
-    {% block meta %}{% endblock %}
+    {% block meta %}
+    {% include "components/seo/open_graph.html" %}
+    {% include "components/seo/twitter_card.html" %}
+    {% endblock %}
 
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
 
@@ -30,6 +33,7 @@
     {% endblock %}
 
     {% block structured_data %}
+    {% include "components/seo/organization_schema.html" %}
     {% endblock %}
 
 </head>
@@ -39,7 +43,7 @@
     {% block layout %}
     {% endblock %}
 
-    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/main.js' %}" defer></script>
 
     {% block extra_js %}
     {% endblock %}

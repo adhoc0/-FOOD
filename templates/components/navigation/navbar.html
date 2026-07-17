@@ -5,7 +5,7 @@
     <nav class="nav container" aria-label="{% trans 'Ana navigasyon' %}">
         {# ── Logo / Site Adı ── #}
         <a href="{% url 'pages:home' %}" class="nav__logo">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="nav__logo-icon" width="28" height="28">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="nav__logo-icon" width="28" height="28" aria-hidden="true" focusable="false">
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.88-11.71L10 14.17l-1.88-1.88a.996.996 0 1 0-1.41 1.41l2.59 2.59c.39.39 1.02.39 1.41 0L17.3 9.7a.996.996 0 1 0-1.42-1.41z"/>
             </svg>
             <span class="nav__logo-text">Yöresel<br>Lezzetler</span>
@@ -13,6 +13,7 @@
 
         {# ── Hamburger Menü (Mobil) ── #}
         <button
+            type="button"
             class="nav__toggle"
             id="nav-toggle"
             aria-label="{% trans 'Menüyü aç/kapat' %}"
@@ -25,31 +26,33 @@
         </button>
 
         {# ── Menü Linkleri ── #}
-        <ul class="nav__menu" id="nav-menu" role="menubar">
-            <li class="nav__item" role="none"><a href="{% url 'pages:home' %}" class="nav__link" role="menuitem">Ana Sayfa</a></li>
-            <li class="nav__item" role="none"><a href="#" class="nav__link" role="menuitem">İller</a></li>
-            <li class="nav__item" role="none"><a href="{% url 'recipes:list' %}" class="nav__link" role="menuitem">Tarifler</a></li>
-            <li class="nav__item" role="none"><a href="#" class="nav__link" role="menuitem">Kategoriler</a></li>
-            <li class="nav__item" role="none"><a href="#" class="nav__link" role="menuitem">Hakkımızda</a></li>
-            <li class="nav__item" role="none"><a href="#" class="nav__link" role="menuitem">İletişim</a></li>
+        <ul class="nav__menu" id="nav-menu">
+            <li class="nav__item"><a href="{% url 'pages:home' %}" class="nav__link">Ana Sayfa</a></li>
+            <li class="nav__item"><a href="{% url 'provinces:list' %}" class="nav__link">İller</a></li>
+            <li class="nav__item"><a href="{% url 'recipes:list' %}" class="nav__link">Tarifler</a></li>
+            <li class="nav__item"><a href="{% url 'recipes:category_list' %}" class="nav__link">Kategoriler</a></li>
+            <li class="nav__item"><a href="{% url 'pages:about' %}" class="nav__link">Hakkımızda</a></li>
+            <li class="nav__item"><a href="{% url 'pages:contact' %}" class="nav__link">İletişim</a></li>
         </ul>
 
         {# ── Kullanıcı Aksiyonları (İkonlar) ── #}
         <div class="nav__actions">
-            <button class="nav__icon-btn" aria-label="Ara" onclick="document.querySelector('.search-overlay').classList.toggle('active')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            </button>
-            <a href="#" class="nav__icon-btn" aria-label="Favoriler">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+            <a href="{% url 'recipes:search' %}" class="nav__icon-btn" aria-label="Ara" aria-expanded="false" aria-controls="site-search-overlay" data-search-toggle>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </a>
+            <a href="{% url 'accounts:profile' %}" class="nav__icon-btn" aria-label="Favoriler">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
             </a>
             <a href="{% if user.is_authenticated %}{% url 'accounts:profile' %}{% else %}{% url 'accounts:login' %}{% endif %}" class="nav__icon-btn" aria-label="Profil">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
             </a>
         </div>
     </nav>
-    <div class="search-overlay" style="display:none;">
-        <form action="{% url 'recipes:list' %}" method="get" class="search-form">
-            <input type="text" name="q" placeholder="Yemek veya il ara..." value="{{ request.GET.q }}" class="search-input">
+    <div class="search-overlay" id="site-search-overlay" data-search-overlay hidden>
+        <form action="{% url 'recipes:search' %}" method="get" class="search-form" role="search">
+            <label for="site-search-input">Yemek veya il ara</label>
+            <input id="site-search-input" type="search" name="q" placeholder="Yemek veya il ara..." value="{{ request.GET.q }}" class="search-input" data-search-input>
+            <button type="submit">Ara</button>
         </form>
     </div>
 </header>

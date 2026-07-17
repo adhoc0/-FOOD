@@ -24,6 +24,8 @@ olduğu için `0.x` sürümlerinde geriye dönük uyumsuz değişiklikler yapıl
 - Kaynak ağacında bilinen secret anahtar biçimleri için tarama yapıldı; gerçek secret bulunmadı.
 - Etkileşim ve yönetim uçları için anonim erişim permission testleri eklendi.
 - pip-audit bulguları doğrultusunda Django 6.0.7 ve Pillow 12.3.0 güvenli sürümlerine yükseltildi.
+- Faz 3 başlangıcında inline stiller kaldırılarak CSP ve erişilebilirlik uyumu güçlendirildi.
+- Production ortamı için HTTPS, HSTS ve secure cookie ayarlarının DEBUG=False altında doğrulaması yapıldı.
 
 ### Removed
 
