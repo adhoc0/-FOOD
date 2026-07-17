@@ -1,7 +1,7 @@
 .map-container {
     position: relative;
-    min-height: 22rem;
-    padding: clamp(1rem, 4vw, 3rem);
+    min-height: clamp(30rem, 48vw, 42rem);
+    padding: clamp(1rem, 2.5vw, 2rem);
     background: var(--map-background);
     border: var(--border-width) solid var(--map-border);
     border-radius: var(--radius-lg);
@@ -12,8 +12,9 @@
     display: block;
     width: 100%;
     height: auto;
-    max-height: 32rem;
+    max-height: none;
     object-fit: contain;
+    min-height: clamp(24rem, 38vw, 36rem);
 }
 
 .turkey-map__land {
@@ -78,7 +79,7 @@
 
     border-radius: 32px;
 
-    padding: 3rem;
+    padding: clamp(1.25rem, 2.5vw, 2.5rem);
 
     overflow: hidden;
 
@@ -112,4 +113,27 @@
 
     pointer-events: none;
 
+}
+
+/* Harita geniş yüzeyi doldurur; küçük ekranlarda taşma yapmaz. */
+.map-container .turkey-map {
+    width: min(100%, 90rem);
+    margin-inline: auto;
+}
+
+@media (min-width: 1200px) {
+    .map-container .turkey-map {
+        width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    .map-container {
+        min-height: 19rem;
+        padding: 1rem;
+    }
+
+    .map-container .turkey-map {
+        min-height: 15rem;
+    }
 }
