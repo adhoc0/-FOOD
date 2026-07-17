@@ -322,7 +322,7 @@
 
    --container-padding: 1rem;
 
-   --section-spacing: 5rem;
+   --section-spacing: clamp(3.5rem, 8vw, 6rem);
 
    /* =======================================================
        TRANSITIONS
