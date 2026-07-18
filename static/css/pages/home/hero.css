@@ -1,5 +1,5 @@
 .hero {
-    padding: clamp(3rem, 8vw, 7rem) 0;
+    padding: clamp(1.5rem, 3vw, 3rem) 0;
     background: linear-gradient(135deg, var(--color-background), var(--color-surface));
 }
 
@@ -23,7 +23,7 @@
 .hero__title {
     max-width: 11ch;
     margin-bottom: var(--space-lg);
-    font-size: clamp(2.75rem, 6vw, 5.5rem);
+    font-size: clamp(2.25rem, 4vw, 4rem);
 }
 
 .hero__title span {
@@ -41,8 +41,10 @@
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-md);
-    margin-top: var(--space-xl);
+    margin-top: var(--space-lg);
 }
+
+.hero__image img { max-height: 22rem; object-fit: contain; }
 
 .hero__image img {
     display: block;
