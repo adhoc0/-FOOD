@@ -130,6 +130,17 @@
     cursor: pointer;
     transition: fill var(--transition-fast), filter var(--transition-fast), stroke-width var(--transition-fast);
 }
+.turkey-map #back {
+    fill: var(--map-lake);
+    stroke: none;
+}
+.turkey-map [id*="lake"],
+.turkey-map [id*="Lake"],
+.turkey-map [id*="GOL"],
+.turkey-map [id*="gol"] {
+    fill: var(--map-lake);
+    stroke: var(--map-lake);
+}
 .turkey-map [id^="TR-"]:hover,
 .turkey-map [id^="TR-"].is-hover {
     fill: var(--color-accent-soft);
