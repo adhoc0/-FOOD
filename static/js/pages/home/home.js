@@ -9,6 +9,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         mapHost.innerHTML = await response.text();
         const svg = mapHost.querySelector('svg');
         if (!svg) throw new Error('Geçersiz harita SVG');
+        // Eski SVG dosyasında viewBox yok; görünür Türkiye siluetini ölçüp
+        // kapsayıcıya ortalayarak boşluk ve sağ-üst kaymasını kaldırıyoruz.
+        const bounds = svg.getBBox();
+        const padding = Math.max(bounds.width, bounds.height) * 0.035;
+        svg.setAttribute('viewBox', `${bounds.x - padding} ${bounds.y - padding} ${bounds.width + padding * 2} ${bounds.height + padding * 2}`);
+        svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+        svg.removeAttribute('width');
+        svg.removeAttribute('height');
 
         const provinces = [...svg.querySelectorAll('[id^="TR-"]')];
         const tooltip = root.querySelector('[data-map-tooltip]');
