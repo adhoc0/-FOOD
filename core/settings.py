@@ -36,11 +36,12 @@ DEBUG = config("DEBUG", default=False, cast=bool)
 
 ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="127.0.0.1,localhost", cast=Csv())
 
-ADMIN_URL: str = config(
+_admin_url_value: object = config(
     "ADMIN_URL",
     default="yonetim/",
     cast=str,
-).strip("/")
+)
+ADMIN_URL: str = str(_admin_url_value).strip("/")
 
 if not ADMIN_URL:
     raise ValueError("ADMIN_URL boş olamaz.")
