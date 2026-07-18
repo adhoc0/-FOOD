@@ -119,6 +119,63 @@
 .map-container .turkey-map {
     width: min(100%, 90rem);
     margin-inline: auto;
+    position: relative;
+}
+
+.turkey-map > svg { display: block; width: 100%; height: auto; overflow: visible; }
+.turkey-map [id^="TR-"] {
+    fill: var(--color-background);
+    stroke: var(--color-map-border);
+    stroke-width: 1.2;
+    cursor: pointer;
+    transition: fill var(--transition-fast), filter var(--transition-fast), stroke-width var(--transition-fast);
+}
+.turkey-map [id^="TR-"]:hover,
+.turkey-map [id^="TR-"].is-hover {
+    fill: var(--color-accent-soft);
+    filter: drop-shadow(0 5px 8px var(--color-accent-soft));
+    stroke-width: 2;
+}
+.turkey-map [id^="TR-"].is-selected {
+    fill: var(--color-primary);
+    stroke: var(--color-primary-dark);
+    filter: drop-shadow(0 8px 12px var(--color-primary-soft));
+}
+.turkey-map [id^="TR-"].is-active {
+    fill: var(--color-primary-dark);
+    stroke: var(--color-primary);
+    stroke-width: 2.4;
+}
+.map-tooltip {
+    position: absolute;
+    z-index: 2;
+    display: none;
+    padding: .45rem .7rem;
+    color: var(--color-white);
+    background: var(--color-text);
+    border-radius: var(--radius-xs);
+    box-shadow: var(--shadow-sm);
+    pointer-events: none;
+    transform: translate(10px, 10px);
+}
+.map-tooltip.is-visible { display: block; }
+.map-action-card {
+    position: absolute;
+    right: clamp(1rem, 4vw, 3rem);
+    bottom: clamp(1rem, 4vw, 3rem);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: .25rem .75rem;
+    min-width: 11rem;
+    padding: 1rem 1.2rem;
+    color: var(--color-white);
+    background: var(--color-primary);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+}
+.map-action-card__code { font-size: var(--text-sm); opacity: .8; }
+.map-action-card__name { font-weight: var(--font-semibold); }
+.map-action-card[hidden] { display: none; }
 }
 
 @media (min-width: 1200px) {

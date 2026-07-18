@@ -1,7 +1,12 @@
-<div class="map-container" role="img" aria-label="Türkiye iller haritası">
+<div class="map-container" data-map-root data-active-province="{{ active_province|default:'' }}" aria-label="Türkiye iller haritası">
     {% load static %}
-    <img class="turkey-map" src="{% static 'images/map/turkey-provinces.svg' %}"
-        alt="Türkiye'nin 81 ilini gösteren harita" loading="lazy" width="1024" height="499">
+    <div class="turkey-map" data-map-src="{% static 'images/map/turkey-provinces.svg' %}" role="group" aria-label="Türkiye'nin 81 ili"></div>
+    <div class="map-tooltip" data-map-tooltip role="status" aria-live="polite"></div>
+    <a class="map-action-card" data-map-action data-province-list-url="{% url 'provinces:list' %}" hidden href="{% url 'provinces:list' %}">
+        <span class="map-action-card__code" data-map-code></span>
+        <span class="map-action-card__name" data-map-name>İl tariflerini gör</span>
+        <span aria-hidden="true">→</span>
+    </a>
     <div class="map-container__legend">
         <span><i></i> İl seçerek tarifleri keşfedin</span>
         <a href="{% url 'provinces:list' %}" class="btn btn-outline">Tüm illeri gör</a>
