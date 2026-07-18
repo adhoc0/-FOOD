@@ -20,6 +20,8 @@ from pathlib import Path
 
 # pyrefly: ignore [missing-import]
 from decouple import Csv, config
+from config.cache import CACHES as CACHE_SETTINGS
+from config.logging import LOGGING as BASE_LOGGING
 
 # ─────────────────────────────────────────────
 # Paths
@@ -312,38 +314,8 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 # Logging
 # ─────────────────────────────────────────────
 # Konteyner ortamında log toplama stdout ve stderr üzerinden yapılır.
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "formatters": {
-        "simple": {
-            "format": "{levelname} {message}",
-            "style": "{",
-        },
-    },
-    "handlers": {
-        "console": {
-            "class": "logging.StreamHandler",
-            "formatter": "simple",
-        },
-    },
-    "root": {
-        "handlers": ["console"],
-        "level": "INFO",
-    },
-    "loggers": {
-        "django": {
-            "handlers": ["console"],
-            "level": config("DJANGO_LOG_LEVEL", default="INFO"),
-            "propagate": False,
-        },
-        "django.request": {
-            "handlers": ["console"],
-            "level": "ERROR",
-            "propagate": False,
-        },
-    },
-}
+LOGGING = BASE_LOGGING
+LOGGING["loggers"]["django"]["level"] = config("DJANGO_LOG_LEVEL", default="INFO")
 
 
 # ─────────────────────────────────────────────
@@ -351,9 +323,4 @@ LOGGING = {
 # ─────────────────────────────────────────────
 # Şimdilik local-memory cache. Production'da Redis önerilir:
 # pip install django-redis → 'django_redis.cache.RedisCache'
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": "food-cache",
-    }
-}
+CACHES = CACHE_SETTINGS
