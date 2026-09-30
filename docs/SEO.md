@@ -44,11 +44,9 @@ Doğru
 
 /il/konya/
 
-/kategori/corbalar/
+/tarifler/kategori/corbalar/
 
-/tarif/ali-nazik/
-
-/malzeme/patlican/
+/tarifler/ali-nazik/
 ```
 
 Yanlış

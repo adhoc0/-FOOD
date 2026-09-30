@@ -10,7 +10,13 @@ olduğu için `0.x` sürümlerinde geriye dönük uyumsuz değişiklikler yapıl
 - Özel 404 ve 500 hata sayfaları (`templates/404.html`, `templates/500.html`).
 - `/robots.txt` (hesap/etkileşim/arama yolları kapalı, sitemap bağlantılı).
 
+### Removed
+
+- Hiçbir yerden referans verilmeyen 52 boş CSS/JS/şablon dosyası silindi.
+
 ### Changed
+
+- `docs/SEO.md` URL örnekleri gerçek yapıyla (`/tarifler/...`) uyumlu hale getirildi.
 
 - Proje durumu gerçek geliştirme seviyesiyle uyumlu olacak şekilde alpha olarak tanımlandı.
 - ROADMAP, tamamlanan ve bekleyen işleri gösterecek biçimde güncellendi.
