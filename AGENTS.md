@@ -1,5 +1,11 @@
 # GEMINI.md
 
+## Konuşma Dili
+
+* Açıklamaların Tamamı Türkçe Olacak.
+* Kod Yorum Satırları Türkçe Olacak.
+
+
 ## Project Context
 
 You are working on a long-term software project.

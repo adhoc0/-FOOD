@@ -1,224 +1,370 @@
-# Testing Scripts
+---
+name: testing
+description: Software testing standards, quality assurance, test automation, verification strategies, and testing best practices for the FOOD project.
+---
+
+# Testing
 
 ## Purpose
 
-This directory contains reusable automation scripts for software testing, validation, quality assurance, coverage analysis, and release verification within the FOOD project.
+This skill defines the software testing standards for the FOOD project.
 
-Scripts automate repetitive testing tasks, improve software quality, reduce human error, and support developers and AI agents throughout the development lifecycle.
+Every feature, bug fix, and refactoring must be verified through testing before being considered complete.
 
-Project-specific testing standards are defined in:
-
-../SKILL.md
-
-Reference documentation is available in:
-
-../references/
+Testing is a mandatory part of development.
 
 ---
 
-## Intended Use
+# General Principles
 
-Scripts in this directory may be used to:
+Always prioritize:
 
-- Run unit tests
-- Run integration tests
-- Run functional tests
-- Run API tests
-- Run regression tests
-- Run performance tests
-- Run security tests
-- Validate migrations
-- Validate fixtures
-- Generate coverage reports
-- Generate test reports
-- Detect flaky tests
-- Verify release readiness
-- Execute production smoke tests
+1. Correctness
+2. Reliability
+3. Repeatability
+4. Maintainability
+5. Automation
+6. Test Coverage
+
+Never assume code works without verification.
 
 ---
 
-## Script Categories
+# Testing Philosophy
 
-Supported script categories include:
+Every bug should result in a regression test.
 
-- Unit Testing
-- Integration Testing
-- Functional Testing
-- API Testing
-- Regression Testing
-- Database Testing
-- Migration Validation
-- Fixture Validation
-- Coverage Analysis
-- Security Testing
-- Performance Testing
-- Smoke Testing
-- Test Reporting
-- Production Verification
+Every feature should have appropriate automated tests.
+
+Tests should verify behavior, not implementation details.
+
+Tests should remain independent and deterministic.
 
 ---
 
-## Suggested Scripts
+# Test Pyramid
 
-Examples:
+Follow the Test Pyramid.
 
-```text
-run-unit-tests.py
-run-integration-tests.py
-run-api-tests.py
-run-functional-tests.py
-run-regression-tests.py
-run-performance-tests.py
-run-security-tests.py
-migration-validator.py
-fixture-validator.py
-coverage-report.py
-flaky-test-check.py
-test-report.py
-smoke-test.py
-production-check.py
-```
+Prioritize:
+
+- Unit Tests
+- Integration Tests
+- Functional Tests
+- End-to-End Tests
+
+Keep End-to-End tests limited to critical user flows.
 
 ---
 
-## Naming Convention
+# Unit Testing
 
-Use descriptive lowercase filenames.
+Unit tests should:
 
-Examples:
-
-```text
-run-unit-tests.py
-coverage-report.py
-production-check.py
-```
-
-Avoid:
-
-```text
-script.py
-temp.py
-new.py
-testing.py
-```
-
----
-
-## Script Requirements
-
-Every script should:
-
-- Perform one clearly defined task.
-- Be reusable.
-- Produce structured and readable output.
-- Exit with appropriate status codes.
-- Handle exceptions gracefully.
-- Validate execution environment.
-- Support automation.
-- Avoid hardcoded configuration.
-
----
-
-## Output
-
-Scripts should report:
-
-- Start Time
-- End Time
-- Execution Duration
-- Total Tests
-- Passed Tests
-- Failed Tests
-- Skipped Tests
-- Coverage Percentage
-- Warnings
-- Overall Status
-
-Output should be deterministic and machine-readable whenever possible.
-
----
-
-## Logging
-
-Scripts should log:
-
-- Executed Tests
-- Warnings
-- Errors
-- Execution Duration
-
-Never log:
-
-- Passwords
-- API Keys
-- Tokens
-- Secrets
-- Personal Data
-
----
-
-## Cross-Platform Support
-
-Whenever possible, support:
-
-- Python
-- Bash (.sh)
-- PowerShell (.ps1)
-
-Avoid operating system-specific assumptions.
-
----
-
-## Guidelines
-
-Scripts should:
-
-- Follow project coding standards.
-- Be idempotent whenever possible.
-- Validate project state before execution.
+- Test one behavior.
+- Be isolated.
+- Execute quickly.
+- Avoid external dependencies.
 - Produce deterministic results.
-- Minimize external dependencies.
-- Support CI/CD pipelines.
-- Preserve application integrity.
+
+Mock external systems only.
 
 ---
 
-## Production Rules
+# Integration Testing
 
-Production verification scripts must:
+Verify:
 
-- Execute critical test suites.
-- Verify application startup.
-- Verify database migrations.
-- Verify API health.
-- Verify authentication.
-- Verify critical user flows.
-- Generate release reports.
-- Abort deployment if critical tests fail.
+- Database Integration
+- ORM Behavior
+- Service Integration
+- Cache Integration
+- API Integration
+- Third-Party Services
 
 ---
 
-## Notes
+# Functional Testing
 
-This directory contains executable automation scripts only.
+Verify complete business workflows.
 
-Project-specific testing rules belong in:
+Focus on:
 
-../SKILL.md
+- User actions
+- Business rules
+- Feature correctness
 
-Reference documentation belongs in:
+---
 
-../references/
+# API Testing
 
-Do not store:
+Every public API should verify:
 
-- Documentation
-- Test Reports
-- Coverage Reports
-- Logs
-- Configuration Files
-- Credentials
-- Environment Files
-- Application Source Code
+- HTTP Status Codes
+- Request Validation
+- Response Format
+- Authentication
+- Authorization
+- Error Responses
+- Pagination
+- Filtering
 
-inside this directory.
+---
+
+# Database Testing
+
+Verify:
+
+- Migrations
+- Constraints
+- Relationships
+- Transactions
+- Indexes
+- Query Results
+
+Test migration safety.
+
+---
+
+# Fixtures
+
+Fixtures should be:
+
+- Small
+- Reusable
+- Predictable
+- Independent
+
+Avoid unnecessary fixture duplication.
+
+---
+
+# Mocking
+
+Mock only:
+
+- External APIs
+- Email Services
+- Payment Services
+- File Storage
+- Time
+- Randomness
+
+Avoid mocking application logic.
+
+---
+
+# Coverage
+
+Focus on meaningful coverage.
+
+Prioritize:
+
+- Business Logic
+- Security
+- Data Validation
+- Critical User Flows
+
+Coverage percentage is not the primary goal.
+
+---
+
+# Regression Testing
+
+Every resolved bug should include a regression test.
+
+Prevent previously fixed defects from returning.
+
+---
+
+# Performance Testing
+
+Measure:
+
+- Response Time
+- Query Count
+- Memory Usage
+- CPU Usage
+
+Optimize only after measurement.
+
+---
+
+# Security Testing
+
+Verify:
+
+- Authentication
+- Authorization
+- CSRF Protection
+- Input Validation
+- XSS Protection
+- SQL Injection Prevention
+- Permission Enforcement
+
+---
+
+# Error Handling
+
+Tests should verify:
+
+- Expected Failures
+- Validation Errors
+- Exception Handling
+- Edge Cases
+
+Never ignore failure scenarios.
+
+---
+
+# Continuous Integration
+
+Automated tests should execute during CI.
+
+Deployment should fail when:
+
+- Critical tests fail.
+- Migration validation fails.
+- Security tests fail.
+
+---
+
+# Test Naming
+
+Use descriptive names.
+
+Examples:
+
+```python
+test_recipe_creation_requires_title()
+
+test_only_admin_can_delete_recipe()
+
+test_search_returns_matching_recipes()
+```
+
+Avoid generic names.
+
+---
+
+# Test Structure
+
+Follow:
+
+Arrange
+
+Act
+
+Assert
+
+Keep each test focused on one behavior.
+
+---
+
+# Test Data
+
+Use minimal data required.
+
+Avoid unnecessary records.
+
+Create reusable factories when appropriate.
+
+---
+
+# Django Testing
+
+Use:
+
+- Django TestCase
+- TransactionTestCase
+- Client
+- RequestFactory
+
+Test:
+
+- Models
+- Views
+- Forms
+- Services
+- Middleware
+- Management Commands
+
+---
+
+# FOOD Project Requirements
+
+Critical features requiring tests:
+
+- Authentication
+- User Registration
+- Recipe Management
+- Province Management
+- Category Management
+- Search
+- Favorites
+- Ratings
+- Image Upload
+- Admin Panel
+- API Endpoints
+
+No critical feature should be merged without tests.
+
+---
+
+# Forbidden Practices
+
+Never:
+
+- Skip critical tests.
+- Ignore failing tests.
+- Depend on test execution order.
+- Use production data.
+- Leave flaky tests unresolved.
+- Write tests without assertions.
+- Duplicate test logic.
+- Mock business logic unnecessarily.
+
+---
+
+# Best Practices
+
+Always:
+
+- Keep tests independent.
+- Write readable tests.
+- Test edge cases.
+- Test failure scenarios.
+- Test security.
+- Test permissions.
+- Test business rules.
+- Maintain deterministic execution.
+- Keep tests fast.
+
+---
+
+# AI Guidelines
+
+Before generating code:
+
+- Generate appropriate tests.
+- Reuse existing fixtures.
+- Avoid duplicate tests.
+- Verify critical paths.
+- Test edge cases.
+- Follow project architecture.
+- Produce deterministic tests.
+- Keep tests maintainable.
+
+---
+
+# References
+
+Additional testing documentation is available in:
+
+references/
+
+Reusable automation scripts are available in:
+
+scripts/
+
+Project-specific rules always take precedence over general software testing best practices.
