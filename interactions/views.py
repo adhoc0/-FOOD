@@ -25,10 +25,14 @@ logger = logging.getLogger(__name__)
 @login_required
 @require_POST
 def add_comment(request, recipe_id):
-    """Tarife yorum ekleme."""
+    """Tarife yorum ve/veya puan ekleme."""
     recipe = get_object_or_404(Recipe, id=recipe_id)
     content = request.POST.get("content", "").strip()
-    score = request.POST.get("score")
+    raw_score = request.POST.get("score", "").strip()
+
+    if not content and not raw_score:
+        messages.error(request, "Yorum yazın veya puan verin.")
+        return redirect("recipes:recipe_detail", slug=recipe.slug)
 
     # ── Yorum ekleme ──
     if content:
@@ -46,16 +50,21 @@ def add_comment(request, recipe_id):
             for message in err.messages:
                 messages.error(request, message)
 
-    # ── Puan ekleme ──
-    if score and score.isdigit():
-        score_int = int(score)
-        if 1 <= score_int <= 5:
-            RatingService.rate(
-                user=request.user,
-                recipe=recipe,
-                score=score_int,
-            )
-            messages.success(request, "Puanınız kaydedildi.")
+    # ── Puan ekleme ── (1–5 kuralı RatingService'te doğrulanır)
+    if raw_score:
+        if not raw_score.isdigit():
+            messages.error(request, "Puan geçerli bir sayı olmalıdır.")
+        else:
+            try:
+                RatingService.rate(
+                    user=request.user,
+                    recipe=recipe,
+                    score=int(raw_score),
+                )
+                messages.success(request, "Puanınız kaydedildi.")
+            except ValidationError as err:
+                for message in err.messages:
+                    messages.error(request, message)
 
     return redirect("recipes:recipe_detail", slug=recipe.slug)
 

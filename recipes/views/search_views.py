@@ -12,8 +12,7 @@ from provinces.selectors import ProvinceSelector
 from recipes.choices import Difficulty
 from recipes.constants import SEARCH_PAGE_SIZE
 from recipes.models import Recipe
-from recipes.selectors import CategorySelector
-from recipes.services import SearchService
+from recipes.selectors import CategorySelector, RecipeSelector
 
 
 class SearchView(ListView):
@@ -25,90 +24,21 @@ class SearchView(ListView):
     paginate_by = SEARCH_PAGE_SIZE
 
     def get_queryset(self):
-        self.query = self.request.GET.get(
-            "q",
-            "",
-        ).strip()
+        self.query = self.request.GET.get("q", "").strip()
+        self.province_slug = self.request.GET.get("province", "").strip()
+        self.category_slug = self.request.GET.get("category", "").strip()
+        self.difficulty = self.request.GET.get("difficulty", "").strip()
+        self.ordering = self.request.GET.get("sort", "").strip()
 
-        self.province_slug = self.request.GET.get(
-            "province",
-            "",
-        ).strip()
-
-        self.category_slug = self.request.GET.get(
-            "category",
-            "",
-        ).strip()
-
-        self.difficulty = self.request.GET.get(
-            "difficulty",
-            "",
-        ).strip()
-
-        self.ordering = self.request.GET.get(
-            "sort",
-            "",
-        ).strip()
-
-        queryset = SearchService.search_recipes(
+        return RecipeSelector.search_published(
             query=self.query,
+            province_slug=self.province_slug,
+            category_slug=self.category_slug,
+            difficulty=self.difficulty,
+            ordering=self.ordering or "latest",
         )
 
-        if self.province_slug:
-            queryset = queryset.filter(
-                province__slug=self.province_slug,
-            )
-
-        if self.category_slug:
-            queryset = queryset.filter(
-                category__slug=self.category_slug,
-            )
-
-        if self.difficulty:
-            queryset = queryset.filter(
-                difficulty=self.difficulty,
-            )
-
-        ordering_map = {
-            "latest": [
-                "-published_at",
-                "-created_at",
-            ],
-            "oldest": [
-                "published_at",
-                "created_at",
-            ],
-            "popular": [
-                "-view_count",
-                "-favorite_count",
-            ],
-            "rating": [
-                "-average_rating",
-                "-rating_count",
-            ],
-            "favorites": [
-                "-favorite_count",
-            ],
-            "title": [
-                "title",
-            ],
-        }
-
-        self._result_queryset = queryset.order_by(
-            *ordering_map.get(
-                self.ordering,
-                [
-                    "-published_at",
-                    "-created_at",
-                ],
-            ),
-        )
-        return self._result_queryset
-
-    def get_context_data(
-        self,
-        **kwargs,
-    ):
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
         context["query"] = self.query
@@ -122,7 +52,8 @@ class SearchView(ListView):
 
         context["difficulties"] = Difficulty.choices
 
-        context["total_results"] = self._result_queryset.count()
+        # Sayfalayıcı toplamı zaten hesapladığı için ikinci bir COUNT sorgusu yapılmaz.
+        context["total_results"] = context["paginator"].count
 
         context["meta_title"] = (
             f'"{self.query}" Arama Sonuçları | Türkiye Yöresel Yemekleri'

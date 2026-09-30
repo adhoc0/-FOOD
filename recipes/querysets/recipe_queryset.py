@@ -180,6 +180,19 @@ class RecipeQuerySet(models.QuerySet["Recipe"]):
                 "-view_count",
             )
 
+        if ordering == "most_viewed":
+            return self.order_by(
+                "-view_count",
+                "-favorite_count",
+                "-published_at",
+            )
+
+        if ordering == "favorites":
+            return self.order_by(
+                "-favorite_count",
+                "-published_at",
+            )
+
         if ordering == "rating":
             return self.order_by(
                 "-average_rating",

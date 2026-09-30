@@ -7,11 +7,12 @@ Handles favorite create/remove operations and keeps recipe counters synchronized
 from __future__ import annotations
 
 from django.db import transaction
-from django.db.models import F, QuerySet
+from django.db.models import QuerySet
 
 from common.types import UserLike
 from interactions.models import Favorite
 from recipes.models import Recipe
+from recipes.services.recipe_service import RecipeService
 
 
 class FavoriteService:
@@ -37,11 +38,11 @@ class FavoriteService:
         )
 
         if created:
-            FavoriteService._increment_recipe_count(recipe)
+            RecipeService.increment_favorite_count(recipe)
             return True
 
         favorite.delete()
-        FavoriteService._decrement_recipe_count(recipe)
+        RecipeService.decrement_favorite_count(recipe)
 
         return False
 
@@ -78,41 +79,4 @@ class FavoriteService:
             .order_by(
                 "-created_at",
             )
-        )
-
-    @staticmethod
-    def _increment_recipe_count(
-        recipe: Recipe,
-    ) -> None:
-        """Increment recipe favorite counter."""
-
-        Recipe.objects.filter(
-            pk=recipe.pk,
-        ).update(
-            favorite_count=F("favorite_count") + 1,
-        )
-
-        recipe.refresh_from_db(
-            fields=[
-                "favorite_count",
-            ],
-        )
-
-    @staticmethod
-    def _decrement_recipe_count(
-        recipe: Recipe,
-    ) -> None:
-        """Decrement recipe favorite counter."""
-
-        Recipe.objects.filter(
-            pk=recipe.pk,
-            favorite_count__gt=0,
-        ).update(
-            favorite_count=F("favorite_count") - 1,
-        )
-
-        recipe.refresh_from_db(
-            fields=[
-                "favorite_count",
-            ],
         )

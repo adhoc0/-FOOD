@@ -27,8 +27,28 @@ olduğu için `0.x` sürümlerinde geriye dönük uyumsuz değişiklikler yapıl
 - Faz 3 başlangıcında inline stiller kaldırılarak CSP ve erişilebilirlik uyumu güçlendirildi.
 - Production ortamı için HTTPS, HSTS ve secure cookie ayarlarının DEBUG=False altında doğrulaması yapıldı.
 
+### Fixed
+
+- Girişten sonra var olmayan `/accounts/profile/` adresine yönlendirme düzeltildi; giriş profile, çıkış ana sayfaya gider.
+- Şifre sıfırlama akışının URL'leri ve e-posta şablonları eklendi.
+- Hız sınırı, Nginx arkasında tüm anonim istemcileri tek IP sayıyordu; `NUM_PROXIES` ile güvenilen proxy sayısına göre istemci IP'si çözülür.
+- Ana sayfa haritasındaki il tıklaması il detay sayfasına gider; tooltip ve erişilebilir etiketler il adını gösterir.
+- İl detay sayfası taslak ve pasif tarifleri de listeliyordu; yalnızca yayındaki tarifler gösterilir.
+- Harita rengi doğrulaması satır sonu karakteriyle biten değeri kabul ediyordu.
+- Yorum/puan formunda geçersiz veya boş gönderimler sessizce yok sayılıyordu; kullanıcıya mesaj gösterilir.
+
+### Changed (mimari)
+
+- Arama filtreleme ve sıralama mantığı `SearchView` içinden `RecipeSelector.search_published` ve `RecipeQuerySet.sort_by` katmanına taşındı; "popular" sıralaması tek tanıma bağlandı (önce favori, sonra görüntülenme).
+- Arama sonuçları ilişkili il ve kategoriyle birlikte yüklenir (N+1 sorgu giderildi); toplam sonuç sayısı paginator'dan alınır.
+- Puan istatistiği yalnızca Rating sinyalinde hesaplanır; favori sayacı kodu `RecipeService` içinde tekilleştirildi.
+- Test factory'sindeki kullanıcı parolası artık veritabanına kaydedilir.
+
 ### Removed
 
+- Hiçbir yerde güncellenmeyen `Recipe.comment_count` alanı kaldırıldı (migration `0004`).
+- `ProvinceManager` için ikinci (tekrar eden) tanım kaldırıldı.
+- Var olmayan uygulama klasörleri paket ve coverage listelerinden çıkarıldı; `common` eklendi.
 - Django dinamik sitemap endpoint'iyle çakışan boş kök `sitemap.xml` kaldırıldı.
 - Yalnızca başka bir şablonu genişleten gereksiz statik sayfa ara şablonları kaldırıldı.
 - Kullanılmayan toplu `pages.views.views` modülü kaldırıldı.

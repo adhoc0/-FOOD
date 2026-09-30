@@ -77,18 +77,13 @@ where = [
 
 include = [
     "accounts*",
-    "analytics*",
-    "api*",
+    "common*",
     "config*",
     "core*",
     "interactions*",
-    "management*",
-    "notifications*",
     "pages*",
     "provinces*",
     "recipes*",
-    "search*",
-    "sitemaps*",
 ]
 
 exclude = [
@@ -229,17 +224,13 @@ branch = true
 
 source = [
     "accounts",
-    "analytics",
-    "api",
+    "common",
     "config",
     "core",
     "interactions",
-    "notifications",
     "pages",
     "provinces",
     "recipes",
-    "search",
-    "sitemaps",
 ]
 
 omit = [

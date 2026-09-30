@@ -42,7 +42,9 @@ class RatingService:
             },
         )
 
-        RatingService._refresh_recipe_rating(recipe)
+        # İstatistikler Rating sinyali tarafından güncellenir; burada yalnızca
+        # çağıranın elindeki nesne tazelenir.
+        recipe.refresh_from_db(fields=["average_rating", "rating_count"])
 
         return rating
 
@@ -93,7 +95,7 @@ class RatingService:
         )
 
     @staticmethod
-    def _refresh_recipe_rating(
+    def refresh_recipe_rating(
         recipe: Recipe,
     ) -> None:
         """

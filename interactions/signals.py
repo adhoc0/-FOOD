@@ -9,4 +9,4 @@ from recipes.services.rating_service import RatingService
 @receiver(post_delete, sender=Rating)
 def rating_changed(sender, instance, **kwargs):
     """Automatically update cached recipe rating stats when a rating changes."""
-    RatingService._refresh_recipe_rating(instance.recipe)
+    RatingService.refresh_recipe_rating(instance.recipe)

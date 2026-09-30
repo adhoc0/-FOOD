@@ -118,11 +118,6 @@ class Recipe(models.Model):
         default=0,
     )
 
-    comment_count = models.PositiveIntegerField(
-        _("Comment Count"),
-        default=0,
-    )
-
     meta_title = models.CharField(
         _("Meta Title"),
         max_length=255,

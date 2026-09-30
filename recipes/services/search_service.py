@@ -4,6 +4,7 @@ from django.db.models import QuerySet
 
 from recipes.choices import Status
 from recipes.models import Recipe
+from recipes.selectors import RecipeSelector
 
 
 class SearchService:
@@ -14,24 +15,11 @@ class SearchService:
         query: str,
         limit: int | None = None,
     ) -> QuerySet[Recipe]:
-        """Search published recipes."""
+        """Search published recipes, most viewed first."""
 
-        queryset = Recipe.objects.filter(
-            is_active=True,
-            status=Status.PUBLISHED,
-        )
-
-        cleaned_query = query.strip()
-
-        if cleaned_query:
-            queryset = queryset.filter(
-                title__icontains=cleaned_query,
-            )
-
-        queryset = queryset.order_by(
-            "-view_count",
-            "-favorite_count",
-            "-published_at",
+        queryset = RecipeSelector.search_published(
+            query=query,
+            ordering="most_viewed",
         )
 
         if limit is not None:

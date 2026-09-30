@@ -127,9 +127,3 @@ class ProvinceQuerySet(models.QuerySet["Province"]):
             .has_recipes()
             .sort_by_name()
         )
-
-
-class ProvinceManager(models.Manager.from_queryset(ProvinceQuerySet)):  # type: ignore[misc]
-    """Custom manager for Province."""
-
-    pass

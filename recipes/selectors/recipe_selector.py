@@ -28,6 +28,30 @@ class RecipeSelector:
         return queryset
 
     @staticmethod
+    def search_published(
+        *,
+        query: str = "",
+        province_slug: str = "",
+        category_slug: str = "",
+        difficulty: str = "",
+        ordering: str = "latest",
+    ) -> QuerySet[Recipe]:
+        """Yayındaki tarifleri başlığa göre arar, süzer ve sıralar."""
+        queryset = Recipe.objects.published_with_related()
+
+        cleaned_query = query.strip()
+        if cleaned_query:
+            queryset = queryset.filter(title__icontains=cleaned_query)
+        if province_slug:
+            queryset = queryset.by_province_slug(province_slug)
+        if category_slug:
+            queryset = queryset.by_category_slug(category_slug)
+        if difficulty:
+            queryset = queryset.by_difficulty(difficulty)
+
+        return queryset.sort_by(ordering)
+
+    @staticmethod
     def get_recipe_detail(slug: str) -> Recipe | None:
         return Recipe.objects.published_with_related().by_slug(slug).first()
 
