@@ -24,6 +24,16 @@ class UserFactory(factory.django.DjangoModelFactory):
     password = factory.PostGenerationMethodCall("set_password", "TestPass123!")
     is_active = True
 
+    @classmethod
+    def _after_postgeneration(cls, instance, create, results=None):
+        """set_password yalnızca bellekte çalışır; hash'in veritabanına yazılması için kaydeder.
+
+        Kaydedilmezse force_login sonrası oturum hash'i veritabanındaki boş parolayla
+        uyuşmaz ve istekler anonim kullanıcı olarak işlenir.
+        """
+        if create and results:
+            instance.save()
+
 
 class AdminFactory(UserFactory):
     """Superuser factory."""
