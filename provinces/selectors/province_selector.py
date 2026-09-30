@@ -20,6 +20,18 @@ class ProvinceSelector:
         return queryset
 
     @staticmethod
+    def get_map_entries() -> list[dict[str, str | int]]:
+        """Etkileşimli harita için aktif illerin plaka, ad ve adres bilgisi."""
+        return [
+            {
+                "plate_code": province.plate_code,
+                "name": province.name,
+                "url": province.get_absolute_url(),
+            }
+            for province in Province.objects.active().ordered_by_code()
+        ]
+
+    @staticmethod
     def get_active_by_slug(slug: str) -> Province | None:
         return (
             Province.objects.active()

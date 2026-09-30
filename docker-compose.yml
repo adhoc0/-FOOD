@@ -12,6 +12,7 @@ x-web-environment: &web-environment
   DB_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD ortam değişkeni tanımlanmalıdır}
   DB_HOST: db
   DB_PORT: "5432"
+  NUM_PROXIES: "1"
 
 services:
   db:

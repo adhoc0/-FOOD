@@ -256,8 +256,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Authentication URLs
 # ─────────────────────────────────────────────
 LOGIN_URL = "accounts:login"
-# GIN_REDIRECT_URL = 'pages:home'
-# GOUT_REDIRECT_URL = 'pages:home'
+LOGIN_REDIRECT_URL = "accounts:profile"
+LOGOUT_REDIRECT_URL = "pages:home"
 
 
 # ─────────────────────────────────────────────
@@ -305,9 +305,19 @@ CSRF_TRUSTED_ORIGINS = config(
 
 
 # ─────────────────────────────────────────────
+# Reverse Proxy
+# ─────────────────────────────────────────────
+# İstemci IP'si, yalnızca güvenilen proxy sayısı kadar X-Forwarded-For
+# kaydı geriden sayılarak okunur. Proxy yoksa 0 kalmalıdır; aksi halde
+# istemci başlığı taklit edebilir. Nginx arkasında 1 kullanılır.
+NUM_PROXIES = config("NUM_PROXIES", default=0, cast=int)
+
+
+# ─────────────────────────────────────────────
 # Email Settings (Development)
 # ─────────────────────────────────────────────
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="noreply@localhost")
 
 
 # ─────────────────────────────────────────────

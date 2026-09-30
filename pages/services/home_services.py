@@ -3,6 +3,7 @@ from __future__ import annotations
 from django.contrib.auth import get_user_model
 
 from provinces.models import Province
+from provinces.selectors import ProvinceSelector
 from recipes.models import Category, Recipe
 
 
@@ -39,6 +40,7 @@ class HomePageService:
                 .active_with_recipe_count()
                 .order_by("-recipe_count", "name")[:8]
             ),
+            "map_provinces": ProvinceSelector.get_map_entries(),
             "total_recipes": (
                 Recipe.objects
                 .published()

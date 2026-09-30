@@ -4,7 +4,7 @@ import pytest
 from django.test import Client
 from django.urls import reverse
 
-from tests.factories import CategoryFactory, RecipeFactory
+from tests.factories import CategoryFactory, ProvinceFactory, RecipeFactory
 
 
 @pytest.mark.django_db
@@ -44,3 +44,25 @@ class TestHomePageView:
         assert response.status_code == 200
         assert b"turkey-map" in response.content
         assert b"images/map/turkey-provinces.svg" in response.content
+
+    def test_map_receives_active_province_names_and_detail_urls(self):
+        active_province = ProvinceFactory(plate_code=27, name="Gaziantep", slug="gaziantep")
+        ProvinceFactory(plate_code=28, name="Pasif İl", slug="pasif-il", is_active=False)
+
+        response = Client().get(reverse("pages:home"))
+
+        assert response.context["map_provinces"] == [
+            {
+                "plate_code": 27,
+                "name": "Gaziantep",
+                "url": active_province.get_absolute_url(),
+            },
+        ]
+        assert b'id="map-provinces"' in response.content
+        assert active_province.get_absolute_url().encode() in response.content
+        assert "Pasif İl".encode() not in response.content
+
+
+@pytest.mark.django_db
+def test_test_media_root_is_isolated_from_project_media(settings):
+    assert settings.MEDIA_ROOT != settings.BASE_DIR / "media"

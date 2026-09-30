@@ -4,8 +4,11 @@ from __future__ import annotations
 
 from collections.abc import Callable
 
+from django.conf import settings
 from django.core.cache import cache
 from django.http import HttpRequest, HttpResponse
+
+from common.network import get_client_ip
 
 
 class SecurityHeadersMiddleware:
@@ -76,4 +79,5 @@ class WriteRateLimitMiddleware:
         user = getattr(request, "user", None)
         if user is not None and user.is_authenticated:
             return f"user:{user.pk}"
-        return f"ip:{request.META.get('REMOTE_ADDR', 'unknown')}"
+        client_ip = get_client_ip(request, trusted_proxy_count=settings.NUM_PROXIES)
+        return f"ip:{client_ip}"

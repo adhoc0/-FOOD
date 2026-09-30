@@ -24,17 +24,24 @@ document.addEventListener('DOMContentLoaded', async () => {
         const code = root.querySelector('[data-map-code]');
         const name = root.querySelector('[data-map-name]');
         const activeProvince = root.dataset.activeProvince;
+        const provinceDataElement = document.getElementById('map-provinces');
+        const provinceData = provinceDataElement ? JSON.parse(provinceDataElement.textContent) : [];
+        const provincesByPlate = new Map(
+            provinceData.map((entry) => [String(entry.plate_code).padStart(2, '0'), entry]),
+        );
 
         provinces.forEach((province) => {
             const plate = province.id.replace('TR-', '').replace(/^0+/, '').padStart(2, '0');
             province.setAttribute('tabindex', '0');
             province.setAttribute('role', 'button');
-            province.setAttribute('aria-label', `İl ${plate}`);
+            const entry = provincesByPlate.get(plate);
+            const label = entry ? entry.name : `İl ${plate}`;
+            province.setAttribute('aria-label', label);
 
             const showHover = (event) => {
                 province.classList.add('is-hover');
                 if (!tooltip) return;
-                tooltip.textContent = `İl ${plate}`;
+                tooltip.textContent = label;
                 tooltip.classList.add('is-visible');
                 const bounds = root.querySelector('.turkey-map').getBoundingClientRect();
                 tooltip.style.left = `${event.clientX - bounds.left}px`;
@@ -45,8 +52,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 provinces.forEach((item) => item.classList.remove('is-selected'));
                 province.classList.add('is-selected');
                 if (code) code.textContent = plate;
-                if (name) name.textContent = `İl ${plate} tariflerini gör`;
-                if (action) { action.hidden = false; action.href = action.dataset.provinceListUrl || '/provinces/'; }
+                if (name) name.textContent = `${label} tariflerini gör`;
+                if (action) { action.hidden = false; action.href = entry ? entry.url : action.dataset.provinceListUrl; }
             };
 
             province.addEventListener('pointerenter', showHover);

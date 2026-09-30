@@ -1,5 +1,6 @@
 <div class="map-container" data-map-root data-active-province="{{ active_province|default:'' }}" aria-label="Türkiye iller haritası">
     {% load static %}
+    {% if map_provinces %}{{ map_provinces|json_script:"map-provinces" }}{% endif %}
     <div class="turkey-map" data-map-src="{% static 'images/map/turkey-provinces.svg' %}" role="group" aria-label="Türkiye'nin 81 ili"></div>
     <div class="map-tooltip" data-map-tooltip role="status" aria-live="polite"></div>
     <a class="map-action-card" data-map-action data-province-list-url="{% url 'provinces:list' %}" hidden href="{% url 'provinces:list' %}">

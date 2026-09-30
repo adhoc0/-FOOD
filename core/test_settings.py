@@ -1,5 +1,8 @@
 """Test ortamı için güvenli ve tekrarlanabilir Django ayarları."""
 
+import tempfile
+from pathlib import Path
+
 from core import settings as base_settings
 
 # Ana ayar modülündeki tüm Django ayarlarını açıkça kopyalıyoruz. Böylece test
@@ -10,6 +13,8 @@ for _setting_name in dir(base_settings):
 
 
 DEBUG = False
+# Testlerde yüklenen dosyalar gerçek media klasörünü kirletmemeli.
+MEDIA_ROOT = Path(tempfile.mkdtemp(prefix="food-test-media-"))
 SECRET_KEY = "test-only-secret-key-with-more-than-fifty-characters-123456"
 ALLOWED_HOSTS = ["testserver", "localhost", "127.0.0.1"]
 SECURE_SSL_REDIRECT = False
