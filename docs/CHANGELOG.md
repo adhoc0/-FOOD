@@ -5,6 +5,11 @@ olduğu için `0.x` sürümlerinde geriye dönük uyumsuz değişiklikler yapıl
 
 ## [Unreleased]
 
+### Added
+
+- Özel 404 ve 500 hata sayfaları (`templates/404.html`, `templates/500.html`).
+- `/robots.txt` (hesap/etkileşim/arama yolları kapalı, sitemap bağlantılı).
+
 ### Changed
 
 - Proje durumu gerçek geliştirme seviyesiyle uyumlu olacak şekilde alpha olarak tanımlandı.
