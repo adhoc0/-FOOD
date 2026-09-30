@@ -5,6 +5,7 @@ from django.views.generic import DetailView, ListView
 
 from provinces.models import Province
 from provinces.selectors import ProvinceSelector, RegionSelector
+from recipes.selectors import RecipeSelector
 
 
 class ProvinceListView(ListView):
@@ -32,6 +33,7 @@ class ProvinceDetailView(DetailView):
     model = Province
     template_name = "provinces/detail.html"
     context_object_name = "province"
+    featured_recipe_limit = 6
 
     def get_object(self, queryset=None):
         province = ProvinceSelector.get_active_by_slug(self.kwargs["slug"])
@@ -40,3 +42,11 @@ class ProvinceDetailView(DetailView):
             raise Http404("Province not found.")
 
         return province
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Yalnızca yayındaki tarifler gösterilir; taslak ve pasif tarifler sızmamalıdır.
+        context["recipes"] = RecipeSelector.get_by_province(self.object)[
+            : self.featured_recipe_limit
+        ]
+        return context
