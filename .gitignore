@@ -58,3 +58,5 @@ Thumbs.db
 .coverage
 .coverage.*
 htmlcov/
+zfood_valute/
+mypy-config.txt
