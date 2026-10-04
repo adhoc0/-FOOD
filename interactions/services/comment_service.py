@@ -41,7 +41,7 @@ class CommentService:
         CommentValidator.validate_content(content)
         CommentValidator.validate_cooldown(user, Comment)
 
-        return Comment.objects.create(
+        return Comment.objects.create(  # type: ignore[misc]
             user=user,
             recipe=recipe,
             content=content.strip(),

@@ -325,7 +325,7 @@ DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="noreply@localhost")
 # ─────────────────────────────────────────────
 # Konteyner ortamında log toplama stdout ve stderr üzerinden yapılır.
 LOGGING = BASE_LOGGING
-LOGGING["loggers"]["django"]["level"] = config("DJANGO_LOG_LEVEL", default="INFO")
+LOGGING["loggers"]["django"]["level"] = config("DJANGO_LOG_LEVEL", default="INFO")  # type: ignore[index]
 
 
 # ─────────────────────────────────────────────

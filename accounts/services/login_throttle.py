@@ -25,7 +25,7 @@ def _key(username: str) -> str:
 def is_locked(username: str) -> bool:
     """Kullanıcı adı için deneme hakkı bittiyse True döner."""
 
-    return cache.get(_key(username), 0) >= MAX_FAILED_ATTEMPTS
+    return bool(cache.get(_key(username), 0) >= MAX_FAILED_ATTEMPTS)
 
 
 def register_failure(username: str) -> int:

@@ -10,7 +10,7 @@ from accounts.managers import UserManager
 class CustomUser(AbstractUser):
     """Custom user model."""
 
-    objects = UserManager()
+    objects = UserManager()  # type: ignore[misc]
 
     email = models.EmailField(
         _("Email Address"),

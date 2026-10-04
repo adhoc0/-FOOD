@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from django.db.models import QuerySet
+
 from provinces.models import Province
 
 
@@ -7,7 +9,7 @@ class ProvinceSelector:
     """İl verisini yalnızca okuyan sorgular."""
 
     @staticmethod
-    def get_active_list(*, region_slug: str = ""):
+    def get_active_list(*, region_slug: str = "") -> QuerySet[Province]:
         queryset = (
             Province.objects.active()
             .with_related()

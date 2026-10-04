@@ -34,7 +34,7 @@ class RatingService:
         if not isinstance(score, int) or not 1 <= score <= 5:
             raise ValidationError("Puan 1 ile 5 arasında olmalıdır.")
 
-        rating, _ = Rating.objects.update_or_create(
+        rating, _ = Rating.objects.update_or_create(  # type: ignore[misc]
             user=user,
             recipe=recipe,
             defaults={
@@ -83,7 +83,7 @@ class RatingService:
             return None
 
         return (
-            Rating.objects.filter(
+            Rating.objects.filter(  # type: ignore[misc]
                 user=user,
                 recipe=recipe,
             )

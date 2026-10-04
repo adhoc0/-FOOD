@@ -67,7 +67,7 @@ class IngredientQuerySet(models.QuerySet["Ingredient"]):
         """Return ingredients used by at least one recipe."""
 
         return (
-            self.with_recipe_count()
+            self.with_recipe_count()  # type: ignore[misc]
             .filter(
                 recipe_count__gt=0,
             )

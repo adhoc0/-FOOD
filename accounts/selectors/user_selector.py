@@ -3,6 +3,8 @@ from __future__ import annotations
 from django.contrib.auth import get_user_model
 from django.db.models import QuerySet
 
+from accounts.models import CustomUser
+
 User = get_user_model()
 
 
@@ -21,7 +23,7 @@ class UserSelector:
     def get_by_id(
         cls,
         user_id: int,
-    ):
+    ) -> CustomUser | None:
         return (
             cls.get_queryset()
             .filter(
@@ -34,14 +36,14 @@ class UserSelector:
     def get_by_username(
         cls,
         username: str,
-    ):
+    ) -> CustomUser | None:
         return User.objects.by_username(username).first()
 
     @classmethod
     def get_by_email(
         cls,
         email: str,
-    ):
+    ) -> CustomUser | None:
         return User.objects.by_email(email).first()
 
     @classmethod

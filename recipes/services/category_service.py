@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from django.db import transaction
 
 from recipes.models.category import Category
@@ -10,16 +12,18 @@ class CategoryService:
 
     @staticmethod
     @transaction.atomic
-    def create(**data) -> Category:
+    def create(**data: Any) -> Category:
         """Create a new category."""
 
-        return Category.objects.create(**data)
+        instance: Category = Category.objects.create(**data)
+
+        return instance
 
     @staticmethod
     @transaction.atomic
     def update(
         category: Category,
-        **data,
+        **data: Any,
     ) -> Category:
         """Update category fields."""
 

@@ -32,7 +32,7 @@ class FavoriteService:
             False: Recipe was removed from favorites.
         """
 
-        favorite, created = Favorite.objects.get_or_create(
+        favorite, created = Favorite.objects.get_or_create(  # type: ignore[misc]
             user=user,
             recipe=recipe,
         )
@@ -56,7 +56,7 @@ class FavoriteService:
         if not user.is_authenticated:
             return False
 
-        return Favorite.objects.filter(
+        return Favorite.objects.filter(  # type: ignore[misc]
             user=user,
             recipe=recipe,
         ).exists()
@@ -68,7 +68,7 @@ class FavoriteService:
         """Return optimized queryset of user's favorites."""
 
         return (
-            Favorite.objects.filter(
+            Favorite.objects.filter(  # type: ignore[misc]
                 user=user,
             )
             .select_related(

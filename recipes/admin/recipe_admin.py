@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from django.contrib import admin
+from django.db.models import QuerySet
+from django.http import HttpRequest
 
 from recipes.models import Recipe, RecipeImage, RecipeIngredient
 
@@ -200,25 +202,25 @@ class RecipeAdmin(admin.ModelAdmin):
     )
 
     @admin.action(description="Seçilen tarifleri aktif yap")
-    def mark_active(self, request, queryset):
+    def mark_active(self, request: HttpRequest, queryset: QuerySet[Recipe]) -> None:
         queryset.update(
             is_active=True,
         )
 
     @admin.action(description="Seçilen tarifleri pasif yap")
-    def mark_inactive(self, request, queryset):
+    def mark_inactive(self, request: HttpRequest, queryset: QuerySet[Recipe]) -> None:
         queryset.update(
             is_active=False,
         )
 
     @admin.action(description="Seçilen tarifleri öne çıkar")
-    def mark_featured(self, request, queryset):
+    def mark_featured(self, request: HttpRequest, queryset: QuerySet[Recipe]) -> None:
         queryset.update(
             is_featured=True,
         )
 
     @admin.action(description="Seçilen tarifleri öne çıkarma")
-    def unmark_featured(self, request, queryset):
+    def unmark_featured(self, request: HttpRequest, queryset: QuerySet[Recipe]) -> None:
         queryset.update(
             is_featured=False,
         )

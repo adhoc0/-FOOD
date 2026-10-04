@@ -32,5 +32,5 @@ class Rating(models.Model):
             ),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.user.username} - {self.recipe.title} ({self.score}/5)"

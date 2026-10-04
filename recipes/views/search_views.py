@@ -6,6 +6,9 @@ Recipe search and filtering.
 
 from __future__ import annotations
 
+from typing import Any
+
+from django.db.models import QuerySet
 from django.views.generic import ListView
 
 from provinces.selectors import ProvinceSelector
@@ -23,7 +26,7 @@ class SearchView(ListView):
     context_object_name = "recipes"
     paginate_by = SEARCH_PAGE_SIZE
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Recipe]:
         self.query = self.request.GET.get("q", "").strip()
         self.province_slug = self.request.GET.get("province", "").strip()
         self.category_slug = self.request.GET.get("category", "").strip()
@@ -38,7 +41,7 @@ class SearchView(ListView):
             ordering=self.ordering or "latest",
         )
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
 
         context["query"] = self.query

@@ -67,7 +67,7 @@ class CategoryQuerySet(models.QuerySet["Category"]):
         """Return categories that contain recipes."""
 
         return (
-            self.with_recipe_count()
+            self.with_recipe_count()  # type: ignore[misc]
             .filter(
                 recipe_count__gt=0,
             )

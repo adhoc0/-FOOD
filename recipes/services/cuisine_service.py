@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from django.db import transaction
 
 from recipes.models.cuisine import Cuisine
@@ -10,16 +12,18 @@ class CuisineService:
 
     @staticmethod
     @transaction.atomic
-    def create(**data) -> Cuisine:
+    def create(**data: Any) -> Cuisine:
         """Create a new cuisine."""
 
-        return Cuisine.objects.create(**data)
+        instance: Cuisine = Cuisine.objects.create(**data)
+
+        return instance
 
     @staticmethod
     @transaction.atomic
     def update(
         cuisine: Cuisine,
-        **data,
+        **data: Any,
     ) -> Cuisine:
         """Update cuisine fields."""
 

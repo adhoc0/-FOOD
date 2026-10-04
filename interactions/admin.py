@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.db.models import QuerySet
+from django.http import HttpRequest
 
 from .models import Comment, Favorite, Rating
 
@@ -27,8 +29,7 @@ class CommentAdmin(admin.ModelAdmin):
     list_editable = ("is_approved",)
     actions = ["approve_comments"]
 
-    def approve_comments(self, request, queryset):
+    @admin.action(description="Seçilen yorumları onayla")
+    def approve_comments(self, request: HttpRequest, queryset: QuerySet[Comment]) -> None:
         updated = queryset.update(is_approved=True)
         self.message_user(request, f"{updated} yorum başarıyla onaylandı.")
-
-    approve_comments.short_description = "Seçilen yorumları onayla"

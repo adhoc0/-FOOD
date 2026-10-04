@@ -1,4 +1,4 @@
-from typing import TypedDict
+from typing import Any, TypedDict
 
 from django.core.management.base import BaseCommand
 
@@ -17,7 +17,7 @@ class ProvinceData(TypedDict):
 class Command(BaseCommand):
     help = "Türkiye'nin 81 ilini veritabanına yükler."
 
-    def handle(self, *args, **kwargs):
+    def handle(self, *args: Any, **kwargs: Any) -> None:
         provinces_data: list[ProvinceData] = [
             {
                 "plate_code": 1,

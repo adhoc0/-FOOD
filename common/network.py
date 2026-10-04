@@ -14,7 +14,7 @@ def get_client_ip(request: HttpRequest, *, trusted_proxy_count: int) -> str:
     Bu yüzden adres, soldan değil sağdan sayılır; soldaki kayıtlar istemci
     tarafından taklit edilebilir.
     """
-    remote_address = request.META.get("REMOTE_ADDR", UNKNOWN_CLIENT_IP)
+    remote_address = str(request.META.get("REMOTE_ADDR", UNKNOWN_CLIENT_IP))
     if trusted_proxy_count <= 0:
         return remote_address
 
@@ -26,4 +26,4 @@ def get_client_ip(request: HttpRequest, *, trusted_proxy_count: int) -> str:
     if len(forwarded_addresses) < trusted_proxy_count:
         return remote_address
 
-    return forwarded_addresses[-trusted_proxy_count]
+    return str(forwarded_addresses[-trusted_proxy_count])

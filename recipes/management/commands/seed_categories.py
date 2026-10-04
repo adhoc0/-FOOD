@@ -1,3 +1,5 @@
+from typing import Any
+
 from django.core.management.base import BaseCommand
 
 from recipes.models import Category
@@ -19,7 +21,7 @@ CATEGORIES = (
 class Command(BaseCommand):
     help = "Create default recipe categories."
 
-    def handle(self, *args, **options):
+    def handle(self, *args: Any, **options: Any) -> None:
         created = 0
 
         for name in CATEGORIES:

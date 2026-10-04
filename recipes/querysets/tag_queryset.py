@@ -67,7 +67,7 @@ class TagQuerySet(models.QuerySet["Tag"]):
         """Return tags assigned to at least one recipe."""
 
         return (
-            self.with_recipe_count()
+            self.with_recipe_count()  # type: ignore[misc]
             .filter(
                 recipe_count__gt=0,
             )

@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from typing import Any
+
+from django.db.models import QuerySet
 from django.http import Http404
 from django.views.generic import DetailView, ListView
 
@@ -16,11 +19,11 @@ class ProvinceListView(ListView):
     context_object_name = "provinces"
     paginate_by = 81
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Province]:
         region_slug = self.request.GET.get("region", "").strip()
         return ProvinceSelector.get_active_list(region_slug=region_slug)
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context["regions"] = RegionSelector.get_active_list()
         context["current_region"] = self.request.GET.get("region", "").strip()
@@ -35,7 +38,7 @@ class ProvinceDetailView(DetailView):
     context_object_name = "province"
     featured_recipe_limit = 6
 
-    def get_object(self, queryset=None):
+    def get_object(self, queryset: QuerySet[Province] | None = None) -> Province:
         province = ProvinceSelector.get_active_by_slug(self.kwargs["slug"])
 
         if province is None:
@@ -43,7 +46,7 @@ class ProvinceDetailView(DetailView):
 
         return province
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         # Yalnızca yayındaki tarifler gösterilir; taslak ve pasif tarifler sızmamalıdır.
         context["recipes"] = RecipeSelector.get_by_province(self.object)[

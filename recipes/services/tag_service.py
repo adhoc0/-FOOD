@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from django.db import transaction
 
 from recipes.models.tag import Tag
@@ -10,16 +12,18 @@ class TagService:
 
     @staticmethod
     @transaction.atomic
-    def create(**data) -> Tag:
+    def create(**data: Any) -> Tag:
         """Create a new tag."""
 
-        return Tag.objects.create(**data)
+        instance: Tag = Tag.objects.create(**data)
+
+        return instance
 
     @staticmethod
     @transaction.atomic
     def update(
         tag: Tag,
-        **data,
+        **data: Any,
     ) -> Tag:
         """Update tag fields."""
 

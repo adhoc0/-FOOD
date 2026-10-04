@@ -7,6 +7,8 @@ Spam koruması için zaman bazlı kontrol içerir.
 
 from __future__ import annotations
 
+from typing import Any
+
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -39,7 +41,7 @@ class CommentValidator:
             )
 
     @staticmethod
-    def validate_cooldown(user, comment_model) -> None:
+    def validate_cooldown(user: Any, comment_model: Any) -> None:
         """
         Spam koruması: Aynı kullanıcının kısa sürede tekrar yorum yapmasını engeller.
 

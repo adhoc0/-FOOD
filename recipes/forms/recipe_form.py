@@ -1,3 +1,5 @@
+from typing import Any
+
 from django import forms
 from django.core.exceptions import ValidationError
 
@@ -93,7 +95,7 @@ class RecipeCreateForm(forms.ModelForm):
             ),
         }
 
-    def clean(self):
+    def clean(self) -> dict[str, Any]:
         """Tüm form verilerini doğrula."""
         cleaned_data = super().clean() or {}
 
@@ -111,37 +113,37 @@ class RecipeCreateForm(forms.ModelForm):
 
         return cleaned_data
 
-    def clean_title(self):
+    def clean_title(self) -> str | None:
         title = self.cleaned_data.get("title")
         if title:
             RecipeValidator.validate_title(title)
         return title
 
-    def clean_summary(self):
+    def clean_summary(self) -> str | None:
         summary = self.cleaned_data.get("summary")
         if summary:
             RecipeValidator.validate_summary(summary)
         return summary
 
-    def clean_instructions(self):
+    def clean_instructions(self) -> str | None:
         instructions = self.cleaned_data.get("instructions")
         if instructions:
             RecipeValidator.validate_instructions(instructions)
         return instructions
 
-    def clean_preparation_time(self):
+    def clean_preparation_time(self) -> int | None:
         prep_time = self.cleaned_data.get("preparation_time")
         if prep_time is not None:
             RecipeValidator.validate_preparation_time(prep_time)
         return prep_time
 
-    def clean_cooking_time(self):
+    def clean_cooking_time(self) -> int | None:
         cook_time = self.cleaned_data.get("cooking_time")
         if cook_time is not None:
             RecipeValidator.validate_cooking_time(cook_time)
         return cook_time
 
-    def clean_servings(self):
+    def clean_servings(self) -> int | None:
         servings = self.cleaned_data.get("servings")
         if servings is not None:
             RecipeValidator.validate_servings(servings)

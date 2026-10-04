@@ -8,13 +8,16 @@ Business Logic servis katmanında — view yalnızca HTTP işlemlerini yönetir.
 from __future__ import annotations
 
 import logging
+from typing import cast
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 
+from accounts.models import CustomUser
 from interactions.services import CommentService
 from recipes.models import Recipe
 from recipes.services import FavoriteService, RatingService
@@ -24,8 +27,9 @@ logger = logging.getLogger(__name__)
 
 @login_required
 @require_POST
-def add_comment(request, recipe_id):
+def add_comment(request: HttpRequest, recipe_id: int) -> HttpResponse:
     """Tarife yorum ve/veya puan ekleme."""
+    user = cast(CustomUser, request.user)
     recipe = get_object_or_404(Recipe, id=recipe_id)
     content = request.POST.get("content", "").strip()
     raw_score = request.POST.get("score", "").strip()
@@ -38,7 +42,7 @@ def add_comment(request, recipe_id):
     if content:
         try:
             CommentService.create(
-                user=request.user,
+                user=user,
                 recipe=recipe,
                 content=content,
             )
@@ -57,7 +61,7 @@ def add_comment(request, recipe_id):
         else:
             try:
                 RatingService.rate(
-                    user=request.user,
+                    user=user,
                     recipe=recipe,
                     score=int(raw_score),
                 )
@@ -71,12 +75,13 @@ def add_comment(request, recipe_id):
 
 @login_required
 @require_POST
-def toggle_favorite(request, recipe_id):
+def toggle_favorite(request: HttpRequest, recipe_id: int) -> HttpResponse:
     """Tarifi favorilere ekleme veya çıkarma."""
+    user = cast(CustomUser, request.user)
     recipe = get_object_or_404(Recipe, id=recipe_id)
 
     added = FavoriteService.toggle(
-        user=request.user,
+        user=user,
         recipe=recipe,
     )
 

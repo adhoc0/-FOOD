@@ -6,5 +6,5 @@ class InteractionsConfig(AppConfig):
     name = "interactions"
     verbose_name = "Kullanıcı Etkileşimleri"
 
-    def ready(self):
+    def ready(self) -> None:
         import interactions.signals  # noqa: F401

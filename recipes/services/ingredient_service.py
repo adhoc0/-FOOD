@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from django.db import transaction
 
 from recipes.models.ingredient import Ingredient
@@ -10,16 +12,18 @@ class IngredientService:
 
     @staticmethod
     @transaction.atomic
-    def create(**data) -> Ingredient:
+    def create(**data: Any) -> Ingredient:
         """Create a new ingredient."""
 
-        return Ingredient.objects.create(**data)
+        instance: Ingredient = Ingredient.objects.create(**data)
+
+        return instance
 
     @staticmethod
     @transaction.atomic
     def update(
         ingredient: Ingredient,
-        **data,
+        **data: Any,
     ) -> Ingredient:
         """Update ingredient fields."""
 

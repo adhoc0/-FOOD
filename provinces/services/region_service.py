@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from django.db import transaction
 
 from provinces.models import Region
@@ -7,19 +9,21 @@ from provinces.models import Region
 
 @transaction.atomic
 def create_region(
-    **validated_data,
+    **validated_data: Any,
 ) -> Region:
     """Create a new region."""
 
-    return Region.objects.create(
+    region: Region = Region.objects.create(
         **validated_data,
     )
+
+    return region
 
 
 @transaction.atomic
 def update_region(
     region: Region,
-    **validated_data,
+    **validated_data: Any,
 ) -> Region:
     """Update an existing region."""
 

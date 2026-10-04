@@ -22,5 +22,5 @@ class Favorite(models.Model):
         unique_together = ("user", "recipe")
         ordering = ["-created_at"]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.user.username} - {self.recipe.title}"

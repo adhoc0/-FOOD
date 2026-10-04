@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any, cast
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import (
     LoginView,
@@ -13,6 +15,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, TemplateView
 
 from accounts.forms import ThrottledAuthenticationForm, UserRegistrationForm
+from accounts.models import CustomUser
 from accounts.selectors import ProfileSelector
 
 
@@ -56,8 +59,9 @@ class UserProfileView(LoginRequiredMixin, TemplateView):
 
     template_name = "accounts/profile.html"
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context["favorites"] = ProfileSelector.get_favorites(self.request.user)
-        context["comments"] = ProfileSelector.get_comments(self.request.user)
+        user = cast(CustomUser, self.request.user)
+        context["favorites"] = ProfileSelector.get_favorites(user)
+        context["comments"] = ProfileSelector.get_comments(user)
         return context

@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 from django.db import models
 
 if TYPE_CHECKING:
-    from provinces.models import Province  # noqa: F401
+    from provinces.models import Province, Region  # noqa: F401
 
 
 class ProvinceQuerySet(models.QuerySet["Province"]):
@@ -67,7 +67,7 @@ class ProvinceQuerySet(models.QuerySet["Province"]):
 
     def by_region(
         self,
-        region,
+        region: Region,
     ) -> ProvinceQuerySet:
         """Filter by region."""
         return self.filter(
@@ -104,7 +104,7 @@ class ProvinceQuerySet(models.QuerySet["Province"]):
         """Return provinces containing recipes."""
 
         return (
-            self.with_recipe_count()
+            self.with_recipe_count()  # type: ignore[misc]
             .filter(
                 recipe_count__gt=0,
             )

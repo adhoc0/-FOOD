@@ -7,6 +7,9 @@ Business logic is handled by the service layer.
 
 from __future__ import annotations
 
+from typing import Any
+
+from django.db.models import QuerySet
 from django.http import Http404
 from django.views.generic import DetailView, ListView
 
@@ -29,7 +32,7 @@ class RecipeListView(ListView):
     context_object_name = "recipes"
     paginate_by = DEFAULT_PAGE_SIZE
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Recipe]:
         province_slug = self.request.GET.get(
             "province",
             "",
@@ -47,8 +50,8 @@ class RecipeListView(ListView):
 
     def get_context_data(
         self,
-        **kwargs,
-    ):
+        **kwargs: Any,
+    ) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
 
         context["current_province"] = self.request.GET.get(
@@ -73,8 +76,8 @@ class RecipeDetailView(DetailView):
 
     def get_object(
         self,
-        queryset=None,
-    ):
+        queryset: QuerySet[Recipe] | None = None,
+    ) -> Recipe:
         recipe = RecipeSelector.get_recipe_detail(self.kwargs["slug"])
 
         if recipe is None:
@@ -86,8 +89,8 @@ class RecipeDetailView(DetailView):
 
     def get_context_data(
         self,
-        **kwargs,
-    ):
+        **kwargs: Any,
+    ) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
 
         recipe = self.object

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from django.db import transaction
 from django.db.models import F
 from django.utils import timezone
@@ -13,16 +15,18 @@ class RecipeService:
 
     @staticmethod
     @transaction.atomic
-    def create(**data) -> Recipe:
+    def create(**data: Any) -> Recipe:
         """Create a new recipe."""
 
-        return Recipe.objects.create(**data)
+        instance: Recipe = Recipe.objects.create(**data)
+
+        return instance
 
     @staticmethod
     @transaction.atomic
     def update(
         recipe: Recipe,
-        **data,
+        **data: Any,
     ) -> Recipe:
         """Update recipe fields."""
 

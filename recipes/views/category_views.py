@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from typing import Any
+
+from django.db.models import QuerySet
 from django.http import Http404
 from django.views.generic import ListView
 
@@ -15,7 +18,7 @@ class CategoryListView(ListView):
     template_name = "recipes/category_list.html"
     context_object_name = "categories"
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Category]:
         return CategorySelector.get_all_active()
 
 
@@ -35,15 +38,15 @@ class CategoryDetailView(ListView):
 
         return category
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Recipe]:
         self.category = self.get_category()
         _, recipes = CategorySelector.get_published_recipes(self.category.slug)
         return recipes
 
     def get_context_data(
         self,
-        **kwargs,
-    ):
+        **kwargs: Any,
+    ) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
 
         category = self.category

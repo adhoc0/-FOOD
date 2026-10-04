@@ -29,6 +29,6 @@ class Comment(models.Model):
         verbose_name_plural = "Yorumlar"
         ordering = ["-created_at"]
 
-    def __str__(self):
+    def __str__(self) -> str:
         status = "Onaylı" if self.is_approved else "Bekliyor"
         return f"{self.user.username} - {self.recipe.title} [{status}]"

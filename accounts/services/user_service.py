@@ -1,22 +1,23 @@
 from __future__ import annotations
 
-from django.contrib.auth import get_user_model
+from typing import Any
+
 from django.db import transaction
 
-User = get_user_model()
+from accounts.models import CustomUser
 
 
 @transaction.atomic
 def create_user(
-    **validated_data,
-):
+    **validated_data: Any,
+) -> CustomUser:
     """Create a new user."""
 
     password = validated_data.pop(
         "password",
     )
 
-    user = User(**validated_data)
+    user = CustomUser(**validated_data)
 
     user.set_password(
         password,
@@ -29,9 +30,9 @@ def create_user(
 
 @transaction.atomic
 def update_user(
-    user,
-    **validated_data,
-):
+    user: CustomUser,
+    **validated_data: Any,
+) -> CustomUser:
     """Update an existing user."""
 
     password = validated_data.pop(
@@ -58,8 +59,8 @@ def update_user(
 
 @transaction.atomic
 def activate_user(
-    user,
-):
+    user: CustomUser,
+) -> CustomUser:
     """Activate user."""
 
     user.is_active = True
@@ -75,8 +76,8 @@ def activate_user(
 
 @transaction.atomic
 def deactivate_user(
-    user,
-):
+    user: CustomUser,
+) -> CustomUser:
     """Deactivate user."""
 
     user.is_active = False

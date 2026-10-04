@@ -6,5 +6,5 @@ class RecipesConfig(AppConfig):
     name = "recipes"
     verbose_name = "Recipes"
 
-    def ready(self):
+    def ready(self) -> None:
         import recipes.signals  # noqa: F401

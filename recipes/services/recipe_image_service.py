@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from django.db import transaction
 
 from recipes.models.recipe import Recipe
@@ -12,7 +14,7 @@ class RecipeImageService:
 
     @staticmethod
     @transaction.atomic
-    def create(**data) -> RecipeImage:
+    def create(**data: Any) -> RecipeImage:
         """Create a new recipe image."""
 
         if data.get("image") is not None:
@@ -28,7 +30,7 @@ class RecipeImageService:
     @transaction.atomic
     def update(
         recipe_image: RecipeImage,
-        **data,
+        **data: Any,
     ) -> RecipeImage:
         """Update recipe image fields."""
 

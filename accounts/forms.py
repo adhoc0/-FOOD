@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.core.exceptions import ValidationError
@@ -12,7 +14,7 @@ User = get_user_model()
 class ThrottledAuthenticationForm(AuthenticationForm):
     """Başarısız denemeleri kullanıcı adı bazında sınırlayan giriş formu."""
 
-    def clean(self):
+    def clean(self) -> dict[str, Any]:
         username = self.data.get(self.add_prefix("username"), "") or ""
 
         if username and login_throttle.is_locked(username):
