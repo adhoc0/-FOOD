@@ -118,3 +118,52 @@ class TestPasswordReset:
 
         assert response.status_code == 200
         assert "geçersiz" in response.content.decode()
+
+
+@pytest.mark.django_db
+class TestLoginBruteForceProtection:
+    def _attempt(self, client, username, password):
+        return client.post(
+            reverse("accounts:login"),
+            {"username": username, "password": password},
+        )
+
+    def test_account_is_locked_after_repeated_failures(self):
+        from accounts.services.login_throttle import MAX_FAILED_ATTEMPTS
+
+        user = _create_user_with_password()
+
+        for index in range(MAX_FAILED_ATTEMPTS):
+            # Farklı istemciler: IP bazlı sınır değil hesap bazlı kilit test edilir.
+            response = self._attempt(Client(REMOTE_ADDR=f"10.0.0.{index}"), user.username, "yanlis")
+            assert response.status_code == 200
+
+        # Doğru parola bile kilit süresince reddedilir.
+        response = self._attempt(Client(REMOTE_ADDR="10.0.1.1"), user.username, VALID_PASSWORD)
+
+        assert response.status_code == 200
+        assert "Çok fazla başarısız giriş denemesi" in response.content.decode()
+        assert "_auth_user_id" not in response.wsgi_request.session
+
+    def test_successful_login_resets_counter(self):
+        user = _create_user_with_password()
+
+        for _ in range(2):
+            self._attempt(Client(), user.username, "yanlis")
+        ok = self._attempt(Client(), user.username, VALID_PASSWORD)
+        assert ok.status_code == 302
+
+        for _ in range(2):
+            self._attempt(Client(), user.username, "yanlis")
+        ok_again = self._attempt(Client(), user.username, VALID_PASSWORD)
+        assert ok_again.status_code == 302
+
+    def test_unknown_username_is_throttled_with_same_message(self):
+        from accounts.services.login_throttle import MAX_FAILED_ATTEMPTS
+
+        for index in range(MAX_FAILED_ATTEMPTS):
+            self._attempt(Client(REMOTE_ADDR=f"10.0.2.{index}"), "yok-boyle-biri", "x")
+
+        response = self._attempt(Client(REMOTE_ADDR="10.0.3.1"), "yok-boyle-biri", "x")
+
+        assert "Çok fazla başarısız giriş denemesi" in response.content.decode()

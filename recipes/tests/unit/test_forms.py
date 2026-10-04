@@ -56,3 +56,9 @@ class TestRecipeCreateForm:
 
         assert not form.is_valid()
         assert {"province", "category", "title"} <= set(form.errors)
+
+    def test_total_time_over_24_hours_is_a_form_error(self):
+        form = RecipeCreateForm(data=_data(preparation_time=1000, cooking_time=1000))
+
+        assert not form.is_valid()
+        assert form.non_field_errors()

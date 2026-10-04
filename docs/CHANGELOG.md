@@ -7,6 +7,8 @@ olduğu için `0.x` sürümlerinde geriye dönük uyumsuz değişiklikler yapıl
 
 ### Added
 
+- Giriş brute-force koruması: kullanıcı adı bazlı başarısız deneme sayacı (5 deneme / 15 dk kilit), `ThrottledAuthenticationForm`.
+
 - Production dağıtımı: `docker-compose.prod.yml`, TLS'li Nginx şablonu, Let's Encrypt kurulum betiği, `.env.prod.example`.
 - `REDIS_URL` ile Redis cache desteği (`config/cache.py`); log formatına zaman ve logger adı eklendi.
 
@@ -16,6 +18,8 @@ olduğu için `0.x` sürümlerinde geriye dönük uyumsuz değişiklikler yapıl
 - `/robots.txt` (hesap/etkileşim/arama yolları kapalı, sitemap bağlantılı).
 
 ### Removed
+
+- Gölgelenen ölü `provinces/admin.py` (gerçek admin `provinces/admin/` paketinde).
 
 - Hiçbir yerden referans verilmeyen 52 boş CSS/JS/şablon dosyası silindi.
 
@@ -44,6 +48,8 @@ olduğu için `0.x` sürümlerinde geriye dönük uyumsuz değişiklikler yapıl
 - Production ortamı için HTTPS, HSTS ve secure cookie ayarlarının DEBUG=False altında doğrulaması yapıldı.
 
 ### Fixed
+
+- `sitemap.xml` kullanım şartları sayfasını (`pages:terms`) içermiyordu; eklendi.
 
 - Girişten sonra var olmayan `/accounts/profile/` adresine yönlendirme düzeltildi; giriş profile, çıkış ana sayfaya gider.
 - Şifre sıfırlama akışının URL'leri ve e-posta şablonları eklendi.

@@ -12,12 +12,13 @@ from django.contrib.auth.views import (
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, TemplateView
 
-from accounts.forms import UserRegistrationForm
+from accounts.forms import ThrottledAuthenticationForm, UserRegistrationForm
 from accounts.selectors import ProfileSelector
 
 
 class UserLoginView(LoginView):
     template_name = "accounts/login.html"
+    authentication_form = ThrottledAuthenticationForm
 
 
 class UserLogoutView(LogoutView):

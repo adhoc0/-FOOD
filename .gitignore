@@ -54,3 +54,7 @@ Thumbs.db
 *.pid
 
 .env.prod
+
+.coverage
+.coverage.*
+htmlcov/

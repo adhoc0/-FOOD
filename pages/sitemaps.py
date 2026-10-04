@@ -13,6 +13,7 @@ class StaticPageSitemap(Sitemap):
             "pages:privacy",
             "pages:cookies",
             "pages:kvkk",
+            "pages:terms",
         ]
 
     def location(self, item):
