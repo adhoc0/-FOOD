@@ -51,6 +51,7 @@ dev = [
     "pre-commit>=4.3",
     "pyright>=1.1",
     "pytest>=8.4",
+    "pytest-cov>=6.0",
     "pytest-django>=4.11",
     "ruff>=0.13",
     "typing-extensions>=4.15",
@@ -237,12 +238,17 @@ omit = [
     "*/migrations/*",
     "*/tests/*",
     "manage.py",
+    "*/wsgi.py",
+    "*/asgi.py",
+    "config/gunicorn.py",
+    "*/management/commands/*",
 ]
 
 [tool.coverage.report]
 
 show_missing = true
 skip_covered = true
+fail_under = 90
 precision = 2
 
 exclude_lines = [

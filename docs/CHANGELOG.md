@@ -7,6 +7,11 @@ olduğu için `0.x` sürümlerinde geriye dönük uyumsuz değişiklikler yapıl
 
 ### Added
 
+- Production dağıtımı: `docker-compose.prod.yml`, TLS'li Nginx şablonu, Let's Encrypt kurulum betiği, `.env.prod.example`.
+- `REDIS_URL` ile Redis cache desteği (`config/cache.py`); log formatına zaman ve logger adı eklendi.
+
+- Test kapsamı %92,85'e çıkarıldı; CI'da `pytest --cov` ve `fail_under = 90` eşiği.
+
 - Özel 404 ve 500 hata sayfaları (`templates/404.html`, `templates/500.html`).
 - `/robots.txt` (hesap/etkileşim/arama yolları kapalı, sitemap bağlantılı).
 

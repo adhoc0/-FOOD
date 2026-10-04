@@ -496,3 +496,39 @@ Test edilmemiş kodu production'a göndermek.
 Deployment sırasında logları kontrol etmemek.
 
 Health check yapmadan deployment'ı tamamlanmış kabul etmek.
+---
+
+# Production Dağıtımı (tek sunucu, Docker Compose)
+
+Dosyalar: `docker-compose.prod.yml`, `nginx/nginx.prod.conf.template`,
+`scripts/init-letsencrypt.sh`, `.env.prod.example`.
+
+## Mimari
+
+Nginx (80/443, TLS) → Gunicorn (`web`) → PostgreSQL (`db`) ve Redis (`redis`).
+Sertifikalar Let's Encrypt ile alınır; `certbot` servisi 12 saatte bir yenileme dener.
+Veritabanı ve Redis dışarıya port açmaz. Tüm servis logları `json-file`
+sürücüsüyle döner (10 MB × 5 dosya).
+
+## İlk kurulum
+
+1. DNS'te alan adının A kaydını sunucuya yönlendirin; 80 ve 443 portlarını açın.
+2. `cp .env.prod.example .env.prod` ve değerleri doldurun (`SECRET_KEY` en az 50 karakter).
+3. `sh scripts/init-letsencrypt.sh` — geçici sertifikayla Nginx'i başlatır, gerçek sertifikayı alır.
+4. Yönetici hesabı: `docker compose -f docker-compose.prod.yml --env-file .env.prod run --rm web python manage.py createsuperuser`
+
+## Güncelleme
+
+```
+git pull
+docker compose -f docker-compose.prod.yml --env-file .env.prod up -d --build
+```
+
+`initialize` servisi her güncellemede `migrate` ve `collectstatic` çalıştırır.
+
+## Notlar
+
+- `NUM_PROXIES=1`: Nginx istemci IP'sini `X-Forwarded-For` ile tek başına yazar (rate limiting buna dayanır).
+- `REDIS_URL` tanımlı olduğunda cache Redis'tedir; rate limiting tüm worker'lar arasında paylaşılır.
+- Yedekleme bu dosyalarda yoktur: `pg_dump` için ayrı bir cron/zamanlanmış görev ve `media_volume` yedeği gerekir.
+- Hata izleme (Sentry vb.) eklenmemiştir.
