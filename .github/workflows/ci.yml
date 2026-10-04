@@ -45,6 +45,12 @@ jobs:
       - name: Ruff
         run: ruff check .
 
+      - name: Mypy
+        # Hata sayısı ölçülene kadar bilgilendirme amaçlı; temizlenince
+        # continue-on-error kaldırılmalı.
+        continue-on-error: true
+        run: mypy .
+
       - name: Django checks
         env:
           DJANGO_SETTINGS_MODULE: core.settings
