@@ -8,8 +8,9 @@ Veritabanı erişimi gerektirir (pytest-django).
 import pytest
 from django.core.exceptions import ValidationError
 
+from interactions.services import FavoriteService, RatingService
 from recipes.choices import Status
-from recipes.services import FavoriteService, RatingService, RecipeService
+from recipes.services import RecipeService
 from tests.factories import (
     CategoryFactory,
     FavoriteFactory,

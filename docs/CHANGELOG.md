@@ -33,6 +33,7 @@ olduğu için `0.x` sürümlerinde geriye dönük uyumsuz değişiklikler yapıl
 
 ### Changed
 
+- `FavoriteService` ve `RatingService` `interactions.services` altına taşındı (ADR-002).
 - Tarif liste sorguları artık malzeme ve etiketleri önceden yüklemiyor (yalnızca kartta kullanılan ilişkiler); detay sayfası `with_detail_relations()` ile malzeme/etiketleri `select_related` içeren `Prefetch` ile tek seferde yükler.
 - `Favorite` ve `Rating` için `unique_together` yerine adlandırılmış `UniqueConstraint` (davranış aynı).
 - Tarif görüntülenme sayacı ziyaretçi başına 30 dakikada bir sayılıyor (kullanıcı veya IP bazlı, cache ile); HEAD istekleri sayılmıyor. Eskiden her GET veritabanına yazıyordu.

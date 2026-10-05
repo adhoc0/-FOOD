@@ -18,9 +18,8 @@ from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 
 from accounts.models import CustomUser
-from interactions.services import CommentService
+from interactions.services import CommentService, FavoriteService, RatingService
 from recipes.models import Recipe
-from recipes.services import FavoriteService, RatingService
 
 logger = logging.getLogger(__name__)
 

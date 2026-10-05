@@ -4,7 +4,7 @@ from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 
 from interactions.models import Rating
-from recipes.services.rating_service import RatingService
+from interactions.services.rating_service import RatingService
 
 
 @receiver(post_save, sender=Rating)

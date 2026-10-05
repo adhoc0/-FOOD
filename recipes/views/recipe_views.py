@@ -15,15 +15,11 @@ from django.http import Http404
 from django.views.generic import DetailView, ListView
 
 from common.network import get_client_ip
-from interactions.services import CommentService
+from interactions.services import CommentService, FavoriteService, RatingService
 from recipes.constants import DEFAULT_PAGE_SIZE
 from recipes.models import Recipe
 from recipes.selectors import RecipeSelector
-from recipes.services import (
-    FavoriteService,
-    RatingService,
-    RecipeService,
-)
+from recipes.services import RecipeService
 
 
 class RecipeListView(ListView):
