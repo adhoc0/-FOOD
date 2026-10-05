@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.core.exceptions import ValidationError
@@ -51,3 +52,20 @@ class UserRegistrationForm(UserCreationForm):
             "password1",
             "password2",
         )
+
+
+class OTPCodeForm(forms.Form):
+    """Authenticator uygulamasındaki 6 haneli kod."""
+
+    code = forms.CharField(
+        label="Doğrulama kodu",
+        min_length=6,
+        max_length=7,  # "123 456" biçimine izin ver
+        widget=forms.TextInput(
+            attrs={
+                "autocomplete": "one-time-code",
+                "inputmode": "numeric",
+                "autofocus": True,
+            }
+        ),
+    )

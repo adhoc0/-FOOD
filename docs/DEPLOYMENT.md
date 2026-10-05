@@ -590,3 +590,17 @@ docker compose -f docker-compose.prod.yml --env-file .env.prod run --rm \
    geri almaz; şema değişikliği içeren sürümlerde önce yedek alın (`backup` servisi / `scripts/backup.sh`).
 
 Imaj adı farklıysa `FOOD_IMAGE_BASE` ortam değişkenini ve `docker-compose.prod.yml` varsayılanını güncelleyin.
+
+## Yönetici İki Adımlı Doğrulama (2FA)
+
+Personel (`is_staff`) hesapları yönetim paneline girmeden önce TOTP doğrulaması yapmak zorundadır.
+
+1. Dağıtımdan sonra `python manage.py migrate` (`initialize` servisi bunu zaten yapar).
+2. Yönetici ilk girişte `/hesap/2fa/kurulum/` sayfasına yönlendirilir; gizli anahtarı authenticator
+   uygulamasına ekleyip ilk kodu girerek etkinleştirir.
+3. Sonraki oturumlarda panele girmeden önce `/hesap/2fa/dogrula/` sayfasında kod istenir.
+4. Telefon kaybında: sunucuda `python manage.py shell -c "from accounts.models import TOTPDevice; TOTPDevice.objects.filter(user__username='KULLANICI').delete()"`
+   ile cihaz silinir; kullanıcı yeniden kurulum yapar.
+
+Acil durumda `.env.prod` içinde `MFA_REQUIRED_FOR_STAFF=False` ile zorunluluk kapatılabilir (geçici kullanın).
+Not: gizli anahtarlar veritabanında düz metin saklanır; yedekleri koruyun.

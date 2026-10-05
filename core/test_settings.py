@@ -13,6 +13,8 @@ for _setting_name in dir(base_settings):
 
 
 DEBUG = False
+# Mevcut admin testleri 2FA olmadan çalışır; 2FA testleri override_settings ile açar.
+MFA_REQUIRED_FOR_STAFF = False
 # Testlerde yüklenen dosyalar gerçek media klasörünü kirletmemeli.
 MEDIA_ROOT = Path(tempfile.mkdtemp(prefix="food-test-media-"))
 SECRET_KEY = "test-only-secret-key-with-more-than-fifty-characters-123456"

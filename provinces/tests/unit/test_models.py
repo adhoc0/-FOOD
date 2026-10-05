@@ -58,5 +58,5 @@ class TestProvinceModel:
     def test_region_cannot_be_deleted_while_provinces_exist(self):
         province = ProvinceFactory()
 
-        with pytest.raises(Exception, match="protected|PROTECT|Protected"):
+        with pytest.raises(Exception, match=r"protected|PROTECT|Protected"):
             province.region.delete()

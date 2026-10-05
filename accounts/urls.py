@@ -3,6 +3,8 @@ from __future__ import annotations
 from django.urls import path
 
 from accounts.views import (
+    MFASetupView,
+    MFAVerifyView,
     UserLoginView,
     UserLogoutView,
     UserPasswordResetCompleteView,
@@ -35,6 +37,16 @@ urlpatterns = [
         "profil/",
         UserProfileView.as_view(),
         name="profile",
+    ),
+    path(
+        "2fa/kurulum/",
+        MFASetupView.as_view(),
+        name="mfa_setup",
+    ),
+    path(
+        "2fa/dogrula/",
+        MFAVerifyView.as_view(),
+        name="mfa_verify",
     ),
     path(
         "password-reset/",

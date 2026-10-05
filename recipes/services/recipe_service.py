@@ -10,7 +10,6 @@ from django.utils import timezone
 from recipes.choices import Status
 from recipes.models import Recipe
 
-
 # Aynı ziyaretçinin aynı tarifi bu süre içinde tekrar açması sayacı artırmaz.
 VIEW_DEDUPE_SECONDS = 30 * 60
 

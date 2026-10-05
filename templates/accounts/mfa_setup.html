@@ -1,0 +1,36 @@
+{% extends "layouts/auth.html" %}
+
+{% block title %}İki Adımlı Doğrulamayı Kur - Türkiye Yöresel Yemekleri{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h2>İki Adımlı Doğrulama</h2>
+            <p>Yönetim paneli için zorunludur. Authenticator uygulamanıza (Google Authenticator, Authy, 1Password vb.) aşağıdaki anahtarı ekleyin.</p>
+        </div>
+
+        <div class="form-group">
+            <label for="mfa-secret">Gizli anahtar (elle girin)</label>
+            <input id="mfa-secret" type="text" value="{{ secret }}" readonly>
+            <p><small>Uygulamada “anahtar girin / zaman tabanlı” seçeneğini kullanın. QR yerine bu anahtar yeterlidir.</small></p>
+            <p><small>Uygulamanız otpauth bağlantısı destekliyorsa: <a href="{{ otpauth_uri }}">{{ otpauth_uri|truncatechars:48 }}</a></small></p>
+        </div>
+
+        <form method="post" class="auth-form" novalidate>
+            {% csrf_token %}
+            {% if form.non_field_errors %}<div class="alert alert-error">{{ form.non_field_errors }}</div>{% endif %}
+            {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}<div class="field-error">{{ field.errors|striptags }}</div>{% endif %}
+                </div>
+            {% endfor %}
+            <div class="form-actions">
+                <button type="submit" class="btn-primary w-100">Doğrula ve Etkinleştir</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

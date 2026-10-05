@@ -20,6 +20,7 @@ from pathlib import Path
 
 # pyrefly: ignore [missing-import]
 from decouple import Csv, config
+
 from config.cache import CACHES as CACHE_SETTINGS
 from config.logging import LOGGING as BASE_LOGGING
 from config.monitoring import init_sentry
@@ -111,6 +112,7 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",  # CSRF koruması
     "django.contrib.auth.middleware.AuthenticationMiddleware",  # request.user
     "django.contrib.messages.middleware.MessageMiddleware",  # Flash mesajlar
+    "accounts.middleware.StaffMFAMiddleware",  # Yönetim paneli için 2FA
     "django.middleware.clickjacking.XFrameOptionsMiddleware",  # Clickjacking koruması
 ]
 
@@ -312,6 +314,9 @@ CSRF_TRUSTED_ORIGINS = config(
 # kaydı geriden sayılarak okunur. Proxy yoksa 0 kalmalıdır; aksi halde
 # istemci başlığı taklit edebilir. Nginx arkasında 1 kullanılır.
 NUM_PROXIES = config("NUM_PROXIES", default=0, cast=int)
+
+# Personel (is_staff) hesapları yönetim paneline girmeden önce 2FA doğrulaması yapmalıdır.
+MFA_REQUIRED_FOR_STAFF = config("MFA_REQUIRED_FOR_STAFF", default=True, cast=bool)
 
 
 # ─────────────────────────────────────────────

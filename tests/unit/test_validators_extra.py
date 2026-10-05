@@ -45,7 +45,9 @@ class TestIngredientValidator:
             with pytest.raises(ValidationError):
                 IngredientValidator.validate_name(bad)
 
-    @pytest.mark.parametrize("bad", ["abc", None, "NaN", "Infinity", -1, MAX_INGREDIENT_QUANTITY + 1])
+    @pytest.mark.parametrize(
+        "bad", ["abc", None, "NaN", "Infinity", -1, MAX_INGREDIENT_QUANTITY + 1]
+    )
     def test_quantity_rejects_invalid(self, bad):
         with pytest.raises(ValidationError):
             IngredientValidator.validate_quantity(bad)
