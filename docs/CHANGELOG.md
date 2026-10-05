@@ -8,6 +8,7 @@ olduğu için `0.x` sürümlerinde geriye dönük uyumsuz değişiklikler yapıl
 ### Added
 
 - Otomatik yedekleme: `backup` servisi (günlük `pg_dump` + medya, doğrulama, saklama süresi), `scripts/backup.sh`, `backup-loop.sh`, `restore.sh`.
+- Registry tabanlı dağıtım: `publish.yml` imajı GHCR'a yayınlar, `scripts/deploy.sh` sunucuda çekip günceller (sağlık kontrolü, `--rollback`).
 - Sunucu dışı yedek: opsiyonel `offsite` servisi (rclone, `--profile offsite`) ve `scripts/restore-drill.sh` geri yükleme tatbikatı.
 - İsteğe bağlı Sentry hata izleme (`SENTRY_DSN`, `config/monitoring.py`).
 

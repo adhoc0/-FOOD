@@ -55,6 +55,7 @@ services:
     logging: *default-logging
 
   initialize:
+    image: ${FOOD_IMAGE:-ghcr.io/adhoc0/food-web:latest}
     build:
       context: .
     command:
@@ -71,6 +72,7 @@ services:
     logging: *default-logging
 
   web:
+    image: ${FOOD_IMAGE:-ghcr.io/adhoc0/food-web:latest}
     build:
       context: .
     environment: *web-environment

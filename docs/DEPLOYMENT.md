@@ -577,3 +577,16 @@ docker compose -f docker-compose.prod.yml --env-file .env.prod run --rm \
 ```
 
 Çıktıda "Tatbikat başarılı." ve makul tablo/tarif sayısı görmelisiniz.
+
+## Registry Üzerinden Dağıtım (GHCR)
+
+1. `main`'e birleştirme veya `v*` etiketi `Publish image` iş akışını tetikler; imaj
+   `ghcr.io/<sahip>/food-web` olarak `latest`, `sha-<kısa>` ve (etiketlerde) sürüm etiketleriyle yayınlanır.
+2. Paket özelse sunucuda bir kez giriş yapın (`read:packages` yetkili PAT):
+   `echo $PAT | docker login ghcr.io -u <kullanici> --password-stdin`.
+3. Sunucuda: `scripts/deploy.sh sha-abc1234` (veya `latest`, `1.2.3`). Betik imajı çeker, `initialize`
+   (migrate + collectstatic) çalışır, `web` sağlıklı olana kadar bekler ve etiketi `.deploy-state` dosyasına yazar.
+4. Sorun olursa: `scripts/deploy.sh --rollback` önceki etiketle geri döner. Not: geri dönüş migrasyonları
+   geri almaz; şema değişikliği içeren sürümlerde önce yedek alın (`backup` servisi / `scripts/backup.sh`).
+
+Imaj adı farklıysa `FOOD_IMAGE_BASE` ortam değişkenini ve `docker-compose.prod.yml` varsayılanını güncelleyin.

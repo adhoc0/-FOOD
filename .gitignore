@@ -60,3 +60,4 @@ Thumbs.db
 htmlcov/
 zfood_valute/
 mypy-config.txt
+.deploy-state*
