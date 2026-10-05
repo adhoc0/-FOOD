@@ -8,6 +8,7 @@ olduğu için `0.x` sürümlerinde geriye dönük uyumsuz değişiklikler yapıl
 ### Added
 
 - Otomatik yedekleme: `backup` servisi (günlük `pg_dump` + medya, doğrulama, saklama süresi), `scripts/backup.sh`, `backup-loop.sh`, `restore.sh`.
+- Sunucu dışı yedek: opsiyonel `offsite` servisi (rclone, `--profile offsite`) ve `scripts/restore-drill.sh` geri yükleme tatbikatı.
 - İsteğe bağlı Sentry hata izleme (`SENTRY_DSN`, `config/monitoring.py`).
 
 - Giriş brute-force koruması: kullanıcı adı bazlı başarısız deneme sayacı (5 deneme / 15 dk kilit), `ThrottledAuthenticationForm`.

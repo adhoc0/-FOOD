@@ -138,6 +138,25 @@ services:
     restart: unless-stopped
     logging: *default-logging
 
+  offsite:
+    # Yedekleri uzak depolamaya kopyalar. Yalnızca `--profile offsite` ile başlar.
+    image: rclone/rclone:latest
+    profiles: ["offsite"]
+    entrypoint: ["sh", "/scripts/offsite-loop.sh"]
+    environment:
+      OFFSITE_REMOTE: ${OFFSITE_REMOTE:-}
+      OFFSITE_RETENTION_DAYS: ${OFFSITE_RETENTION_DAYS:-30}
+      RCLONE_CONFIG_OFFSITE_TYPE: ${RCLONE_CONFIG_OFFSITE_TYPE:-s3}
+      RCLONE_CONFIG_OFFSITE_PROVIDER: ${RCLONE_CONFIG_OFFSITE_PROVIDER:-}
+      RCLONE_CONFIG_OFFSITE_ENDPOINT: ${RCLONE_CONFIG_OFFSITE_ENDPOINT:-}
+      RCLONE_CONFIG_OFFSITE_ACCESS_KEY_ID: ${RCLONE_CONFIG_OFFSITE_ACCESS_KEY_ID:-}
+      RCLONE_CONFIG_OFFSITE_SECRET_ACCESS_KEY: ${RCLONE_CONFIG_OFFSITE_SECRET_ACCESS_KEY:-}
+    volumes:
+      - ./scripts:/scripts:ro
+      - backups:/backups:ro
+    restart: unless-stopped
+    logging: *default-logging
+
   certbot:
     image: certbot/certbot:latest
     entrypoint: /bin/sh

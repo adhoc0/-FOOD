@@ -556,3 +556,24 @@ mutlaka bir kez deneyin; denenmemiş yedek, yedek sayılmaz.
 `.env.prod` içinde `SENTRY_DSN` tanımlanırsa `config/monitoring.py` Sentry'yi başlatır (kişisel veri
 gönderilmez, `send_default_pii=False`). Boşsa tamamen kapalıdır. `SENTRY_TRACES_SAMPLE_RATE` performans
 izleme oranıdır (varsayılan 0).
+
+## Sunucu Dışı Yedek ve Geri Yükleme Tatbikatı
+
+Yedekler yalnızca sunucudaki `backups` volume'unda kalırsa disk kaybında birlikte kaybolur. Opsiyonel `offsite` servisi
+(rclone) günlük 04:00 UTC'de (`backup` servisinden sonra) yedekleri S3 uyumlu bir depoya kopyalar:
+
+```bash
+# .env.prod içinde OFFSITE_REMOTE ve RCLONE_CONFIG_OFFSITE_* değişkenlerini doldurun
+docker compose -f docker-compose.prod.yml --env-file .env.prod --profile offsite up -d offsite
+```
+
+Uzaktaki dosyalar `OFFSITE_RETENTION_DAYS` (varsayılan 30) sonra silinir.
+
+**Geri yükleme tatbikatı** (üretim verisine dokunmaz; geçici veritabanı oluşturup siler). Ayda bir çalıştırın:
+
+```bash
+docker compose -f docker-compose.prod.yml --env-file .env.prod run --rm \
+  --entrypoint sh backup /scripts/restore-drill.sh
+```
+
+Çıktıda "Tatbikat başarılı." ve makul tablo/tarif sayısı görmelisiniz.
