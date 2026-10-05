@@ -21,6 +21,8 @@ x-web-environment: &web-environment
   DB_PORT: "5432"
   REDIS_URL: redis://redis:6379/1
   NUM_PROXIES: "1"
+  SENTRY_DSN: ${SENTRY_DSN:-}
+  SENTRY_TRACES_SAMPLE_RATE: ${SENTRY_TRACES_SAMPLE_RATE:-0.0}
   DEFAULT_FROM_EMAIL: ${DEFAULT_FROM_EMAIL:-noreply@localhost}
 
 services:
@@ -117,6 +119,25 @@ services:
     restart: unless-stopped
     logging: *default-logging
 
+  backup:
+    image: postgres:16
+    entrypoint: ["sh", "/scripts/backup-loop.sh"]
+    environment:
+      DB_HOST: db
+      DB_NAME: ${DB_NAME:-food_db}
+      DB_USER: ${DB_USER:-food}
+      DB_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD tanımlanmalıdır}
+      RETENTION_DAYS: ${BACKUP_RETENTION_DAYS:-14}
+    volumes:
+      - ./scripts:/scripts:ro
+      - backups:/backups
+      - media_volume:/media:ro
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    logging: *default-logging
+
   certbot:
     image: certbot/certbot:latest
     entrypoint: /bin/sh
@@ -135,3 +156,4 @@ volumes:
   media_volume:
   certbot_www:
   letsencrypt:
+  backups:

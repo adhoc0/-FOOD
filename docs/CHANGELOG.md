@@ -7,6 +7,9 @@ olduğu için `0.x` sürümlerinde geriye dönük uyumsuz değişiklikler yapıl
 
 ### Added
 
+- Otomatik yedekleme: `backup` servisi (günlük `pg_dump` + medya, doğrulama, saklama süresi), `scripts/backup.sh`, `backup-loop.sh`, `restore.sh`.
+- İsteğe bağlı Sentry hata izleme (`SENTRY_DSN`, `config/monitoring.py`).
+
 - Giriş brute-force koruması: kullanıcı adı bazlı başarısız deneme sayacı (5 deneme / 15 dk kilit), `ThrottledAuthenticationForm`.
 
 - Production dağıtımı: `docker-compose.prod.yml`, TLS'li Nginx şablonu, Let's Encrypt kurulum betiği, `.env.prod.example`.
@@ -18,6 +21,8 @@ olduğu için `0.x` sürümlerinde geriye dönük uyumsuz değişiklikler yapıl
 - `/robots.txt` (hesap/etkileşim/arama yolları kapalı, sitemap bağlantılı).
 
 ### Removed
+
+- Boş `scripts/backup_db.py` (yerine `scripts/backup.sh`).
 
 - Gölgelenen ölü `provinces/admin.py` (gerçek admin `provinces/admin/` paketinde).
 

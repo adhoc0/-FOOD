@@ -530,5 +530,29 @@ docker compose -f docker-compose.prod.yml --env-file .env.prod up -d --build
 
 - `NUM_PROXIES=1`: Nginx istemci IP'sini `X-Forwarded-For` ile tek başına yazar (rate limiting buna dayanır).
 - `REDIS_URL` tanımlı olduğunda cache Redis'tedir; rate limiting tüm worker'lar arasında paylaşılır.
-- Yedekleme bu dosyalarda yoktur: `pg_dump` için ayrı bir cron/zamanlanmış görev ve `media_volume` yedeği gerekir.
-- Hata izleme (Sentry vb.) eklenmemiştir.
+
+## Yedekleme
+
+`backup` servisi her gün 03:00 UTC'de (`BACKUP_HOUR_UTC` ile değişir) `scripts/backup.sh` çalıştırır:
+`pg_dump -Fc` ile veritabanı ve medya dizininin `tar.gz` arşivi `backups` volume'üne yazılır. Arşiv
+`pg_restore -l` ile doğrulanır, bozuksa kaydedilmez. `BACKUP_RETENTION_DAYS` (varsayılan 14) günden
+eski dosyalar silinir.
+
+Anında yedek: `docker compose -f docker-compose.prod.yml --env-file .env.prod exec backup sh /scripts/backup.sh`
+
+Geri yükleme (mevcut verinin üzerine yazar; önce uygulamayı durdurun):
+
+```
+docker compose -f docker-compose.prod.yml --env-file .env.prod exec -e FORCE=1 backup \
+  sh /scripts/restore.sh /backups/db-YYYYMMDDTHHMMSSZ.dump
+```
+
+**Önemli:** `backups` volume'ü aynı sunucudadır; sunucu kaybında yedek de kaybolur. Yedekleri düzenli olarak
+başka bir yere kopyalayın (ör. `docker cp`, `rclone` veya nesne depolama). Geri yüklemeyi bir test ortamında
+mutlaka bir kez deneyin; denenmemiş yedek, yedek sayılmaz.
+
+## Hata izleme (Sentry)
+
+`.env.prod` içinde `SENTRY_DSN` tanımlanırsa `config/monitoring.py` Sentry'yi başlatır (kişisel veri
+gönderilmez, `send_default_pii=False`). Boşsa tamamen kapalıdır. `SENTRY_TRACES_SAMPLE_RATE` performans
+izleme oranıdır (varsayılan 0).

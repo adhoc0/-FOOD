@@ -22,6 +22,7 @@ from pathlib import Path
 from decouple import Csv, config
 from config.cache import CACHES as CACHE_SETTINGS
 from config.logging import LOGGING as BASE_LOGGING
+from config.monitoring import init_sentry
 
 # ─────────────────────────────────────────────
 # Paths
@@ -334,3 +335,14 @@ LOGGING["loggers"]["django"]["level"] = config("DJANGO_LOG_LEVEL", default="INFO
 # Şimdilik local-memory cache. Production'da Redis önerilir:
 # pip install django-redis → 'django_redis.cache.RedisCache'
 CACHES = CACHE_SETTINGS
+
+
+# ─────────────────────────────────────────────
+# Hata izleme (Sentry)
+# ─────────────────────────────────────────────
+# SENTRY_DSN tanımlı değilse devre dışıdır.
+init_sentry(
+    dsn=config("SENTRY_DSN", default=""),
+    environment=config("SENTRY_ENVIRONMENT", default="production"),
+    traces_sample_rate=config("SENTRY_TRACES_SAMPLE_RATE", default=0.0, cast=float),
+)
