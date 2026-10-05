@@ -53,7 +53,7 @@ class RecipeSelector:
 
     @staticmethod
     def get_recipe_detail(slug: str) -> Recipe | None:
-        return Recipe.objects.published_with_related().by_slug(slug).first()
+        return Recipe.objects.by_slug(slug).first()
 
     @staticmethod
     def get_featured() -> QuerySet[Recipe]:

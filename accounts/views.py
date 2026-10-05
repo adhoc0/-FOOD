@@ -109,7 +109,7 @@ class MFAVerifyView(_MFAViewMixin):
         self, request: HttpRequest, *args: Any, **kwargs: Any
     ) -> HttpResponseBase:
         if request.user.is_authenticated and not mfa_service.has_confirmed_device(
-            cast(CustomUser, request.user)
+            self.user_obj
         ):
             return redirect(f"{reverse('accounts:mfa_setup')}?{request.GET.urlencode()}")
         return super().dispatch(request, *args, **kwargs)
@@ -129,7 +129,7 @@ class MFASetupView(_MFAViewMixin):
         self, request: HttpRequest, *args: Any, **kwargs: Any
     ) -> HttpResponseBase:
         if request.user.is_authenticated and mfa_service.has_confirmed_device(
-            cast(CustomUser, request.user)
+            self.user_obj
         ):
             messages.info(request, "İki adımlı doğrulama zaten etkin.")
             return redirect(f"{reverse('accounts:mfa_verify')}?{request.GET.urlencode()}")

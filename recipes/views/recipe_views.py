@@ -136,7 +136,7 @@ class RecipeDetailView(DetailView):
         context["average_rating"] = recipe.average_rating
         context["rating_count"] = recipe.rating_count
         context["recipe_images"] = recipe.recipe_images.all()
-        context["recipe_ingredients"] = recipe.recipe_ingredients.select_related("ingredient").all()
+        context["recipe_ingredients"] = recipe.recipe_ingredients.all()
         context["approved_comments"] = CommentService.get_approved_comments(recipe)
 
         context["meta_title"] = (

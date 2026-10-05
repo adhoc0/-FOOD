@@ -19,7 +19,12 @@ class Favorite(models.Model):
         verbose_name = "Favori"
         verbose_name_plural = "Favoriler"
         # Bir kullanıcı aynı tarifi sadece 1 kez favorilere ekleyebilir
-        unique_together = ("user", "recipe")
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "recipe"],
+                name="favorite_unique_user_recipe",
+            ),
+        ]
         ordering = ["-created_at"]
 
     def __str__(self) -> str:

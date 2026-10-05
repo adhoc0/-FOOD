@@ -24,8 +24,11 @@ class Rating(models.Model):
         verbose_name = "Puan"
         verbose_name_plural = "Puanlar"
         # Bir kullanıcı bir tarife sadece 1 kez puan verebilir
-        unique_together = ("user", "recipe")
         constraints = [
+            models.UniqueConstraint(
+                fields=["user", "recipe"],
+                name="rating_unique_user_recipe",
+            ),
             models.CheckConstraint(
                 condition=Q(score__gte=1, score__lte=5),
                 name="rating_score_between_one_and_five",

@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from django.db import models
-from django.db.models import Q
+from django.db.models import Prefetch, Q
 
 from recipes.choices import Status
 
@@ -53,19 +53,35 @@ class RecipeQuerySet(models.QuerySet["Recipe"]):
         )
 
     def with_related(self) -> RecipeQuerySet:
-        """Load related objects."""
+        """Liste/kart görünümü için gereken ilişkileri yükler.
 
-        return (
-            self.select_related(
-                "province",
-                "category",
-                "author",
-            )
-            .prefetch_related(
-                "recipe_images",
+        Kartlar yalnızca il, kategori, yazar ve kapak görselini (`recipe_images`)
+        kullanır; malzeme ve etiketler detay sayfasına özeldir.
+        """
+
+        return self.select_related(
+            "province",
+            "category",
+            "author",
+        ).prefetch_related(
+            "recipe_images",
+        )
+
+    def with_detail_relations(self) -> RecipeQuerySet:
+        """Detay sayfası için malzeme ve etiketleri de (N+1 olmadan) yükler."""
+
+        from recipes.models.recipe_ingredient import RecipeIngredient
+        from recipes.models.recipe_tag import RecipeTag
+
+        return self.with_related().prefetch_related(
+            Prefetch(
                 "recipe_ingredients",
+                queryset=RecipeIngredient.objects.select_related("ingredient"),
+            ),
+            Prefetch(
                 "recipe_tags",
-            )
+                queryset=RecipeTag.objects.select_related("tag"),
+            ),
         )
 
     def published_with_related(self) -> RecipeQuerySet:
@@ -83,7 +99,8 @@ class RecipeQuerySet(models.QuerySet["Recipe"]):
         """Filter by slug."""
 
         return (
-            self.published_with_related()
+            self.published()
+            .with_detail_relations()
             .filter(
                 slug=slug,
             )

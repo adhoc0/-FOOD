@@ -145,7 +145,7 @@ class TestProvinceModel:
 # ─────────────────────────────────────────────
 @pytest.mark.django_db
 class TestFavoriteConstraints:
-    """Favorite unique_together constraint testi."""
+    """Favorite (user, recipe) UniqueConstraint testi."""
 
     def test_duplicate_favorite_raises_error(self):
         user = UserFactory()
@@ -158,7 +158,7 @@ class TestFavoriteConstraints:
 
 @pytest.mark.django_db
 class TestRatingConstraints:
-    """Rating unique_together constraint testi."""
+    """Rating (user, recipe) UniqueConstraint testi."""
 
     def test_duplicate_rating_raises_error(self):
         user = UserFactory()
