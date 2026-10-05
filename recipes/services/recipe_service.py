@@ -2,12 +2,17 @@ from __future__ import annotations
 
 from typing import Any
 
+from django.core.cache import cache
 from django.db import transaction
 from django.db.models import F
 from django.utils import timezone
 
 from recipes.choices import Status
 from recipes.models import Recipe
+
+
+# Aynı ziyaretçinin aynı tarifi bu süre içinde tekrar açması sayacı artırmaz.
+VIEW_DEDUPE_SECONDS = 30 * 60
 
 
 class RecipeService:
@@ -128,6 +133,27 @@ class RecipeService:
             recipe=recipe,
             is_featured=False,
         )
+
+    @staticmethod
+    def record_view(
+        recipe: Recipe,
+        *,
+        viewer_key: str,
+    ) -> bool:
+        """Görüntülenmeyi ziyaretçi başına tekilleştirerek sayar.
+
+        Aynı `viewer_key` için `VIEW_DEDUPE_SECONDS` içinde yalnızca ilk görüntüleme
+        veritabanına yazılır. Sayaç artırıldıysa True döner.
+        """
+
+        cache_key = f"recipe-view:{recipe.pk}:{viewer_key}"
+
+        if not cache.add(cache_key, 1, timeout=VIEW_DEDUPE_SECONDS):
+            return False
+
+        RecipeService.increment_view_count(recipe)
+
+        return True
 
     @staticmethod
     @transaction.atomic

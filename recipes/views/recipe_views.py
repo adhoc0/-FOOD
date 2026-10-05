@@ -9,10 +9,12 @@ from __future__ import annotations
 
 from typing import Any
 
+from django.conf import settings
 from django.db.models import QuerySet
 from django.http import Http404
 from django.views.generic import DetailView, ListView
 
+from common.network import get_client_ip
 from interactions.services import CommentService
 from recipes.constants import DEFAULT_PAGE_SIZE
 from recipes.models import Recipe
@@ -83,9 +85,28 @@ class RecipeDetailView(DetailView):
         if recipe is None:
             raise Http404("Recipe not found.")
 
-        RecipeService.increment_view_count(recipe)
+        # Yalnızca gerçek sayfa isteklerinde (GET) ve ziyaretçi başına bir kez sayılır.
+        if self.request.method == "GET":
+            RecipeService.record_view(
+                recipe,
+                viewer_key=self._get_viewer_key(),
+            )
 
         return recipe
+
+    def _get_viewer_key(self) -> str:
+        user = self.request.user
+
+        if user.is_authenticated:
+            return f"user:{user.pk}"
+
+        client_ip = get_client_ip(
+            self.request,
+            trusted_proxy_count=settings.NUM_PROXIES,
+        )
+
+        return f"ip:{client_ip}"
+
 
     def get_context_data(
         self,

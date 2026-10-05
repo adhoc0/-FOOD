@@ -30,6 +30,8 @@ olduğu için `0.x` sürümlerinde geriye dönük uyumsuz değişiklikler yapıl
 
 ### Changed
 
+- Tarif görüntülenme sayacı ziyaretçi başına 30 dakikada bir sayılıyor (kullanıcı veya IP bazlı, cache ile); HEAD istekleri sayılmıyor. Eskiden her GET veritabanına yazıyordu.
+
 - `docs/SEO.md` URL örnekleri gerçek yapıyla (`/tarifler/...`) uyumlu hale getirildi.
 
 - Proje durumu gerçek geliştirme seviyesiyle uyumlu olacak şekilde alpha olarak tanımlandı.
