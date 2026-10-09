@@ -124,3 +124,109 @@ class TestFavoriteCounter:
 
         logged_in_client.post(url)
         assert Recipe.objects.get(pk=recipe.pk).favorite_count == 0
+
+
+# ─────────────────────────────────────────────
+# JSON (fetch) yanıtları — ilerleyici geliştirme
+# ─────────────────────────────────────────────
+JSON = {"HTTP_ACCEPT": "application/json"}
+
+
+@pytest.mark.django_db
+class TestInteractionJsonResponses:
+    def test_favorite_toggle_returns_state_without_flash_message(self, logged_in_client):
+        recipe = RecipeFactory()
+        url = reverse("interactions:toggle_favorite", kwargs={"recipe_id": recipe.pk})
+
+        added = logged_in_client.post(url, **JSON)
+        assert added.status_code == 200
+        assert added.json()["favorited"] is True
+        assert added.json()["messages"][0]["level"] == "success"
+        assert _messages(added) == []
+
+        removed = logged_in_client.post(url, **JSON)
+        assert removed.json()["favorited"] is False
+        assert removed.json()["messages"][0]["level"] == "info"
+
+    def test_rating_returns_updated_summary(self, logged_in_client):
+        recipe = RecipeFactory()
+        RatingFactory(recipe=recipe, score=2)
+
+        response = logged_in_client.post(
+            reverse("interactions:add_comment", kwargs={"recipe_id": recipe.pk}),
+            {"score": "4"},
+            **JSON,
+        )
+
+        data = response.json()
+        assert response.status_code == 200
+        assert data["ok"] is True
+        assert data["rating_count"] == 2
+        assert data["average_rating"] == "3.0"
+
+    def test_comment_returns_pending_message(self, logged_in_client):
+        recipe = RecipeFactory()
+
+        response = logged_in_client.post(
+            reverse("interactions:add_comment", kwargs={"recipe_id": recipe.pk}),
+            {"content": CONTENT},
+            **JSON,
+        )
+
+        assert response.json()["ok"] is True
+        assert Comment.objects.filter(recipe=recipe).count() == 1
+
+    def test_invalid_submission_returns_400(self, logged_in_client):
+        recipe = RecipeFactory()
+
+        empty = logged_in_client.post(
+            reverse("interactions:add_comment", kwargs={"recipe_id": recipe.pk}), **JSON
+        )
+        bad_score = logged_in_client.post(
+            reverse("interactions:add_comment", kwargs={"recipe_id": recipe.pk}),
+            {"score": "abc"},
+            **JSON,
+        )
+
+        assert empty.status_code == 400
+        assert empty.json()["ok"] is False
+        assert bad_score.status_code == 400
+        assert not Rating.objects.filter(recipe=recipe).exists()
+
+    def test_partial_success_returns_200_with_both_messages(self, logged_in_client):
+        recipe = RecipeFactory()
+
+        response = logged_in_client.post(
+            reverse("interactions:add_comment", kwargs={"recipe_id": recipe.pk}),
+            {"content": CONTENT, "score": "9"},
+            **JSON,
+        )
+
+        levels = {item["level"] for item in response.json()["messages"]}
+        assert response.status_code == 200
+        assert levels == {"success", "error"}
+
+    def test_anonymous_json_request_is_redirected_to_login(self):
+        recipe = RecipeFactory()
+
+        response = Client().post(
+            reverse("interactions:toggle_favorite", kwargs={"recipe_id": recipe.pk}), **JSON
+        )
+
+        assert response.status_code == 302
+        assert reverse("accounts:login") in response["Location"]
+
+
+@pytest.mark.django_db
+def test_detail_page_shows_favorite_state(logged_in_client):
+    recipe = RecipeFactory()
+    url = reverse("recipes:recipe_detail", kwargs={"slug": recipe.slug})
+
+    assert "Favorilerime ekle" in logged_in_client.get(url).content.decode()
+
+    logged_in_client.post(
+        reverse("interactions:toggle_favorite", kwargs={"recipe_id": recipe.pk})
+    )
+    page = logged_in_client.get(url).content.decode()
+    assert "Favorilerimden çıkar" in page
+    assert 'aria-pressed="true"' in page

@@ -7,6 +7,7 @@ olduğu için `0.x` sürümlerinde geriye dönük uyumsuz değişiklikler yapıl
 
 ### Added
 
+- Favori, yorum ve puan formları JavaScript varken sayfa yenilenmeden (fetch + JSON) gönderilir; JS yoksa veya oturum düşmüşse normal form akışı çalışır. Favori düğmesi durumu (`aria-pressed`) ve puan özeti anında güncellenir, sonuçlar `aria-live` bölgesinde duyurulur.
 - Otomatik yedekleme: `backup` servisi (günlük `pg_dump` + medya, doğrulama, saklama süresi), `scripts/backup.sh`, `backup-loop.sh`, `restore.sh`.
 - Yönetim paneli için zorunlu iki adımlı doğrulama (TOTP, RFC 6238): `TOTPDevice`, `StaffMFAMiddleware`, `/hesap/2fa/kurulum/` ve `/hesap/2fa/dogrula/`; kod tekrar kullanımı engellenir, hatalı denemeler 5'te 15 dk kilitlenir. `MFA_REQUIRED_FOR_STAFF=False` ile kapatılabilir.
 - Registry tabanlı dağıtım: `publish.yml` imajı GHCR'a yayınlar, `scripts/deploy.sh` sunucuda çekip günceller (sağlık kontrolü, `--rollback`).
