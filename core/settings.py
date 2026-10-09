@@ -172,6 +172,10 @@ DATABASES = {
         "OPTIONS": {
             "connect_timeout": 5,
         },
+        # Bağlantıyı istekler arasında yeniden kullan; her istekte yeni TCP +
+        # kimlik doğrulama maliyetini (özellikle Windows'ta) ortadan kaldırır.
+        "CONN_MAX_AGE": config("DB_CONN_MAX_AGE", default=60, cast=int),
+        "CONN_HEALTH_CHECKS": True,
     }
 }
 
