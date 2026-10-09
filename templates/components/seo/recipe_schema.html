@@ -1,0 +1,26 @@
+<!-- Recipe Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "Recipe",
+  "name": "{{ recipe.title|escapejs }}",
+  {% if recipe.cover_image %}
+  "image": [
+    "{{ request.scheme }}://{{ request.get_host }}{{ recipe.cover_image.image.url }}"
+  ],
+  {% endif %}
+  "author": {
+    "@type": "Person",
+    "name": "{{ recipe.author.get_full_name|default:recipe.author.username|escapejs }}"
+  },
+  "datePublished": "{{ recipe.published_at|date:'Y-m-d' }}",
+  "description": "{{ recipe.summary|escapejs }}",
+  "recipeCuisine": "{{ recipe.category.name|escapejs }}",
+  "prepTime": "PT{{ recipe.preparation_time }}M",
+  "cookTime": "PT{{ recipe.cooking_time }}M",
+  "totalTime": "PT{{ recipe.total_time }}M",
+  "keywords": "{% for tag in recipe.recipe_tags.all %}{{ tag.tag.name|escapejs }}{% if not forloop.last %}, {% endif %}{% endfor %}",
+  "recipeYield": "{{ recipe.servings }} porsiyon",
+  "recipeCategory": "{{ recipe.category.name|escapejs }}"
+}
+</script>

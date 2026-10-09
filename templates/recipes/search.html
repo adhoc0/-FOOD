@@ -1,0 +1,43 @@
+{% extends "layouts/default.html" %}
+
+{% block title %}{{ meta_title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Tarif Ara</h1>
+    
+    <form method="get" action="{% url 'recipes:search' %}">
+        <label class="visually-hidden" for="recipe-search-query">Tarif ara</label>
+        <input id="recipe-search-query" type="text" name="q" value="{{ query }}" placeholder="Ne yemek istersiniz?">
+        
+        <label class="visually-hidden" for="recipe-search-province">İl seçin</label>
+        <select id="recipe-search-province" name="province">
+            <option value="">Tüm İller</option>
+            {% for prov in provinces %}
+                <option value="{{ prov.slug }}" {% if current_province == prov.slug %}selected{% endif %}>{{ prov.name }}</option>
+            {% endfor %}
+        </select>
+        
+        <label class="visually-hidden" for="recipe-search-category">Kategori seçin</label>
+        <select id="recipe-search-category" name="category">
+            <option value="">Tüm Kategoriler</option>
+            {% for cat in categories %}
+                <option value="{{ cat.slug }}" {% if current_category == cat.slug %}selected{% endif %}>{{ cat.name }}</option>
+            {% endfor %}
+        </select>
+        
+        <button type="submit">Ara</button>
+    </form>
+
+    <h2>Sonuçlar ({{ total_results }})</h2>
+    <ul>
+        {% for recipe in recipes %}
+            <li><a href="{{ recipe.get_absolute_url }}">{{ recipe.title }}</a></li>
+        {% empty %}
+            <li>Arama kriterlerinize uygun tarif bulunamadı.</li>
+        {% endfor %}
+    </ul>
+
+    {% include "components/feedback/pagination.html" %}
+</div>
+{% endblock %}

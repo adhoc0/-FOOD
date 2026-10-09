@@ -1,60 +1,92 @@
-from django.shortcuts import get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_POST
+"""
+Interaction views.
+
+Kullanıcı etkileşimleri: yorum, favori, puanlama.
+Business Logic servis katmanında — view yalnızca HTTP işlemlerini yönetir.
+"""
+
+from __future__ import annotations
+
+import logging
+from typing import cast
+
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ValidationError
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import get_object_or_404, redirect
+from django.views.decorators.http import require_POST
 
+from accounts.models import CustomUser
+from interactions.services import CommentService, FavoriteService, RatingService
 from recipes.models import Recipe
-from .models import Comment, Favorite, Rating
+
+logger = logging.getLogger(__name__)
+
 
 @login_required
 @require_POST
-def add_comment(request, recipe_id):
-    """
-    Tarife yorum ve/veya puan ekleme.
-    """
+def add_comment(request: HttpRequest, recipe_id: int) -> HttpResponse:
+    """Tarife yorum ve/veya puan ekleme."""
+    user = cast(CustomUser, request.user)
     recipe = get_object_or_404(Recipe, id=recipe_id)
-    content = request.POST.get('content', '').strip()
-    score = request.POST.get('score')
-    
-    # Yorum Ekleme
+    content = request.POST.get("content", "").strip()
+    raw_score = request.POST.get("score", "").strip()
+
+    if not content and not raw_score:
+        messages.error(request, "Yorum yazın veya puan verin.")
+        return redirect("recipes:recipe_detail", slug=recipe.slug)
+
+    # ── Yorum ekleme ──
     if content:
-        Comment.objects.create(
-            user=request.user,
-            recipe=recipe,
-            content=content,
-            is_approved=False  # Admin onayı gerekiyor
-        )
-        messages.success(request, 'Yorumunuz alındı, yönetici onayından sonra yayınlanacaktır.')
-    
-    # Puan Ekleme (Eğer seçildiyse)
-    if score and score.isdigit():
-        score = int(score)
-        if 1 <= score <= 5:
-            # Aynı kullanıcının önceki puanını güncelle veya yeni puan ver
-            Rating.objects.update_or_create(
-                user=request.user,
+        try:
+            CommentService.create(
+                user=user,
                 recipe=recipe,
-                defaults={'score': score}
+                content=content,
             )
-            messages.success(request, 'Puanınız kaydedildi.')
-            
-    return redirect('recipes:detail', slug=recipe.slug)
+            messages.success(
+                request,
+                "Yorumunuz alındı, yönetici onayından sonra yayınlanacaktır.",
+            )
+        except ValidationError as err:
+            for message in err.messages:
+                messages.error(request, message)
+
+    # ── Puan ekleme ── (1–5 kuralı RatingService'te doğrulanır)
+    if raw_score:
+        if not raw_score.isdigit():
+            messages.error(request, "Puan geçerli bir sayı olmalıdır.")
+        else:
+            try:
+                RatingService.rate(
+                    user=user,
+                    recipe=recipe,
+                    score=int(raw_score),
+                )
+                messages.success(request, "Puanınız kaydedildi.")
+            except ValidationError as err:
+                for message in err.messages:
+                    messages.error(request, message)
+
+    return redirect("recipes:recipe_detail", slug=recipe.slug)
 
 
 @login_required
 @require_POST
-def toggle_favorite(request, recipe_id):
-    """
-    Tarifi favorilere ekleme veya çıkarma.
-    """
+def toggle_favorite(request: HttpRequest, recipe_id: int) -> HttpResponse:
+    """Tarifi favorilere ekleme veya çıkarma."""
+    user = cast(CustomUser, request.user)
     recipe = get_object_or_404(Recipe, id=recipe_id)
-    favorite, created = Favorite.objects.get_or_create(user=request.user, recipe=recipe)
-    
-    if not created:
-        # Zaten favorilerdeyse, çıkar
-        favorite.delete()
-        messages.info(request, f'{recipe.title} favorilerinizden çıkarıldı.')
+
+    added = FavoriteService.toggle(
+        user=user,
+        recipe=recipe,
+    )
+
+    if added:
+        messages.success(request, f"{recipe.title} favorilerinize eklendi.")
     else:
-        messages.success(request, f'{recipe.title} favorilerinize eklendi.')
-        
-    return redirect('recipes:detail', slug=recipe.slug)
+        messages.info(request, f"{recipe.title} favorilerinizden çıkarıldı.")
+
+    return redirect("recipes:recipe_detail", slug=recipe.slug)

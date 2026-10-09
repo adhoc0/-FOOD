@@ -1,43 +1,49 @@
 from __future__ import annotations
 
+from typing import ClassVar
+
 from django.db import models
-from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
+
+from recipes.querysets.tag_queryset import TagManager
 
 
 class Tag(models.Model):
-    """Recipe tag."""
+    """Tag model."""
+
+    objects: ClassVar[TagManager] = TagManager()
 
     name = models.CharField(
-        verbose_name=_("Name"),
+        _("Name"),
         max_length=100,
         unique=True,
     )
 
     slug = models.SlugField(
-        verbose_name=_("Slug"),
+        _("Slug"),
         max_length=120,
         unique=True,
         db_index=True,
     )
 
-    color = models.CharField(
-        verbose_name=_("Color"),
-        max_length=7,
-        default="#4CAF50",
+    description = models.TextField(
+        _("Description"),
+        blank=True,
     )
 
     is_active = models.BooleanField(
-        verbose_name=_("Active"),
+        _("Active"),
         default=True,
         db_index=True,
     )
 
     created_at = models.DateTimeField(
+        _("Created At"),
         auto_now_add=True,
     )
 
     updated_at = models.DateTimeField(
+        _("Updated At"),
         auto_now=True,
     )
 
@@ -46,36 +52,21 @@ class Tag(models.Model):
         verbose_name_plural = _("Tags")
 
         ordering = [
-              "name",
-        ]
-
-        indexes = [
-            models.Index(fields=["slug"]),
-            models.Index(fields=["is_active"]),
-        ]
-
-    class Meta:    
-        verbose_name = _("Ingredient")
-        verbose_name_plural = _("Ingredients")
-
-        ordering = [
             "name",
         ]
 
         indexes = [
-            models.Index(fields=["slug"]),
-            models.Index(fields=["is_active"]),
-        ]   
+            models.Index(
+                fields=[
+                    "slug",
+                ],
+            ),
+            models.Index(
+                fields=[
+                    "is_active",
+                ],
+            ),
+        ]
 
-    
     def __str__(self) -> str:
         return self.name
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(
-                self.name,
-                allow_unicode=True,
-            )
-
-        super().save(*args, **kwargs)

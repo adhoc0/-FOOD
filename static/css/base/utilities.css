@@ -1,0 +1,7 @@
+.flow > * + * {
+    margin-top: var(--space-md);
+}
+
+.text-muted {
+    color: var(--color-text-light);
+}

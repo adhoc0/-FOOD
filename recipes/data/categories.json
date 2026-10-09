@@ -1,0 +1,14 @@
+[
+    {
+        "name": "Çorba",
+        "slug": "corba",
+        "description": "Geleneksel çorbalar",
+        "sort_order": 1
+    },
+    {
+        "name": "Ana Yemek",
+        "slug": "ana-yemek",
+        "description": "Ana yemek tarifleri",
+        "sort_order": 2
+    }
+]

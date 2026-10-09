@@ -496,3 +496,111 @@ Test edilmemiş kodu production'a göndermek.
 Deployment sırasında logları kontrol etmemek.
 
 Health check yapmadan deployment'ı tamamlanmış kabul etmek.
+---
+
+# Production Dağıtımı (tek sunucu, Docker Compose)
+
+Dosyalar: `docker-compose.prod.yml`, `nginx/nginx.prod.conf.template`,
+`scripts/init-letsencrypt.sh`, `.env.prod.example`.
+
+## Mimari
+
+Nginx (80/443, TLS) → Gunicorn (`web`) → PostgreSQL (`db`) ve Redis (`redis`).
+Sertifikalar Let's Encrypt ile alınır; `certbot` servisi 12 saatte bir yenileme dener.
+Veritabanı ve Redis dışarıya port açmaz. Tüm servis logları `json-file`
+sürücüsüyle döner (10 MB × 5 dosya).
+
+## İlk kurulum
+
+1. DNS'te alan adının A kaydını sunucuya yönlendirin; 80 ve 443 portlarını açın.
+2. `cp .env.prod.example .env.prod` ve değerleri doldurun (`SECRET_KEY` en az 50 karakter).
+3. `sh scripts/init-letsencrypt.sh` — geçici sertifikayla Nginx'i başlatır, gerçek sertifikayı alır.
+4. Yönetici hesabı: `docker compose -f docker-compose.prod.yml --env-file .env.prod run --rm web python manage.py createsuperuser`
+
+## Güncelleme
+
+```
+git pull
+docker compose -f docker-compose.prod.yml --env-file .env.prod up -d --build
+```
+
+`initialize` servisi her güncellemede `migrate` ve `collectstatic` çalıştırır.
+
+## Notlar
+
+- `NUM_PROXIES=1`: Nginx istemci IP'sini `X-Forwarded-For` ile tek başına yazar (rate limiting buna dayanır).
+- `REDIS_URL` tanımlı olduğunda cache Redis'tedir; rate limiting tüm worker'lar arasında paylaşılır.
+
+## Yedekleme
+
+`backup` servisi her gün 03:00 UTC'de (`BACKUP_HOUR_UTC` ile değişir) `scripts/backup.sh` çalıştırır:
+`pg_dump -Fc` ile veritabanı ve medya dizininin `tar.gz` arşivi `backups` volume'üne yazılır. Arşiv
+`pg_restore -l` ile doğrulanır, bozuksa kaydedilmez. `BACKUP_RETENTION_DAYS` (varsayılan 14) günden
+eski dosyalar silinir.
+
+Anında yedek: `docker compose -f docker-compose.prod.yml --env-file .env.prod exec backup sh /scripts/backup.sh`
+
+Geri yükleme (mevcut verinin üzerine yazar; önce uygulamayı durdurun):
+
+```
+docker compose -f docker-compose.prod.yml --env-file .env.prod exec -e FORCE=1 backup \
+  sh /scripts/restore.sh /backups/db-YYYYMMDDTHHMMSSZ.dump
+```
+
+**Önemli:** `backups` volume'ü aynı sunucudadır; sunucu kaybında yedek de kaybolur. Yedekleri düzenli olarak
+başka bir yere kopyalayın (ör. `docker cp`, `rclone` veya nesne depolama). Geri yüklemeyi bir test ortamında
+mutlaka bir kez deneyin; denenmemiş yedek, yedek sayılmaz.
+
+## Hata izleme (Sentry)
+
+`.env.prod` içinde `SENTRY_DSN` tanımlanırsa `config/monitoring.py` Sentry'yi başlatır (kişisel veri
+gönderilmez, `send_default_pii=False`). Boşsa tamamen kapalıdır. `SENTRY_TRACES_SAMPLE_RATE` performans
+izleme oranıdır (varsayılan 0).
+
+## Sunucu Dışı Yedek ve Geri Yükleme Tatbikatı
+
+Yedekler yalnızca sunucudaki `backups` volume'unda kalırsa disk kaybında birlikte kaybolur. Opsiyonel `offsite` servisi
+(rclone) günlük 04:00 UTC'de (`backup` servisinden sonra) yedekleri S3 uyumlu bir depoya kopyalar:
+
+```bash
+# .env.prod içinde OFFSITE_REMOTE ve RCLONE_CONFIG_OFFSITE_* değişkenlerini doldurun
+docker compose -f docker-compose.prod.yml --env-file .env.prod --profile offsite up -d offsite
+```
+
+Uzaktaki dosyalar `OFFSITE_RETENTION_DAYS` (varsayılan 30) sonra silinir.
+
+**Geri yükleme tatbikatı** (üretim verisine dokunmaz; geçici veritabanı oluşturup siler). Ayda bir çalıştırın:
+
+```bash
+docker compose -f docker-compose.prod.yml --env-file .env.prod run --rm \
+  --entrypoint sh backup /scripts/restore-drill.sh
+```
+
+Çıktıda "Tatbikat başarılı." ve makul tablo/tarif sayısı görmelisiniz.
+
+## Registry Üzerinden Dağıtım (GHCR)
+
+1. `main`'e birleştirme veya `v*` etiketi `Publish image` iş akışını tetikler; imaj
+   `ghcr.io/<sahip>/food-web` olarak `latest`, `sha-<kısa>` ve (etiketlerde) sürüm etiketleriyle yayınlanır.
+2. Paket özelse sunucuda bir kez giriş yapın (`read:packages` yetkili PAT):
+   `echo $PAT | docker login ghcr.io -u <kullanici> --password-stdin`.
+3. Sunucuda: `scripts/deploy.sh sha-abc1234` (veya `latest`, `1.2.3`). Betik imajı çeker, `initialize`
+   (migrate + collectstatic) çalışır, `web` sağlıklı olana kadar bekler ve etiketi `.deploy-state` dosyasına yazar.
+4. Sorun olursa: `scripts/deploy.sh --rollback` önceki etiketle geri döner. Not: geri dönüş migrasyonları
+   geri almaz; şema değişikliği içeren sürümlerde önce yedek alın (`backup` servisi / `scripts/backup.sh`).
+
+Imaj adı farklıysa `FOOD_IMAGE_BASE` ortam değişkenini ve `docker-compose.prod.yml` varsayılanını güncelleyin.
+
+## Yönetici İki Adımlı Doğrulama (2FA)
+
+Personel (`is_staff`) hesapları yönetim paneline girmeden önce TOTP doğrulaması yapmak zorundadır.
+
+1. Dağıtımdan sonra `python manage.py migrate` (`initialize` servisi bunu zaten yapar).
+2. Yönetici ilk girişte `/hesap/2fa/kurulum/` sayfasına yönlendirilir; gizli anahtarı authenticator
+   uygulamasına ekleyip ilk kodu girerek etkinleştirir.
+3. Sonraki oturumlarda panele girmeden önce `/hesap/2fa/dogrula/` sayfasında kod istenir.
+4. Telefon kaybında: sunucuda `python manage.py shell -c "from accounts.models import TOTPDevice; TOTPDevice.objects.filter(user__username='KULLANICI').delete()"`
+   ile cihaz silinir; kullanıcı yeniden kurulum yapar.
+
+Acil durumda `.env.prod` içinde `MFA_REQUIRED_FOR_STAFF=False` ile zorunluluk kapatılabilir (geçici kullanın).
+Not: gizli anahtarlar veritabanında düz metin saklanır; yedekleri koruyun.

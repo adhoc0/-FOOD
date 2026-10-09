@@ -1,64 +1,50 @@
 from __future__ import annotations
 
+from typing import ClassVar
+
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-from django.utils.text import slugify
+
+from recipes.querysets.category_queryset import CategoryManager
 
 
 class Category(models.Model):
     """Recipe category."""
 
+    objects: ClassVar[CategoryManager] = CategoryManager()
+
     name = models.CharField(
-        verbose_name=_("Name"),
+        _("Name"),
         max_length=100,
         unique=True,
     )
 
     slug = models.SlugField(
-        verbose_name=_("Slug"),
+        _("Slug"),
         max_length=120,
         unique=True,
         db_index=True,
     )
 
     description = models.TextField(
-        verbose_name=_("Description"),
+        _("Description"),
         blank=True,
-    )
-
-    image = models.ImageField(
-        verbose_name=_("Image"),
-        upload_to="categories/",
-        blank=True,
-        null=True,
-    )
-
-    icon = models.CharField(
-        verbose_name=_("Icon"),
-        max_length=100,
-        blank=True,
-    )
-
-    sort_order = models.PositiveSmallIntegerField(
-        verbose_name=_("Sort Order"),
-        default=0,
-        db_index=True,
     )
 
     is_active = models.BooleanField(
-        verbose_name=_("Active"),
+        _("Active"),
         default=True,
         db_index=True,
     )
 
     created_at = models.DateTimeField(
-        verbose_name=_("Created At"),
+        _("Created At"),
         auto_now_add=True,
     )
 
     updated_at = models.DateTimeField(
-        verbose_name=_("Updated At"),
+        _("Updated At"),
         auto_now=True,
     )
 
@@ -67,30 +53,21 @@ class Category(models.Model):
         verbose_name_plural = _("Categories")
 
         ordering = [
-            "sort_order",
             "name",
         ]
 
         indexes = [
             models.Index(fields=["slug"]),
             models.Index(fields=["is_active"]),
-            models.Index(fields=["sort_order"]),
         ]
 
     def __str__(self) -> str:
         return self.name
 
-    def get_absolute_url(self):
+    def get_absolute_url(self) -> str:
         return reverse(
             "recipes:category_detail",
-            kwargs={"slug": self.slug},
+            kwargs={
+                "slug": self.slug,
+            },
         )
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(
-                self.name,
-                allow_unicode=True,
-            )
-
-        super().save(*args, **kwargs)

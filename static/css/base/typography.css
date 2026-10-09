@@ -1,0 +1,39 @@
+h1,
+h2,
+h3,
+h4 {
+    margin-top: 0;
+    color: var(--color-text);
+    font-family: var(--font-family-display);
+    line-height: 1.15;
+}
+
+h1 {
+    font-size: clamp(2.25rem, 5vw, 4.5rem);
+}
+
+h2 {
+    font-size: clamp(1.75rem, 3vw, 3rem);
+}
+
+h3 {
+    font-size: clamp(1.25rem, 2vw, 1.75rem);
+}
+
+a {
+    color: var(--link-color);
+    text-decoration-thickness: 0.08em;
+    text-underline-offset: 0.18em;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+:focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 3px;
+}

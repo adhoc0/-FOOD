@@ -1,0 +1,57 @@
+{% load static %}
+
+<article class="province-card">
+
+    <a href="{{ province.get_absolute_url }}" class="province-card__image-link" aria-label="{{ province.name }}">
+
+        {% if province.image %}
+        <img src="{{ province.image.url }}" alt="{{ province.name }}" class="province-card__image" loading="lazy"
+            width="420" height="260">
+        {% else %}
+        <img src="{% static 'images/placeholders/province.svg' %}" alt="{{ province.name }}"
+            class="province-card__image" loading="lazy" width="420" height="260">
+        {% endif %}
+
+    </a>
+
+    <div class="province-card__content">
+
+        <div class="province-card__header">
+
+            <h3 class="province-card__title">
+
+                <a href="{{ province.get_absolute_url }}">
+                    {{ province.name }}
+                </a>
+
+            </h3>
+
+            <span class="province-card__plate">
+                {{ province.plate_code }}
+            </span>
+
+        </div>
+
+        {% if province.description %}
+        <p class="province-card__description">
+            {{ province.description|truncatechars:120 }}
+        </p>
+        {% endif %}
+
+        <div class="province-card__footer">
+
+            <span class="province-card__recipes">
+
+                🍽 {{ province.recipe_count|default:0 }} Tarif
+
+            </span>
+
+            <a href="{{ province.get_absolute_url }}" class="province-card__button">
+                İncele
+            </a>
+
+        </div>
+
+    </div>
+
+</article>

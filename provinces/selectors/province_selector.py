@@ -1,28 +1,43 @@
 from __future__ import annotations
 
+from django.db.models import QuerySet
+
 from provinces.models import Province
 
 
 class ProvinceSelector:
-    """Read-only queries for provinces."""
+    """İl verisini yalnızca okuyan sorgular."""
 
     @staticmethod
-    def get_all():
-        return Province.objects.filter(
-            is_active=True,
-        ).order_by("name")
-
-    @staticmethod
-    def get_popular(limit: int = 12):
-        return (
-            Province.objects.filter(
-                is_active=True,
-            )
-            .order_by("-recipe_count", "name")[:limit]
+    def get_active_list(*, region_slug: str = "") -> QuerySet[Province]:
+        queryset = (
+            Province.objects.active()
+            .with_related()
+            .ordered_by_code()
         )
 
+        if region_slug:
+            queryset = queryset.filter(region__slug=region_slug)
+
+        return queryset
+
     @staticmethod
-    def get_count() -> int:
-        return Province.objects.filter(
-            is_active=True,
-        ).count()
+    def get_map_entries() -> list[dict[str, str | int]]:
+        """Etkileşimli harita için aktif illerin plaka, ad ve adres bilgisi."""
+        return [
+            {
+                "plate_code": province.plate_code,
+                "name": province.name,
+                "url": province.get_absolute_url(),
+            }
+            for province in Province.objects.active().ordered_by_code()
+        ]
+
+    @staticmethod
+    def get_active_by_slug(slug: str) -> Province | None:
+        return (
+            Province.objects.active()
+            .with_related()
+            .by_slug(slug)
+            .first()
+        )

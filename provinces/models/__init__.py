@@ -1,7 +1,7 @@
-from .region import Region
 from .province import Province
+from .region import Region
 
 __all__ = [
-    "Region",
     "Province",
+    "Region",
 ]

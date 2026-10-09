@@ -1,4 +1,4 @@
-from .home_service import HomePageService
+from .home_services import HomePageService
 from .seo_service import SEOService
 
 __all__ = [

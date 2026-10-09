@@ -1,0 +1,20 @@
+# Depodaki tüm metin dosyaları LF ile saklanır (.editorconfig ve ruff ile uyumlu).
+# Windows'ta CRLF ile düzenlenen dosyalar commit sırasında LF'ye normalize edilir.
+* text=auto eol=lf
+
+# Windows'a özgü betikler CRLF kalmalıdır.
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+
+# Görüntü, yazı tipi ve arşiv dosyaları metin olarak işlenmez.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.zip binary
+*.gz binary
+*.tgz binary

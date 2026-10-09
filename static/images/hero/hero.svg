@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 650" role="img" aria-labelledby="title description">
+  <title id="title">Türkiye'nin yöresel lezzetleri</title>
+  <desc id="description">Yemek tabağı, baharatlar ve yapraklarla hazırlanmış dekoratif çizim</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f9eddd"/>
+      <stop offset="1" stop-color="#e2b880"/>
+    </linearGradient>
+    <radialGradient id="dish" cx=".45" cy=".4" r=".7">
+      <stop offset="0" stop-color="#fffdf7"/>
+      <stop offset="1" stop-color="#e9dac7"/>
+    </radialGradient>
+  </defs>
+  <rect width="700" height="650" rx="36" fill="url(#background)"/>
+  <circle cx="350" cy="334" r="220" fill="url(#dish)"/>
+  <circle cx="350" cy="334" r="175" fill="#d66c3e"/>
+  <circle cx="350" cy="334" r="135" fill="#f0b85e"/>
+  <path d="M256 315c38-75 115-99 177-47-14 65-80 113-148 100-31-6-42-29-29-53Z" fill="#347451"/>
+  <path d="M445 356c-38 75-115 99-177 47 14-65 80-113 148-100 31 6 42 29 29 53Z" fill="#6a9d54"/>
+  <circle cx="164" cy="178" r="35" fill="#c8543f"/>
+  <circle cx="552" cy="174" r="27" fill="#e9a33e"/>
+  <circle cx="530" cy="504" r="38" fill="#8c4834"/>
+  <path d="M114 458c34-77 91-105 132-81-10 65-58 105-111 95-23-4-33-20-21-54Z" fill="#3e7d55"/>
+</svg>

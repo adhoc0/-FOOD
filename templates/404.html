@@ -1,0 +1,11 @@
+{% extends "layouts/error.html" %}
+{% block title %}Sayfa bulunamadı{% endblock %}
+{% block robots %}noindex,nofollow{% endblock %}
+{% block content %}
+<section class="container content-page error-page">
+    <p class="eyebrow">404</p>
+    <h1>Aradığınız sayfa bulunamadı</h1>
+    <p class="lead">Adres değişmiş ya da sayfa kaldırılmış olabilir.</p>
+    <p><a class="btn" href="{% url 'pages:home' %}">Ana sayfaya dön</a></p>
+</section>
+{% endblock %}

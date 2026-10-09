@@ -1,0 +1,55 @@
+{% load static %}
+
+<article class="category-card">
+
+    <a href="{{ category.get_absolute_url }}" class="category-card__link" aria-label="{{ category.name }}">
+
+        <div class="category-card__icon">
+
+            {% if category.icon %}
+            <img src="{{ category.icon.url }}" alt="" loading="lazy" width="56" height="56">
+            {% else %}
+            <img src="{% static 'images/icons/category.svg' %}" alt="" loading="lazy" width="56" height="56">
+            {% endif %}
+
+        </div>
+
+        <div class="category-card__content">
+
+            <h3 class="category-card__title">
+
+                {{ category.name }}
+
+            </h3>
+
+            {% if category.description %}
+
+            <p class="category-card__description">
+
+                {{ category.description|truncatechars:90 }}
+
+            </p>
+
+            {% endif %}
+
+        </div>
+
+        <div class="category-card__footer">
+
+            <span class="category-card__count">
+
+                {{ category.recipe_count|default:"0" }} Tarif
+
+            </span>
+
+            <span class="category-card__arrow">
+
+                →
+
+            </span>
+
+        </div>
+
+    </a>
+
+</article>

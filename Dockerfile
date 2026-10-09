@@ -1,34 +1,27 @@
-FROM python:3.12-slim
+FROM python:3.14-slim
 
-# Ortam değişkenlerini ayarla
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-ENV HOME=/app
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_NO_CACHE_DIR=1
 
-WORKDIR $HOME
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y postgresql-client \
+    && rm -rf /var/lib/apt/lists/* \
+    && addgroup --system app \
+    && adduser --system --ingroup app --home /app app
 
-# Sistem bağımlılıklarını kur (PostgreSQL istemci araçları dahil)
-RUN apt-get update && apt-get install -y \
-    gcc \
-    libpq-dev \
-    postgresql-client \
-    && rm -rf /var/lib/apt/lists/*
+WORKDIR /app
 
-# Bağımlılıkları kopyala ve kur (prod = base + gunicorn)
 COPY requirements/ requirements/
-RUN pip install --upgrade pip
-RUN pip install -r requirements/prod.txt
+RUN pip install --no-cache-dir -r requirements/prod.txt
 
-# Proje dosyalarını kopyala
-COPY . .
+COPY --chown=app:app . .
+RUN chmod 0755 /app/entrypoint.sh \
+    && mkdir -p /app/staticfiles /app/media \
+    && chown -R app:app /app/staticfiles /app/media
 
-# Entrypoint betiğini kopyala ve çalıştırılabilir yap
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+USER app
 
-# Media ve staticfiles klasörleri için izinleri ayarla
-RUN mkdir -p /app/staticfiles /app/media
-RUN chown -R www-data:www-data /app/staticfiles /app/media
-
-# Başlangıç betiğini belirle
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/app/entrypoint.sh"]
+CMD ["gunicorn", "core.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3"]

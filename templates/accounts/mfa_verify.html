@@ -1,0 +1,29 @@
+{% extends "layouts/auth.html" %}
+
+{% block title %}Doğrulama Kodu - Türkiye Yöresel Yemekleri{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h2>Doğrulama Kodu</h2>
+            <p>Authenticator uygulamanızdaki 6 haneli kodu girin.</p>
+        </div>
+
+        <form method="post" class="auth-form" novalidate>
+            {% csrf_token %}
+            {% if form.non_field_errors %}<div class="alert alert-error">{{ form.non_field_errors }}</div>{% endif %}
+            {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}<div class="field-error">{{ field.errors|striptags }}</div>{% endif %}
+                </div>
+            {% endfor %}
+            <div class="form-actions">
+                <button type="submit" class="btn-primary w-100">Doğrula</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

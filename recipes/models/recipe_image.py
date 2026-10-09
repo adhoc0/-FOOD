@@ -4,6 +4,8 @@ from django.db import models
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
+from recipes.validators import ImageValidator
+
 from .recipe import Recipe
 
 
@@ -13,12 +15,14 @@ class RecipeImage(models.Model):
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
-        related_name="images",
+        related_name="recipe_images",
+        verbose_name=_("Recipe"),
     )
 
     image = models.ImageField(
         _("Image"),
         upload_to="recipes/",
+        validators=[ImageValidator.validate_image],
     )
 
     alt_text = models.CharField(
@@ -43,6 +47,11 @@ class RecipeImage(models.Model):
         auto_now_add=True,
     )
 
+    updated_at = models.DateTimeField(
+        _("Updated At"),
+        auto_now=True,
+    )
+
     class Meta:
         verbose_name = _("Recipe Image")
         verbose_name_plural = _("Recipe Images")
@@ -53,18 +62,37 @@ class RecipeImage(models.Model):
         ]
 
         indexes = [
-            models.Index(fields=["recipe"]),
-            models.Index(fields=["is_cover"]),
-            models.Index(fields=["sort_order"]),
+            models.Index(
+                fields=[
+                    "recipe",
+                ],
+            ),
+            models.Index(
+                fields=[
+                    "is_cover",
+                ],
+            ),
+            models.Index(
+                fields=[
+                    "sort_order",
+                ],
+            ),
         ]
 
         constraints = [
             models.UniqueConstraint(
-                fields=["recipe"],
-                condition=Q(is_cover=True),
+                fields=[
+                    "recipe",
+                ],
+                condition=Q(
+                    is_cover=True,
+                ),
                 name="unique_cover_image_per_recipe",
             ),
         ]
 
     def __str__(self) -> str:
-        return f"{self.recipe} ({self.sort_order})"
+        return (
+            f"{self.recipe} "
+            f"({self.sort_order})"
+        )

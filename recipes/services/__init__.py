@@ -1,11 +1,17 @@
-from .image_service import ImageService
+from .category_service import CategoryService
+from .cuisine_service import CuisineService
 from .ingredient_service import IngredientService
+from .recipe_image_service import RecipeImageService
 from .recipe_service import RecipeService
 from .search_service import SearchService
+from .tag_service import TagService
 
 __all__ = [
-    "ImageService",
+    "CategoryService",
+    "CuisineService",
     "IngredientService",
+    "RecipeImageService",
     "RecipeService",
     "SearchService",
+    "TagService",
 ]

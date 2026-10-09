@@ -1,0 +1,28 @@
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.75rem;
+    padding: .7rem 1.15rem;
+    border: var(--border-width) solid transparent;
+    border-radius: var(--radius-xs);
+    cursor: pointer;
+    font-weight: var(--font-semibold);
+    text-decoration: none;
+    transition: transform var(--transition-fast), background var(--transition-fast);
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn-primary {
+    background: var(--button-primary-bg);
+    color: var(--button-primary-text);
+}
+
+.btn-outline {
+    background: transparent;
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}

@@ -1,0 +1,75 @@
+{% extends "layouts/default.html" %}
+
+{% block title %}{{ recipe.title }} | Türkiye Yöresel Yemekleri{% endblock %}
+
+{% block extra_css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/pages/recipes/detail.css' %}">
+{% endblock %}
+
+{% block structured_data %}
+{{ block.super }}
+{% include "components/seo/recipe_schema.html" %}
+{% include "components/seo/breadcrumbs_schema.html" %}
+{% endblock %}
+
+{% block content %}
+<article class="recipe-detail">
+    <div class="container">
+        <header class="recipe-detail__header">
+            <p class="page-heading__eyebrow">{{ recipe.category.name }} · {{ recipe.province.name }}</p>
+            <h1>{{ recipe.title }}</h1>
+            <p class="recipe-detail__summary">{{ recipe.summary }}</p>
+            <div class="recipe-detail__meta" aria-label="Tarif bilgileri">
+                <span>Hazırlık {{ recipe.preparation_time }} dk</span>
+                <span>Pişirme {{ recipe.cooking_time }} dk</span>
+                <span>{{ recipe.servings }} kişilik</span>
+                <span>★ {{ recipe.average_rating }} ({{ recipe.rating_count }})</span>
+            </div>
+        </header>
+        <div class="recipe-detail__body">
+            {% include "recipes/detail/gallery.html" %}
+            <section aria-labelledby="ingredients-title">
+                <h2 id="ingredients-title">Malzemeler</h2>
+                {% include "recipes/detail/ingredients.html" %}
+            </section>
+            <section aria-labelledby="instructions-title">
+                <h2 id="instructions-title">Hazırlanışı</h2>
+                <div class="recipe-detail__instructions">{{ recipe.instructions|linebreaks }}</div>
+            </section>
+            <section aria-labelledby="history-title">
+                <h2 id="history-title">Yörenin hikâyesi</h2>
+                <p>{{ recipe.province.description|default:"Bu tarif, yöresel mutfak kültürünün nesilden nesile aktarılan lezzetlerinden biridir." }}</p>
+            </section>
+            <section aria-labelledby="comments-title">
+                <h2 id="comments-title">Yorumlar</h2>
+                <p>{{ approved_comments|length }} onaylı yorum</p>
+                {% if user.is_authenticated %}
+                    <form class="recipe-interaction-form" action="{% url 'interactions:add_comment' recipe.id %}" method="post">
+                        {% csrf_token %}
+                        <label for="recipe-comment">Yorumunuz</label>
+                        <textarea id="recipe-comment" name="content" rows="4" maxlength="2000" required></textarea>
+                        <label for="recipe-score">Puanınız</label>
+                        <select id="recipe-score" name="score">
+                            <option value="">Puan seçin</option>
+                            {% for score in "12345" %}<option value="{{ score }}">{{ score }} / 5</option>{% endfor %}
+                        </select>
+                        <button class="btn btn-primary" type="submit">Yorum gönder</button>
+                    </form>
+                    <form class="recipe-favorite-form" action="{% url 'interactions:toggle_favorite' recipe.id %}" method="post">
+                        {% csrf_token %}
+                        <button class="btn btn-outline" type="submit">Favorilerime ekle/çıkar</button>
+                    </form>
+                {% else %}
+                    <p><a href="{% url 'accounts:login' %}">Giriş yaparak</a> yorum yazabilir ve favorilerinize ekleyebilirsiniz.</p>
+                {% endif %}
+            </section>
+            <aside class="recipe-detail__aside" aria-label="Tarif özeti">
+                <strong>{{ recipe.province.name }}</strong>
+                <span>{{ recipe.category.name }}</span>
+                <a class="btn btn-primary" href="{% url 'provinces:detail' recipe.province.slug %}">İli keşfet</a>
+            </aside>
+        </div>
+    </div>
+</article>
+{% endblock %}

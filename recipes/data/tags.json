@@ -1,0 +1,12 @@
+[
+    {
+        "name": "Acılı",
+        "slug": "acili",
+        "color": "#E53935"
+    },
+    {
+        "name": "Vejetaryen",
+        "slug": "vejetaryen",
+        "color": "#43A047"
+    }
+]

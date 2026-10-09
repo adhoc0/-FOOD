@@ -1,30 +1,71 @@
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from __future__ import annotations
 
-from .models import CustomUser
+from typing import Any
+
+from django import forms
+from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.core.exceptions import ValidationError
+
+from accounts.services import login_throttle
+
+User = get_user_model()
 
 
-class CustomUserCreationForm(UserCreationForm):
-    """
-    Kullanıcı oluşturma formu.
+class ThrottledAuthenticationForm(AuthenticationForm):
+    """Başarısız denemeleri kullanıcı adı bazında sınırlayan giriş formu."""
 
-    Django'nun UserCreationForm'u varsayılan User modeline bağlıdır.
-    Custom User Model kullandığımız için bu formu override etmeliyiz.
-    Aksi halde admin panelinde kullanıcı oluşturma hata verir.
-    """
+    def clean(self) -> dict[str, Any]:
+        username = self.data.get(self.add_prefix("username"), "") or ""
+
+        if username and login_throttle.is_locked(username):
+            raise ValidationError(
+                "Çok fazla başarısız giriş denemesi yapıldı. "
+                "Lütfen 15 dakika sonra tekrar deneyin.",
+                code="locked",
+            )
+
+        try:
+            cleaned_data = super().clean()
+        except ValidationError:
+            if username:
+                login_throttle.register_failure(username)
+            raise
+
+        if username:
+            login_throttle.reset(username)
+
+        return cleaned_data
+
+
+class UserRegistrationForm(UserCreationForm):
+    """User registration form."""
 
     class Meta:
-        model = CustomUser
-        fields = ('username', 'email')
+        model = User
+
+        fields = (
+            "username",
+            "email",
+            "first_name",
+            "last_name",
+            "password1",
+            "password2",
+        )
 
 
-class CustomUserChangeForm(UserChangeForm):
-    """
-    Kullanıcı düzenleme formu.
+class OTPCodeForm(forms.Form):
+    """Authenticator uygulamasındaki 6 haneli kod."""
 
-    Aynı sebepten ötürü UserChangeForm'u da override ediyoruz.
-    İleride profil düzenleme sayfasında da bu form kullanılacak.
-    """
-
-    class Meta:
-        model = CustomUser
-        fields = ('username', 'email', 'first_name', 'last_name')
+    code = forms.CharField(
+        label="Doğrulama kodu",
+        min_length=6,
+        max_length=7,  # "123 456" biçimine izin ver
+        widget=forms.TextInput(
+            attrs={
+                "autocomplete": "one-time-code",
+                "inputmode": "numeric",
+                "autofocus": True,
+            }
+        ),
+    )

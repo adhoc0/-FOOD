@@ -1,236 +1,113 @@
-```md
 # CHANGELOG
 
-Bu dosya projedeki tüm önemli değişikliklerin tarihsel kaydını tutar.
-
-Semantic Versioning (SemVer) kullanılmaktadır.
-
-Sürüm formatı:
-
-MAJOR.MINOR.PATCH
-
-MAJOR
-Geriye dönük uyumluluğu bozan büyük değişiklikler.
-
-MINOR
-Yeni özellikler.
-
-PATCH
-Hata düzeltmeleri ve küçük iyileştirmeler.
-
----
+Bu proje [Semantic Versioning](https://semver.org/) kullanır. Proje alpha aşamasında
+olduğu için `0.x` sürümlerinde geriye dönük uyumsuz değişiklikler yapılabilir.
 
 ## [Unreleased]
 
 ### Added
 
-Henüz yayınlanmamış yeni özellikler.
+- Otomatik yedekleme: `backup` servisi (günlük `pg_dump` + medya, doğrulama, saklama süresi), `scripts/backup.sh`, `backup-loop.sh`, `restore.sh`.
+- Yönetim paneli için zorunlu iki adımlı doğrulama (TOTP, RFC 6238): `TOTPDevice`, `StaffMFAMiddleware`, `/hesap/2fa/kurulum/` ve `/hesap/2fa/dogrula/`; kod tekrar kullanımı engellenir, hatalı denemeler 5'te 15 dk kilitlenir. `MFA_REQUIRED_FOR_STAFF=False` ile kapatılabilir.
+- Registry tabanlı dağıtım: `publish.yml` imajı GHCR'a yayınlar, `scripts/deploy.sh` sunucuda çekip günceller (sağlık kontrolü, `--rollback`).
+- Sunucu dışı yedek: opsiyonel `offsite` servisi (rclone, `--profile offsite`) ve `scripts/restore-drill.sh` geri yükleme tatbikatı.
+- İsteğe bağlı Sentry hata izleme (`SENTRY_DSN`, `config/monitoring.py`).
 
-### Changed
+- Giriş brute-force koruması: kullanıcı adı bazlı başarısız deneme sayacı (5 deneme / 15 dk kilit), `ThrottledAuthenticationForm`.
 
-Değiştirilen özellikler.
+- Production dağıtımı: `docker-compose.prod.yml`, TLS'li Nginx şablonu, Let's Encrypt kurulum betiği, `.env.prod.example`.
+- `REDIS_URL` ile Redis cache desteği (`config/cache.py`); log formatına zaman ve logger adı eklendi.
 
-### Fixed
+- Test kapsamı %95,6'ya çıkarıldı (444 test); CI'da `pytest --cov` ve `fail_under = 93` eşiği; mypy CI'a bilgilendirme amaçlı eklendi.
 
-Düzeltilen hatalar.
+- Özel 404 ve 500 hata sayfaları (`templates/404.html`, `templates/500.html`).
+- `/robots.txt` (hesap/etkileşim/arama yolları kapalı, sitemap bağlantılı).
 
 ### Removed
 
-Kaldırılan özellikler.
+- Boş `scripts/backup_db.py` (yerine `scripts/backup.sh`).
 
-### Security
+- Gölgelenen ölü `provinces/admin.py` (gerçek admin `provinces/admin/` paketinde).
 
-Güvenlik iyileştirmeleri.
-
----
-
-## [1.0.0] - YYYY-MM-DD
-
-### Added
-
-- İlk kararlı sürüm.
-- Türkiye haritası.
-- İl bazlı tarif sistemi.
-- Tarif detay sayfaları.
-- Kullanıcı sistemi.
-- Favoriler.
-- Puanlama sistemi.
-- Yorum sistemi.
-- SEO altyapısı.
-- Responsive tasarım.
-- Admin paneli.
-- Docker desteği.
-- PostgreSQL desteği.
-- Sitemap.
-- Robots.
-- OpenGraph.
-- JSON-LD.
+- Hiçbir yerden referans verilmeyen 52 boş CSS/JS/şablon dosyası silindi.
 
 ### Changed
 
-- Yayın öncesi performans optimizasyonları.
+- `FavoriteService` ve `RatingService` `interactions.services` altına taşındı (ADR-002).
+- Tarif liste sorguları artık malzeme ve etiketleri önceden yüklemiyor (yalnızca kartta kullanılan ilişkiler); detay sayfası `with_detail_relations()` ile malzeme/etiketleri `select_related` içeren `Prefetch` ile tek seferde yükler.
+- `Favorite` ve `Rating` için `unique_together` yerine adlandırılmış `UniqueConstraint` (davranış aynı).
+- Tarif görüntülenme sayacı ziyaretçi başına 30 dakikada bir sayılıyor (kullanıcı veya IP bazlı, cache ile); HEAD istekleri sayılmıyor. Eskiden her GET veritabanına yazıyordu.
+
+- `docs/SEO.md` URL örnekleri gerçek yapıyla (`/tarifler/...`) uyumlu hale getirildi.
+
+- Proje durumu gerçek geliştirme seviyesiyle uyumlu olacak şekilde alpha olarak tanımlandı.
+- ROADMAP, tamamlanan ve bekleyen işleri gösterecek biçimde güncellendi.
+- Statik sayfa view'ları doğrudan asıl şablonlara bağlandı.
+- Büyük çalışma ağacını atomik commitlere ayırmak için sınıflandırma planı eklendi.
+- Test ayarları, test PostgreSQL compose dosyası ve temel CI kalite hattı eklendi.
+- Uygulama testlerinin toplanmasını engelleyen yanlış accounts test import'u düzeltildi.
+- Test ortamında production HTTPS yönlendirmesinin test istemcilerini etkilemesi düzeltildi.
+- Mevcut kullanım şartları şablonu için eksik URL ve view bağlantısı tamamlandı.
+- Rating puanı servis ve PostgreSQL constraint ile 1–5 aralığında zorunlu kılındı.
+- RecipeImage model ve service girişlerine boyut, uzantı ve magic-byte doğrulaması bağlandı.
+- Faz 2 veri bütünlüğü regresyon testleri eklendi.
+- Hassas POST uçları için cache tabanlı rate limiting middleware'i eklendi.
+- CSP ve Permissions-Policy başlıkları merkezi security middleware'ine eklendi.
+- Rate limiting ve güvenlik başlıkları için birim testleri eklendi.
+- Kaynak ağacında bilinen secret anahtar biçimleri için tarama yapıldı; gerçek secret bulunmadı.
+- Etkileşim ve yönetim uçları için anonim erişim permission testleri eklendi.
+- pip-audit bulguları doğrultusunda Django 6.0.7 ve Pillow 12.3.0 güvenli sürümlerine yükseltildi.
+- Faz 3 başlangıcında inline stiller kaldırılarak CSP ve erişilebilirlik uyumu güçlendirildi.
+- Production ortamı için HTTPS, HSTS ve secure cookie ayarlarının DEBUG=False altında doğrulaması yapıldı.
 
 ### Fixed
 
-- Yayın öncesi tüm kritik hatalar giderildi.
+- `sitemap.xml` kullanım şartları sayfasını (`pages:terms`) içermiyordu; eklendi.
 
-### Security
+- Girişten sonra var olmayan `/accounts/profile/` adresine yönlendirme düzeltildi; giriş profile, çıkış ana sayfaya gider.
+- Şifre sıfırlama akışının URL'leri ve e-posta şablonları eklendi.
+- Hız sınırı, Nginx arkasında tüm anonim istemcileri tek IP sayıyordu; `NUM_PROXIES` ile güvenilen proxy sayısına göre istemci IP'si çözülür.
+- Ana sayfa haritasındaki il tıklaması il detay sayfasına gider; tooltip ve erişilebilir etiketler il adını gösterir.
+- İl detay sayfası taslak ve pasif tarifleri de listeliyordu; yalnızca yayındaki tarifler gösterilir.
+- Harita rengi doğrulaması satır sonu karakteriyle biten değeri kabul ediyordu.
+- Yorum/puan formunda geçersiz veya boş gönderimler sessizce yok sayılıyordu; kullanıcıya mesaj gösterilir.
 
-- CSRF koruması.
-- XSS koruması.
-- SQL Injection koruması.
-- Dosya yükleme güvenliği.
-- Yetkilendirme kontrolleri.
+### Changed (mimari)
 
----
+- Arama filtreleme ve sıralama mantığı `SearchView` içinden `RecipeSelector.search_published` ve `RecipeQuerySet.sort_by` katmanına taşındı; "popular" sıralaması tek tanıma bağlandı (önce favori, sonra görüntülenme).
+- Arama sonuçları ilişkili il ve kategoriyle birlikte yüklenir (N+1 sorgu giderildi); toplam sonuç sayısı paginator'dan alınır.
+- Puan istatistiği yalnızca Rating sinyalinde hesaplanır; favori sayacı kodu `RecipeService` içinde tekilleştirildi.
+- Test factory'sindeki kullanıcı parolası artık veritabanına kaydedilir.
 
-## [0.9.0] - YYYY-MM-DD
+### Removed
 
-### Added
+- Hiçbir yerde güncellenmeyen `Recipe.comment_count` alanı kaldırıldı (migration `0004`).
+- `ProvinceManager` için ikinci (tekrar eden) tanım kaldırıldı.
+- Var olmayan uygulama klasörleri paket ve coverage listelerinden çıkarıldı; `common` eklendi.
+- Django dinamik sitemap endpoint'iyle çakışan boş kök `sitemap.xml` kaldırıldı.
+- Yalnızca başka bir şablonu genişleten gereksiz statik sayfa ara şablonları kaldırıldı.
+- Kullanılmayan toplu `pages.views.views` modülü kaldırıldı.
 
-- Deployment altyapısı.
-- Docker.
-- Nginx.
-- Gunicorn.
-- HTTPS hazırlıkları.
-- Cache sistemi.
-
-### Changed
-
-- Veritabanı optimizasyonları.
-- CSS optimizasyonları.
-- JavaScript optimizasyonları.
-
-### Fixed
-
-- Performans sorunları.
-
----
-
-## [0.8.0] - YYYY-MM-DD
+## [0.3.0] - 2026-07-16
 
 ### Added
 
-- SEO altyapısı.
-- Breadcrumb.
-- Canonical URL.
-- Meta sistemi.
-- OpenGraph.
-- Twitter Cards.
-- Sitemap.
-- Robots.
+- Accounts, provinces, recipes, pages ve interactions uygulamalarının temel yapıları.
+- Service, selector, validator ve özel queryset katmanlarının başlangıç uygulamaları.
+- Region, Province, Recipe, Category, Cuisine, Ingredient, Tag, Favorite, Rating ve Comment modelleri.
+- Docker, Gunicorn, Nginx ve PostgreSQL geliştirme yapılandırmaları.
+- Temel sitemap, SEO bileşenleri, test fabrikaları ve otomatik testler.
 
----
+### Known Issues
 
-## [0.7.0] - YYYY-MM-DD
+- PostgreSQL servisi olmadan veritabanı kullanan testler çalışmıyor.
+- Uygulama içi bazı test klasörleri mevcut pytest toplama kapsamının dışında.
+- Production e-posta, HTTPS, rate limiting, monitoring ve backup doğrulanmış değil.
+- Çalışma ağacı henüz mantıksal ve atomik commitlere ayrılmadı.
 
-### Added
+## Sürümleme Kuralları
 
-- Arama sistemi.
-- Filtreleme.
-- Sıralama.
-- Sayfalama.
-
----
-
-## [0.6.0] - YYYY-MM-DD
-
-### Added
-
-- Favori sistemi.
-- Puanlama sistemi.
-- Yorum sistemi.
-- Admin onay sistemi.
-
----
-
-## [0.5.0] - YYYY-MM-DD
-
-### Added
-
-- Tarif sistemi.
-- Kategori sistemi.
-- Malzeme sistemi.
-- Etiket sistemi.
-- Tarif görselleri.
-
----
-
-## [0.4.0] - YYYY-MM-DD
-
-### Added
-
-- İl sayfaları.
-- Türkiye SVG haritası.
-- Bölge sistemi.
-- İl filtreleme.
-
----
-
-## [0.3.0] - YYYY-MM-DD
-
-### Added
-
-- Kullanıcı kayıt sistemi.
-- Giriş sistemi.
-- Profil sistemi.
-- Şifre sıfırlama.
-
----
-
-## [0.2.0] - YYYY-MM-DD
-
-### Added
-
-- PostgreSQL desteği.
-- Django Admin.
-- Statik dosya yapısı.
-- Template mimarisi.
-- Component sistemi.
-- CSS mimarisi.
-- JavaScript mimarisi.
-
----
-
-## [0.1.0] - YYYY-MM-DD
-
-### Added
-
-- Proje oluşturuldu.
-- Clean Architecture yapısı oluşturuldu.
-- Klasör yapısı oluşturuldu.
-- Dokümantasyon oluşturuldu.
-- Docker altyapısı oluşturuldu.
-- Kod standartları belirlendi.
-- Güvenlik standartları belirlendi.
-- AI geliştirme kuralları oluşturuldu.
-
----
-
-# Changelog Kuralları
-
-Her commit bu dosyaya eklenmez.
-
-Sadece kullanıcıyı veya geliştiriciyi etkileyen değişiklikler eklenir.
-
-Her değişiklik aşağıdaki başlıklardan biri altında yazılır:
-
-- Added
-- Changed
-- Deprecated
-- Removed
-- Fixed
-- Security
-
-Değişiklikler kronolojik sırada tutulur.
-
-En yeni sürüm her zaman en üstte bulunur.
-
-Küçük refactoring işlemleri changelog'a eklenmez.
-
-Kod biçimlendirme değişiklikleri changelog'a eklenmez.
-
-Her sürüm bir tarih içermelidir.
-
-Her sürüm Semantic Versioning kurallarına uygun olmalıdır.
-```
+- Kullanıcıyı veya geliştiriciyi etkileyen değişiklikler kaydedilir.
+- Başlıklar `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed` ve `Security` biçimindedir.
+- Sürüm kayıtları tarih içerir ve en yeni kayıt üstte tutulur.
+- Yalnızca biçimlendirme ve davranış değiştirmeyen küçük düzenlemeler kaydedilmez.

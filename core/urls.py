@@ -3,6 +3,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.sitemaps.views import sitemap
 from django.urls import include, path
+from django.views.generic import TemplateView
 
 from pages.sitemaps import StaticPageSitemap
 from provinces.sitemaps import ProvinceSitemap
@@ -19,14 +20,26 @@ sitemaps = {
 }
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
-
+    path(settings.ADMIN_URL, admin.site.urls),
     path("", include("pages.urls")),
-    path("", include("provinces.urls")),
+    path("il/", include("provinces.urls")),
     path("tarifler/", include("recipes.urls")),
     path("etkilesim/", include("interactions.urls")),
     path("hesap/", include("accounts.urls")),
-    path("sitemap.xml", sitemap, {"sitemaps": sitemaps},name="django.contrib.sitemaps.views.sitemap",),
+    path(
+        "robots.txt",
+        TemplateView.as_view(
+            template_name="robots.txt",
+            content_type="text/plain; charset=utf-8",
+        ),
+        name="robots_txt",
+    ),
+    path(
+        "sitemap.xml",
+        sitemap,
+        {"sitemaps": sitemaps},
+        name="django.contrib.sitemaps.views.sitemap",
+    ),
 ]
 
 if settings.DEBUG:

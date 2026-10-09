@@ -220,25 +220,43 @@ Aynı hata ikinci kez oluşmamalıdır.
 
 # Test Komutları
 
-Tüm Testler
+Test PostgreSQL'ini Docker ile başlatma
 
-python manage.py test
+docker compose -f docker-compose.test.yml up -d --wait
+
+Windows PowerShell yerel test ayarlarıyla tüm testler
+
+$env:DJANGO_SETTINGS_MODULE="core.test_settings"
+pytest
+
+CI ile aynı statik kontroller
+
+ruff check .
+python manage.py check --deploy
+python manage.py makemigrations --check --dry-run
+
+Eski Django test komutları yerine pytest kullanılmalıdır. Test ayarları
+`core.test_settings` üzerinden yüklenir ve veritabanı PostgreSQL olmalıdır.
+
+Tüm testleri doğrudan çalıştırma
+
+pytest
 
 Tek Uygulama
 
-python manage.py test recipes
+pytest recipes
 
 Tek Dosya
 
-python manage.py test recipes.tests.test_recipe
+pytest recipes/tests/unit/test_services.py
 
 Tek Test
 
-python manage.py test recipes.tests.test_recipe.RecipeTests.test_create_recipe
+pytest recipes/tests/unit/test_services.py -k create_recipe
 
 Coverage
 
-coverage run manage.py test
+coverage run -m pytest
 
 coverage report
 

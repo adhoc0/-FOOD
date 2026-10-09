@@ -1,0 +1,46 @@
+.home-map {
+    min-height: 100svh;
+    padding: clamp(1rem, 3vw, 2.5rem) 0;
+    display: flex;
+    align-items: stretch;
+}
+
+.home-map > .container {
+    width: 100%;
+    max-width: none;
+    padding-inline: clamp(1rem, 3vw, 3rem);
+    display: flex;
+    flex-direction: column;
+}
+
+.home-map .section-header {
+    flex: 0 0 auto;
+    margin-bottom: var(--space-md);
+}
+
+.home-map .map-container {
+    flex: 1 1 auto;
+    min-height: calc(100svh - 5.5rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.home-map .map-container .turkey-map {
+    width: 100%;
+    max-width: 120rem;
+    min-height: 0;
+}
+
+.home-map .map-container__legend {
+    flex: 0 0 auto;
+}
+
+.section-header {
+    margin-bottom: var(--space-xl);
+}
+
+.section-header p {
+    max-width: 60ch;
+    color: var(--color-text-light);
+}

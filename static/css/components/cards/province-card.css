@@ -1,0 +1,207 @@
+.province-card {
+
+    display: flex;
+
+    flex-direction: column;
+
+    height: 100%;
+
+    background: var(--card-background);
+
+    border: var(--border-width) solid var(--card-border);
+
+    border-radius: var(--radius-md);
+
+    overflow: hidden;
+
+    box-shadow: var(--card-shadow);
+
+    transition:
+        transform var(--transition),
+        box-shadow var(--transition);
+
+}
+
+.province-card:hover {
+
+    transform: translateY(-6px);
+
+    box-shadow: var(--card-hover-shadow);
+
+}
+
+.province-card__image-link {
+
+    display: block;
+
+    overflow: hidden;
+
+}
+
+.province-card__image {
+
+    width: 100%;
+
+    aspect-ratio: 16 / 9;
+
+    object-fit: cover;
+
+    transition: transform .45s ease;
+
+}
+
+.province-card:hover .province-card__image {
+
+    transform: scale(1.05);
+
+}
+
+.province-card__content {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: var(--space-md);
+
+    padding: var(--space-lg);
+
+    flex: 1;
+
+}
+
+.province-card__header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: var(--space-md);
+
+}
+
+.province-card__title {
+
+    margin: 0;
+
+    font-size: var(--text-xl);
+
+}
+
+.province-card__title a {
+
+    color: var(--page-text);
+
+    text-decoration: none;
+
+}
+
+.province-card__title a:hover {
+
+    color: var(--link-hover);
+
+}
+
+.province-card__plate {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 42px;
+
+    height: 42px;
+
+    border-radius: 50%;
+
+    background: var(--button-primary-bg);
+
+    color: var(--button-primary-text);
+
+    font-weight: var(--font-bold);
+
+    flex-shrink: 0;
+
+}
+
+.province-card__description {
+
+    color: var(--page-text-light);
+
+    line-height: var(--line-relaxed);
+
+    flex: 1;
+
+}
+
+.province-card__footer {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: var(--space-md);
+
+    padding-top: var(--space-md);
+
+    border-top: 1px solid var(--card-border);
+
+}
+
+.province-card__recipes {
+
+    font-size: var(--text-sm);
+
+    color: var(--page-text-light);
+
+}
+
+.province-card__button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: .6rem 1rem;
+
+    border-radius: var(--radius-sm);
+
+    background: var(--button-primary-bg);
+
+    color: var(--button-primary-text);
+
+    text-decoration: none;
+
+    transition: background var(--transition);
+
+}
+
+.province-card__button:hover {
+
+    background: var(--button-primary-hover);
+
+}
+
+@media (max-width: 768px) {
+
+    .province-card__content {
+
+        padding: var(--space-md);
+
+    }
+
+    .province-card__title {
+
+        font-size: var(--text-lg);
+
+    }
+
+}

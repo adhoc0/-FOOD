@@ -1,0 +1,6 @@
+<form class="comment-form" method="post" action="{{ action }}">
+    {% csrf_token %}
+    <label for="comment-content">Yorumunuz</label>
+    <textarea id="comment-content" name="content" rows="4" maxlength="2000" required></textarea>
+    <button class="btn btn-primary" type="submit">Gönder</button>
+</form>

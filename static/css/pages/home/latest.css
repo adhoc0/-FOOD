@@ -1,0 +1,6 @@
+.latest-recipes .section-header,
+.featured-recipes .section-header,
+.categories .section-header,
+.popular-provinces .section-header {
+    margin-bottom: var(--space-xl);
+}

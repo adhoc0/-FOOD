@@ -1,0 +1,2 @@
+.messages { position: fixed; top: 1rem; right: 1rem; z-index: 30; display: grid; gap: .5rem; max-width: 22rem; }
+.message { padding: .75rem 1rem; background: var(--color-surface); border: var(--border-width) solid var(--color-border); border-radius: var(--radius-xs); box-shadow: var(--shadow-md); }

@@ -8,18 +8,20 @@ from .tag import Tag
 
 
 class RecipeTag(models.Model):
-    """Recipe tag relation."""
+    """Intermediate model between Recipe and Tag."""
 
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
-        related_name="tags",
+        related_name="recipe_tags",
+        verbose_name=_("Recipe"),
     )
 
     tag = models.ForeignKey(
         Tag,
         on_delete=models.PROTECT,
-        related_name="recipes",
+        related_name="recipe_tags",
+        verbose_name=_("Tag"),
     )
 
     created_at = models.DateTimeField(
@@ -36,8 +38,16 @@ class RecipeTag(models.Model):
         ]
 
         indexes = [
-            models.Index(fields=["recipe"]),
-            models.Index(fields=["tag"]),
+            models.Index(
+                fields=[
+                    "recipe",
+                ],
+            ),
+            models.Index(
+                fields=[
+                    "tag",
+                ],
+            ),
         ]
 
         constraints = [
@@ -51,4 +61,7 @@ class RecipeTag(models.Model):
         ]
 
     def __str__(self) -> str:
-        return f"{self.recipe} - {self.tag}"
+        return (
+            f"{self.recipe} - "
+            f"{self.tag}"
+        )

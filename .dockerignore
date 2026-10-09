@@ -1,0 +1,30 @@
+# Sürüm kontrolü ve geliştirme araçları
+.git/
+.agents/
+.venv/
+.vscode/
+.idea/
+
+# Ortam değişkenleri ve yerel veriler
+.env
+.envs/
+*.env
+media/
+logs/
+staticfiles/
+*.log
+*.sqlite3
+
+# Önbellek ve derleme çıktıları
+__pycache__/
+*.py[cod]
+*.egg-info/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+build/
+dist/
+
+# Test ve dokümantasyon dosyaları çalışma zamanındaki imaja gerekli değildir.
+tests/
+docs/

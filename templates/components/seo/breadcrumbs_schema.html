@@ -1,0 +1,17 @@
+<!-- Breadcrumbs Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {% for breadcrumb in breadcrumbs %}
+    {
+      "@type": "ListItem",
+      "position": {{ forloop.counter }},
+      "name": "{{ breadcrumb.title|escapejs }}",
+      "item": "{{ request.scheme }}://{{ request.get_host }}{{ breadcrumb.url }}"
+    }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  ]
+}
+</script>
