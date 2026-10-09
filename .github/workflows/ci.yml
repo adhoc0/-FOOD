@@ -46,7 +46,10 @@ jobs:
         run: ruff check .
 
       - name: Mypy
-        run: mypy .
+        env:
+          SECRET_KEY: ci-only-secret-key-with-more-than-fifty-characters-123456
+
+        run: mypy --show-traceback .
 
       - name: Django checks
         env:
